@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
         user.setFundRaisePostList(userDto.getFundRaisePostList());
         user.setRole(userDto.getRole());
 
-        userRepository.save(user);
-
+        User save = userRepository.save(user);
+        userDto.setId(save.getId());
 
 
         return userDto;

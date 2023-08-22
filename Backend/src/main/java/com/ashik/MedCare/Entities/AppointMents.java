@@ -20,6 +20,7 @@ public class AppointMents {
     @ManyToOne
     private Doctor doctor;
     @ManyToOne
+    @JsonBackReference
     private User user;
 
 }

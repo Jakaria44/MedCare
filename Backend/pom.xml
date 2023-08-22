@@ -11,7 +11,7 @@
 	<groupId>com.ashik</groupId>
 	<artifactId>MedCare</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MedCare</name>
+	<name>Backend</name>
 	<description>MedCare project for Spring Boot</description>
 	<properties>
 		<java.version>20</java.version>

@@ -134,6 +134,23 @@ public class Mapper {
     }
 
 
+    public static UserDto userToDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setAddress(user.getAddress());
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+        userDto.setAppointMents(user.getAppointMents());
+        userDto.setAmbulancePostList(user.getAmbulancePostList());
+        userDto.setPassword(null);
+        userDto.setBloodDonatePostList(user.getBloodDonatePostList());
+        userDto.setFundRaisePostList(user.getFundRaisePostList());
+        userDto.setRole(user.getRole());
+        userDto.setId(user.getId());
+
+        return userDto;
+    }
+
+
 
 
 

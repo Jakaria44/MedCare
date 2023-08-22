@@ -1,5 +1,7 @@
 package com.ashik.MedCare.Controllers;
 
+import com.ashik.MedCare.ApiResponse.LoginResponse;
+import com.ashik.MedCare.ApiResponse.SignUpResponse;
 import com.ashik.MedCare.Configuration.JwTokenProvider;
 import com.ashik.MedCare.DTOs.UserDto;
 import com.ashik.MedCare.Entities.Address;
@@ -11,6 +13,7 @@ import com.ashik.MedCare.RequestObject.UserRequest;
 import com.ashik.MedCare.Services.ServiceImplementation.CustomUserServiceImple;
 import com.ashik.MedCare.Services.UserService;
 import com.ashik.MedCare.Utils.AuthResponse;
+import com.ashik.MedCare.Utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +43,7 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> signUp(@RequestBody UserRequest userRequest){
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody UserRequest userRequest){
 
         String email = userRequest.getEmail();
         String name = userRequest.getFirstName() + " "+ userRequest.getLastName();
@@ -77,13 +80,21 @@ public class AuthController {
         String jwtToken = jwTokenProvider.generateToken(authentication);
 
 
-        AuthResponse authResponse = new AuthResponse();
-        authResponse.setAuth(true);
-        authResponse.setJwtToken(jwtToken);
+//        AuthResponse authResponse = new AuthResponse();
+//        authResponse.setAuth(true);
+//        authResponse.setJwtToken(jwtToken);
+        userDto1.setPassword(null);
 
-        return  new ResponseEntity<AuthResponse>(authResponse, HttpStatus.ACCEPTED);
+        SignUpResponse signUpResponse = new SignUpResponse();
+        signUpResponse.setUserDto(userDto1);
+        signUpResponse.setJwtToken(jwtToken);
+        signUpResponse.setAuthenticate(true);
+
+        return  new ResponseEntity<SignUpResponse>(signUpResponse, HttpStatus.ACCEPTED);
 
     }
+
+
 
     @GetMapping("/ashik")
     public  String hello(){
@@ -108,7 +119,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public  ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest){
+    public  ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
 
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
@@ -116,13 +127,30 @@ public class AuthController {
         Authentication authenticationuser = authentication(email,password);
         SecurityContextHolder.getContext().setAuthentication(authenticationuser);
 
+
         String jwtToken = jwTokenProvider.generateToken(authenticationuser);
-        AuthResponse authResponse = new AuthResponse();
-        authResponse.setAuth(true);
-        authResponse.setJwtToken(jwtToken);
+
+        String name = authenticationuser.getName();
+        User loggedUser = userRepository.findByEmail(name);
+
+        UserDto userDto = Mapper.userToDto(loggedUser);
+        userDto.getAddress().setUser(null);
+
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setJwtToken(jwtToken);
+        loginResponse.setAuthenticate(true);
+        loginResponse.setUserDto(userDto);
+
+//       System.out.println(loginResponse);
 
 
-        return  new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
+//        System.out.println(name);
+//        if(loggedUser != null) {
+//            System.out.println(loggedUser.getAddress());
+//        }
+//        System.out.println(userDto);
+
+        return  new ResponseEntity<LoginResponse>(loginResponse,HttpStatus.OK);
 
     }
 
