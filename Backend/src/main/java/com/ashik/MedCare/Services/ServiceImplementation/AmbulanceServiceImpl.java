@@ -7,7 +7,13 @@ import com.ashik.MedCare.Repository.AmbulancePostRepository;
 import com.ashik.MedCare.Repository.UserRepository;
 import com.ashik.MedCare.Services.AmbulancePostService;
 import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceMapper;
+import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulancePageResponse;
+import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +64,7 @@ public class AmbulanceServiceImpl implements AmbulancePostService {
         AmbulancePost save = ambulancePostRepository.save(ambulancePost);
 
 
+
         return  AmbulanceMapper.postDTO(save);
     }
 
@@ -75,43 +82,111 @@ public class AmbulanceServiceImpl implements AmbulancePostService {
 
     }
 
+
+
     @Override
-    public List<AmbulancePostDTO> getAllambulancePost() {
+    public  List<AmbulanceResponse> getAllambulancePost() {
 
         List<AmbulancePost> allAmbulancePosts = ambulancePostRepository.findAll();
 
         List<AmbulancePostDTO> ambulancePostDTOS =
-                allAmbulancePosts.stream().map((ampost) -> postToDto(ampost)).collect(Collectors.toList());
+                allAmbulancePosts.stream().map((ampost) -> AmbulanceMapper.postDTO(ampost)).collect(Collectors.toList());
+
+        List<AmbulanceResponse> collect =
+                ambulancePostDTOS.stream().map((post) -> AmbulanceMapper.dtoToResponse(post)).collect(Collectors.toList());
 
 
-        return ambulancePostDTOS;
+        return collect;
     }
 
+
+
+
     @Override
-    public List<AmbulancePostDTO> getPostbyUserId(Integer id) {
+    public List<AmbulanceResponse> getPostbyUserId(Integer id) {
 
         List<AmbulancePost> posts = ambulancePostRepository.findByUserId(id);
 
         List<AmbulancePostDTO> ambulancePostDTOS =
-                posts.stream().map((post) -> postToDto(post)).collect(Collectors.toList());
+                posts.stream().map((post) ->AmbulanceMapper.postDTO(post)).collect(Collectors.toList());
+
+        List<AmbulanceResponse> collect =
+                ambulancePostDTOS.stream().map((post) -> AmbulanceMapper.dtoToResponse(post)).collect(Collectors.toList());
 
 
-        return ambulancePostDTOS;
+        return collect;
     }
 
-    public AmbulancePostDTO  postToDto(AmbulancePost post){
 
-        AmbulancePostDTO ambulancePostDTO = new AmbulancePostDTO();
-        ambulancePostDTO.setAmbulanceInfo(post.getAmbulanceInfo());
-        ambulancePostDTO.setId(post.getId());
-        ambulancePostDTO.setAmbulanceModel(post.getAmbulanceModel());
-//        ambulancePostDTO.setLocation(post.getLocation());
-        ambulancePostDTO.setUser(post.getUser());
-        ambulancePostDTO.setAircon(post.isAircon());
-        ambulancePostDTO.setDriverName(post.getDriverName());
-        ambulancePostDTO.setContactInfo(post.getContactInfo());
 
-        return ambulancePostDTO;
+
+    @Override
+    public AmbulancePageResponse allpostWithPagination(Integer pageNumber,
+                                                       Integer pageSize,
+                                                       String SortBy,
+                                                       String SortDir) {
+
+        Sort sort = SortDir.equalsIgnoreCase("asc")? Sort.by(SortBy).ascending():Sort.by(SortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
+
+        Page<AmbulancePost> posts = ambulancePostRepository.findAll(pageable);
+
+        List<AmbulancePostDTO> collect =
+                posts.stream().map((post) -> AmbulanceMapper.postDTO(post)).collect(Collectors.toList());
+
+        List<AmbulanceResponse> collect1 =
+                collect.stream().map((post) -> AmbulanceMapper.dtoToResponse(post)).collect(Collectors.toList());
+
+        AmbulancePageResponse ambulancePageResponse = new AmbulancePageResponse();
+        ambulancePageResponse.setContent(collect1);
+        ambulancePageResponse.setLastPage(posts.isLast());
+        ambulancePageResponse.setPageNumber(posts.getNumber());
+        ambulancePageResponse.setPageSize(posts.getSize());
+        ambulancePageResponse.setTotaleElements((int) posts.getTotalElements());
+        ambulancePageResponse.setTotalPages(posts.getTotalPages());
+
+
+
+        return ambulancePageResponse;
+
+
+
+    }
+
+
+
+
+
+
+    @Override
+    public AmbulancePageResponse getAllpostbyUserIdwithPage(int id,
+                                                            Integer pageNumber,
+                                                            Integer pageSize,
+                                                            String SortBy,
+                                                            String SortDir) {
+
+
+        Sort sort = SortDir.equalsIgnoreCase("asc")? Sort.by(SortBy).ascending():Sort.by(SortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
+
+        Page<AmbulancePost> posts = ambulancePostRepository.findByUserId(id, pageable);
+        List<AmbulancePostDTO> collect =
+                posts.stream().map((post) -> AmbulanceMapper.postDTO(post)).collect(Collectors.toList());
+
+        List<AmbulanceResponse> collect1 =
+                collect.stream().map((post) -> AmbulanceMapper.dtoToResponse(post)).collect(Collectors.toList());
+
+        AmbulancePageResponse ambulancePageResponse = new AmbulancePageResponse();
+        ambulancePageResponse.setContent(collect1);
+        ambulancePageResponse.setLastPage(posts.isLast());
+        ambulancePageResponse.setPageNumber(posts.getNumber());
+        ambulancePageResponse.setPageSize(posts.getSize());
+        ambulancePageResponse.setTotaleElements((int) posts.getTotalElements());
+        ambulancePageResponse.setTotalPages(posts.getTotalPages());
+
+
+
+        return ambulancePageResponse;
     }
 
 

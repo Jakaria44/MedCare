@@ -9,7 +9,9 @@ import com.ashik.MedCare.RequestObject.AmbulanceRequest;
 import com.ashik.MedCare.Services.AmbulancePostService;
 import com.ashik.MedCare.Services.UserService;
 import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceMapper;
+import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulancePageResponse;
 import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceResponse;
+import com.ashik.MedCare.Utils.BloodDonatePostPageResponse;
 import com.ashik.MedCare.Utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -130,19 +132,58 @@ public class AmbulanceController {
 
 
     @GetMapping("/getallambulancepost")
-    public  ResponseEntity<List<AmbulancePostDTO>> getallPost(){
-        List<AmbulancePostDTO> allambulancePost = ambulancePostService.getAllambulancePost();
+    public  ResponseEntity<List<AmbulanceResponse>> getallPost(){
+        List<AmbulanceResponse> allambulancePost = ambulancePostService.getAllambulancePost();
 
-        return new ResponseEntity<List<AmbulancePostDTO>>(allambulancePost,HttpStatus.OK);
+        return new ResponseEntity<List<AmbulanceResponse>>(allambulancePost,HttpStatus.OK);
     }
 
 
     @GetMapping("/getallambulancepost/{id}")
-    public  ResponseEntity<List<AmbulancePostDTO>> getallPostbyUser(@PathVariable Integer id){
-        List<AmbulancePostDTO> allambulancePost = ambulancePostService.getPostbyUserId(id);
+    public  ResponseEntity<List<AmbulanceResponse>> getallPostbyUser(@PathVariable Integer id){
+        List<AmbulanceResponse> postbyUserId = ambulancePostService.getPostbyUserId(id);
 
-        return new ResponseEntity<List<AmbulancePostDTO>>(allambulancePost,HttpStatus.OK);
+        return new ResponseEntity<List<AmbulanceResponse>>(postbyUserId,HttpStatus.OK);
     }
+
+
+    @GetMapping("/ambulance/getallpostbySort")
+    public ResponseEntity<AmbulancePageResponse> getAllPostbysortwithPage(
+            @RequestParam(name = "pageNumber",defaultValue ="0") Integer pageNumber,
+            @RequestParam(name = "pageSize",defaultValue = "1") Integer pageSize,
+            @RequestParam(name = "SortBy" ,defaultValue = "createdDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir
+
+
+
+    ){
+
+        AmbulancePageResponse ambulancePageResponse =
+                ambulancePostService.allpostWithPagination(pageNumber, pageSize, SortBy, SortDir);
+
+
+        return new ResponseEntity<AmbulancePageResponse>(ambulancePageResponse,HttpStatus.OK);
+    }
+
+    @GetMapping("/ambulance/getallpostuserbySort/{id}")
+    public ResponseEntity<AmbulancePageResponse> getAllPostuserbysortwithPage(
+            @RequestParam(name = "pageNumber",defaultValue ="0") Integer pageNumber,
+            @RequestParam(name = "pageSize",defaultValue = "1") Integer pageSize,
+            @RequestParam(name = "SortBy" ,defaultValue = "createdDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir,
+            @PathVariable Integer id
+
+
+
+    ){
+
+        AmbulancePageResponse allpostbyUserIdwithPage =
+                ambulancePostService.getAllpostbyUserIdwithPage(id, pageNumber, pageSize, SortBy, SortDir);
+
+
+        return new ResponseEntity<AmbulancePageResponse>( allpostbyUserIdwithPage,HttpStatus.OK);
+    }
+
 
 
 
