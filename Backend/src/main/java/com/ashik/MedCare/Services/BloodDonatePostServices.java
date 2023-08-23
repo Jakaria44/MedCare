@@ -16,8 +16,18 @@ public interface BloodDonatePostServices {
     public List<BloodDonatePostDto> getAllBloodDonatePost();
     public List<BloodDonatePostDto> getAllBloodDonatePostbyUserId(Integer id);
 
-    public BloodDonatePostPageResponse allpostWithPagination(Integer pageNumber, Integer pageSize,
-                                                             String SortBy, String SortDir);
+    BloodDonatePostPageResponse allpostWithPagination(Integer pageNumber,
+                                                      Integer pageSize,
+                                                      String SortBy,
+                                                      String SortDir,
+                                                      boolean availability);
+
+
+    List<BloodDonatePostDto> getAllpostDescSortbyCreatedDate(boolean availibility);
+    List<BloodDonatePostDto>getAllpostbyUserId(int id,String SortBy,String SortDir);
+
+    BloodDonatePostPageResponse getAllpostbyUserIdwithPage(int id, Integer pageNumber,
+                                                       Integer pageSize,String SortBy,String SortDir);
 
 
 

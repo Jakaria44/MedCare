@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bloodpost")
@@ -37,13 +38,14 @@ public class BloodDonatePostController {
              bloodDonatePostDto.setBloodGroup(bloodDonatePostReq.getBloodGroup());
 //             bloodDonatePostDto.setLocation(bloodDonatePostReq.getLocation());
              bloodDonatePostDto.setContact(bloodDonatePostReq.getContact());
+             bloodDonatePostDto.setAvailibility(bloodDonatePostReq.isAvailibility());
 
              Address address = user.getAddress();
 
              bloodDonatePostDto.setDivision(address.getDivision());
              bloodDonatePostDto.setDistrict(address.getDistrict());
              bloodDonatePostDto.setUpazila(address.getUpazila());
-             bloodDonatePostDto.setAvailibility(bloodDonatePostReq.isAvailibility());
+
 
 
      BloodDonatePostDto postDto = bloodDonatePostServices.createPost(bloodDonatePostDto);
@@ -67,6 +69,14 @@ public class BloodDonatePostController {
      bloodDonatePostDto.setBloodGroup(bloodDonatePostReq.getBloodGroup());
 //     bloodDonatePostDto.setLocation(bloodDonatePostReq.getLocation());
      bloodDonatePostDto.setContact(bloodDonatePostReq.getContact());
+
+     Address address = user.getAddress();
+
+     bloodDonatePostDto.setDivision(address.getDivision());
+     bloodDonatePostDto.setDistrict(address.getDistrict());
+     bloodDonatePostDto.setUpazila(address.getUpazila());
+
+
 
      BloodDonatePostDto bloodDonatePostDto1 = bloodDonatePostServices.updatePost(bloodDonatePostDto, id);
 
@@ -110,20 +120,76 @@ public class BloodDonatePostController {
 
 
     @GetMapping("/getallpostbySort")
-    public ResponseEntity<BloodDonatePostPageResponse> getAllPostbysort(
-            @RequestParam("pageNumber") Integer pageNumber,
-            @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("SortBy") String SortBy,
-            @RequestParam("SortDir") String SortDir
+    public ResponseEntity<BloodDonatePostPageResponse> getAllPostbysortwithPage(
+            @RequestParam(name = "pageNumber",defaultValue ="0") Integer pageNumber,
+            @RequestParam(name = "pageSize",defaultValue = "1") Integer pageSize,
+            @RequestParam(name = "SortBy" ,defaultValue = "createdDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir,
+            @RequestParam (name = "availability",defaultValue = "true") boolean availability
 
 
     ){
 
-        BloodDonatePostPageResponse bloodDonatePostPageResponse = bloodDonatePostServices.allpostWithPagination(pageNumber, pageSize, SortBy, SortDir);
+        BloodDonatePostPageResponse bloodDonatePostPageResponse =
+                bloodDonatePostServices.allpostWithPagination(pageNumber, pageSize, SortBy, SortDir,availability);
 
 
         return new ResponseEntity<BloodDonatePostPageResponse>(bloodDonatePostPageResponse,HttpStatus.OK);
     }
+
+
+
+    @GetMapping("/getallpostbySortwithoutPage")
+    public ResponseEntity<List <BloodDonatePostResponse>> getAllPost(@RequestParam("availability") boolean availability){
+
+        List<BloodDonatePostDto> allpostDescSortbyCreatedDate =
+                bloodDonatePostServices.getAllpostDescSortbyCreatedDate(availability);
+
+        List<BloodDonatePostResponse> collect =
+                allpostDescSortbyCreatedDate.stream().map((post) -> Mapper.bloodDonatePostResponseMapper(post, post.getUser())).collect(Collectors.toList());
+
+        return new ResponseEntity<List <BloodDonatePostResponse>>(collect,HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getuserpostbySort/{userId}")
+    public ResponseEntity<List <BloodDonatePostResponse>> getAllPostbyUserId(
+            @RequestParam(name = "SortBy" ,defaultValue = "createdDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir,
+            @PathVariable Integer userId ){
+
+        List<BloodDonatePostDto> allpostbyUserId = bloodDonatePostServices.getAllpostbyUserId(userId, SortBy, SortDir);
+
+        List<BloodDonatePostResponse> collect =
+                allpostbyUserId.stream().map((post) -> Mapper.bloodDonatePostResponseMapper(post, post.getUser())).collect(Collectors.toList());
+
+        return new ResponseEntity<List <BloodDonatePostResponse>>(collect,HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getuserpostbyPage/{userId}")
+    public ResponseEntity<BloodDonatePostPageResponse> getAllPostbyUserIdwithPage(
+            @RequestParam(name = "pageNumber",defaultValue ="0") Integer pageNumber,
+            @RequestParam(name = "pageSize",defaultValue = "1") Integer pageSize,
+            @RequestParam(name = "SortBy" ,defaultValue = "createdDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir,
+            @PathVariable Integer userId ){
+
+        BloodDonatePostPageResponse allpostbyUserIdwithPage =
+                bloodDonatePostServices.getAllpostbyUserIdwithPage(userId, pageNumber, pageSize, SortBy, SortDir);
+
+
+
+        return new ResponseEntity<BloodDonatePostPageResponse>(allpostbyUserIdwithPage,HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
 
 
 

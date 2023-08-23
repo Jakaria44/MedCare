@@ -84,14 +84,14 @@ public class BloodDonatePostServiceImpl implements BloodDonatePostServices {
     @Override
     public BloodDonatePostPageResponse allpostWithPagination(Integer pageNumber,
                                                                Integer pageSize,
-                                                               String SortBy, String SortDir) {
+                                                               String SortBy, String SortDir,boolean availability) {
 
 
         Sort sort = SortDir.equalsIgnoreCase("asc")? Sort.by(SortBy).ascending():Sort.by(SortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
 
         Page<BloodDonatePost> byAvailibilityOrderByCreatedDateDesc =
-                bloodDonatePostRepository.findByAvailibilityOrderByCreatedDateDesc(false, pageable);
+                bloodDonatePostRepository.findByAvailibilityOrderByCreatedDateDesc(availability, pageable);
 
         List<BloodDonatePostDto> collect = byAvailibilityOrderByCreatedDateDesc.stream().map((post) -> Mapper.postToDto(post))
                 .collect(Collectors.toList());
@@ -108,6 +108,64 @@ public class BloodDonatePostServiceImpl implements BloodDonatePostServices {
         bloodDonatePostPageResponse.setLastPage(byAvailibilityOrderByCreatedDateDesc.isLast());
 
         return  bloodDonatePostPageResponse;
+    }
+
+    @Override
+    public List<BloodDonatePostDto> getAllpostDescSortbyCreatedDate(boolean availibility) {
+
+
+        List<BloodDonatePost> postList =
+                bloodDonatePostRepository.findByAvailibilityOrderByCreatedDateDesc(availibility);
+
+        List<BloodDonatePostDto> collect =
+                postList.stream().map((post) -> Mapper.postToDto(post)).collect(Collectors.toList());
+
+
+        return collect;
+    }
+
+    @Override
+    public List<BloodDonatePostDto> getAllpostbyUserId(int id,String SortBy, String SortDir) {
+
+        Sort sort = SortDir.equalsIgnoreCase("asc")? Sort.by(SortBy).ascending():Sort.by(SortBy).descending();
+
+        List<BloodDonatePost> byUserId = bloodDonatePostRepository.findByUserId(id,sort);
+
+        List<BloodDonatePostDto> collect = byUserId.stream().map((post) -> Mapper.postToDto(post)).collect(Collectors.toList());
+
+
+        return collect;
+    }
+
+    @Override
+    public BloodDonatePostPageResponse getAllpostbyUserIdwithPage(int id,
+                                                               Integer pageNumber,
+                                                               Integer pageSize,
+                                                               String SortBy,
+                                                               String SortDir) {
+
+        Sort sort = SortDir.equalsIgnoreCase("asc")? Sort.by(SortBy).ascending():Sort.by(SortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
+
+        Page<BloodDonatePost> byUserId = bloodDonatePostRepository.findByUserId(id, pageable);
+
+        List<BloodDonatePostDto> collect = byUserId.stream().map((post) -> Mapper.postToDto(post)).collect(Collectors.toList());
+
+        List<BloodDonatePostResponse> collect1 =
+                collect.stream().map((post) -> Mapper.bloodDonatePostResponseMapper(post, post.getUser())).collect(Collectors.toList());
+
+
+        BloodDonatePostPageResponse bloodDonatePostPageResponse = new BloodDonatePostPageResponse();
+        bloodDonatePostPageResponse.setContent(collect1);
+        bloodDonatePostPageResponse.setPageNumber(byUserId.getNumber());
+        bloodDonatePostPageResponse.setPageSize(byUserId.getSize());
+        bloodDonatePostPageResponse.setTotaleElements((int) byUserId.getTotalElements());
+        bloodDonatePostPageResponse.setTotalPages(byUserId.getTotalPages());
+        bloodDonatePostPageResponse.setLastPage(byUserId.isLast());
+
+
+
+        return bloodDonatePostPageResponse;
     }
 
 
