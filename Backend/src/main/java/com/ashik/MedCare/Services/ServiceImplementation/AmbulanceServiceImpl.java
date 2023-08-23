@@ -6,6 +6,7 @@ import com.ashik.MedCare.Entities.User;
 import com.ashik.MedCare.Repository.AmbulancePostRepository;
 import com.ashik.MedCare.Repository.UserRepository;
 import com.ashik.MedCare.Services.AmbulancePostService;
+import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +24,10 @@ public class AmbulanceServiceImpl implements AmbulancePostService {
     public AmbulancePostDTO cratePost(AmbulancePostDTO ambulancePostDTO) {
 
 
-        AmbulancePost ambulancePost = new AmbulancePost();
-        ambulancePost.setAmbulanceInfo(ambulancePostDTO.getAmbulanceInfo());
-        ambulancePost.setAmbulanceModel(ambulancePostDTO.getAmbulanceModel());
-        ambulancePost.setAircon(ambulancePostDTO.isAircon());
-        ambulancePost.setContactInfo(ambulancePostDTO.getContactInfo());
-        ambulancePost.setDriverName(ambulancePostDTO.getDriverName());
-        ambulancePost.setLocation(ambulancePostDTO.getLocation());
-        ambulancePost.setUser(ambulancePostDTO.getUser());
+        AmbulancePost ambulancePost = AmbulanceMapper.DtoToPost(ambulancePostDTO);
+        AmbulancePost save = ambulancePostRepository.save(ambulancePost);
 
-        AmbulancePost ambulancePost1 =ambulancePostRepository.save(ambulancePost);
-        ambulancePostDTO.setId(ambulancePost1.getId());
-
-        return ambulancePostDTO;
-
-
+        return AmbulanceMapper.postDTO(save);
 
     }
 
@@ -53,20 +43,25 @@ public class AmbulanceServiceImpl implements AmbulancePostService {
 //
 //        }
 
-
-
         ambulancePost.setAmbulanceInfo(ambulancePostDTO.getAmbulanceInfo());
+        ambulancePost.setContactInfo(ambulancePostDTO.getContactInfo());
         ambulancePost.setAmbulanceModel(ambulancePostDTO.getAmbulanceModel());
         ambulancePost.setAircon(ambulancePostDTO.isAircon());
-        ambulancePost.setContactInfo(ambulancePostDTO.getContactInfo());
         ambulancePost.setDriverName(ambulancePostDTO.getDriverName());
-        ambulancePost.setLocation(ambulancePostDTO.getLocation());
-        ambulancePost.setUser(ambulancePostDTO.getUser());
+        ambulancePost.setAmbulanceImageName(ambulancePostDTO.getAmbulanceImageName());
+        ambulancePost.setDistrict(ambulancePostDTO.getDistrict());
+        ambulancePost.setDivision(ambulancePostDTO.getDivision());
+        ambulancePost.setUpazila(ambulancePostDTO.getUpazila());
 
-        ambulancePostRepository.save(ambulancePost);
 
-        return  ambulancePostDTO;
+
+        AmbulancePost save = ambulancePostRepository.save(ambulancePost);
+
+
+        return  AmbulanceMapper.postDTO(save);
     }
+
+
 
     @Override
     public void deletePost(Integer id) {
@@ -110,7 +105,7 @@ public class AmbulanceServiceImpl implements AmbulancePostService {
         ambulancePostDTO.setAmbulanceInfo(post.getAmbulanceInfo());
         ambulancePostDTO.setId(post.getId());
         ambulancePostDTO.setAmbulanceModel(post.getAmbulanceModel());
-        ambulancePostDTO.setLocation(post.getLocation());
+//        ambulancePostDTO.setLocation(post.getLocation());
         ambulancePostDTO.setUser(post.getUser());
         ambulancePostDTO.setAircon(post.isAircon());
         ambulancePostDTO.setDriverName(post.getDriverName());

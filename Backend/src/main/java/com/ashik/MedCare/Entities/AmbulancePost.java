@@ -2,8 +2,12 @@ package com.ashik.MedCare.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
+import java.util.Date;
 
 @Data
 @Entity
@@ -18,12 +22,16 @@ public class AmbulancePost {
     private String ambulanceModel;
     @Column(name = "AirCon")
     private boolean isAircon;
+    @Column(name = "ImageName")
+    private String ambulanceImageName;
     @Column(name = "Description")
     private String ambulanceInfo;
     @Column(name = "Contact")
     private String contactInfo;
-    @Column(name = "location")
-    private  String location;
+    private String division;
+    private String district;
+    private String upazila;
+    private Date createdDate;
     @ManyToOne
     @JsonBackReference
     private User user;

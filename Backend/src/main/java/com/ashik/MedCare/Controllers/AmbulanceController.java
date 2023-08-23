@@ -1,20 +1,25 @@
 package com.ashik.MedCare.Controllers;
 
-import com.ashik.MedCare.Configuration.JwTokenProvider;
 import com.ashik.MedCare.DTOs.AmbulancePostDTO;
+import com.ashik.MedCare.Entities.AmbulancePost;
 import com.ashik.MedCare.Entities.User;
+import com.ashik.MedCare.Repository.AmbulancePostRepository;
 import com.ashik.MedCare.Repository.UserRepository;
 import com.ashik.MedCare.RequestObject.AmbulanceRequest;
 import com.ashik.MedCare.Services.AmbulancePostService;
 import com.ashik.MedCare.Services.UserService;
-import com.ashik.MedCare.Utils.AmbulanceResponse;
+import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceMapper;
+import com.ashik.MedCare.Utils.AmbulanceUtil.AmbulanceResponse;
+import com.ashik.MedCare.Utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,6 +31,8 @@ public class AmbulanceController {
     private UserService userService;
     @Autowired
     private AmbulancePostService ambulancePostService;
+    @Autowired
+    private AmbulancePostRepository ambulancePostRepository;
 
 
 
@@ -40,27 +47,19 @@ public class AmbulanceController {
 
                 User user = userService.findUserByJwt(jwt);
 
-            AmbulancePostDTO ambulancePostDTO = new AmbulancePostDTO();
-
-            ambulancePostDTO.setAmbulanceInfo(ambulanceRequest.getAmbulanceInfo());
-            ambulancePostDTO.setAmbulanceModel(ambulanceRequest.getAmbulanceModel());
-            ambulancePostDTO.setAircon(ambulanceRequest.isAircon());
-            ambulancePostDTO.setContactInfo(ambulanceRequest.getContactInfo());
-            ambulancePostDTO.setDriverName(ambulanceRequest.getDriverName());
-            ambulancePostDTO.setLocation(ambulanceRequest.getLocation());
-            ambulancePostDTO.setUser(user);
-
-            ambulancePostService.cratePost(ambulancePostDTO);
-
-        AmbulanceResponse ambulanceResponse = new AmbulanceResponse();
-        ambulanceResponse.setMessage("craeted successfully");
-        ambulanceResponse.setIsCreated("true");
+        AmbulancePostDTO ambulancePostDTO = AmbulanceMapper.requestToDto(ambulanceRequest);
+        ambulancePostDTO.setUser(user);
+        ambulancePostDTO.setCreatedDate(new Date());
+        AmbulancePostDTO ambulancePostDTO1 = ambulancePostService.cratePost(ambulancePostDTO);
+        AmbulanceResponse response = AmbulanceMapper.dtoToResponse(ambulancePostDTO1);
 
 
-            return new ResponseEntity<AmbulanceResponse>(ambulanceResponse, HttpStatus.CREATED);
+        return new ResponseEntity<AmbulanceResponse>(response, HttpStatus.CREATED);
 
 
     }
+
+
 
 
     @PutMapping("/updateambulance/{id}")
@@ -71,46 +70,63 @@ public class AmbulanceController {
 
         User user = userService.findUserByJwt(jwt);
 
-        AmbulancePostDTO ambulancePostDTO = new AmbulancePostDTO();
-
-        ambulancePostDTO.setAmbulanceInfo(ambulanceRequest.getAmbulanceInfo());
-        ambulancePostDTO.setAmbulanceModel(ambulanceRequest.getAmbulanceModel());
-        ambulancePostDTO.setAircon(ambulanceRequest.isAircon());
-        ambulancePostDTO.setContactInfo(ambulanceRequest.getContactInfo());
-        ambulancePostDTO.setDriverName(ambulanceRequest.getDriverName());
-        ambulancePostDTO.setLocation(ambulanceRequest.getLocation());
-        ambulancePostDTO.setUser(user);
-
-        AmbulancePostDTO ambulancePostDTO1 = ambulancePostService.updatePost(ambulancePostDTO,id);
+        AmbulancePostDTO ambulancePostDTO = AmbulanceMapper.requestToDto(ambulanceRequest);
+        AmbulancePostDTO ambulancePostDTO1 = ambulancePostService.updatePost(ambulancePostDTO, id);
+        AmbulanceResponse response = AmbulanceMapper.dtoToResponse(ambulancePostDTO1);
 
 
-        AmbulanceResponse ambulanceResponse = new AmbulanceResponse();
-        ambulanceResponse.setMessage("updated  successfully");
-        ambulanceResponse.setIsCreated("true");
 
 
-       return new ResponseEntity<AmbulanceResponse>(ambulanceResponse,HttpStatus.CREATED);
+
+       return new ResponseEntity<AmbulanceResponse>(response,HttpStatus.CREATED);
 
 
     }
 
+
+
+
     @DeleteMapping("/deleteambulance/{id}")
-    public ResponseEntity<AmbulanceResponse> deletePost(@PathVariable Integer id,
-                                                        @RequestHeader ("Authorization") String jwt){
+    public ResponseEntity<GeneralResponse> deletePost(@PathVariable Integer id,
+                                                      @RequestHeader ("Authorization") String jwt){
 
 
         ambulancePostService.deletePost(id);
 
-        AmbulanceResponse ambulanceResponse = new AmbulanceResponse();
-        ambulanceResponse.setMessage("Deleted  successfully");
-        ambulanceResponse.setIsCreated("true");
+          GeneralResponse response = new GeneralResponse();
+
+          response.setMessage("Deleted Successfully");
+          response.setSuccess(true);
 
 
-        return new ResponseEntity<AmbulanceResponse>(ambulanceResponse,HttpStatus.OK);
+        return new ResponseEntity<GeneralResponse>(response,HttpStatus.OK);
 
 
 
     }
+
+
+    @GetMapping("/ambulance/{id}")
+    public ResponseEntity<AmbulanceResponse>getPostById(@PathVariable Integer id){
+
+
+        Optional<AmbulancePost> byId = ambulancePostRepository.findById(id);
+
+        if(!byId.isPresent()){
+            throw  new BadCredentialsException("post not found");
+        }
+
+        AmbulancePost ambulancePost = byId.get();
+        AmbulancePostDTO ambulancePostDTO = AmbulanceMapper.postDTO(ambulancePost);
+        AmbulanceResponse response = AmbulanceMapper.dtoToResponse(ambulancePostDTO);
+
+
+        return new ResponseEntity<AmbulanceResponse>(response,HttpStatus.OK);
+
+
+    }
+
+
 
 
     @GetMapping("/getallambulancepost")
