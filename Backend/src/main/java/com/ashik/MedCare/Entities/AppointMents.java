@@ -18,6 +18,7 @@ public class AppointMents {
     private String description;
     private Date date;
     @ManyToOne
+    @JsonBackReference
     private Doctor doctor;
     @ManyToOne
     @JsonBackReference

@@ -70,26 +70,6 @@ public class Mapper {
         return fundRaisePost;
     }
 
-    public static DoctorDtos doctorPostTodto(Doctor doctor){
-        DoctorDtos doctorDtos = new DoctorDtos();
-        doctorDtos.setDoctorCategory(doctor.getDoctorCategory());
-        doctorDtos.setDescription(doctor.getDescription());
-        doctorDtos.setAppointMents(doctor.getAppointMents());
-        doctorDtos.setName(doctor.getName());
-
-        return doctorDtos;
-    }
-
-
-    public static Doctor doctordtoToPost(DoctorDtos doctorDtos){
-       Doctor doctor= new Doctor();
-        doctor.setDoctorCategory(doctorDtos.getDoctorCategory());
-        doctor.setDescription(doctorDtos.getDescription());
-        doctor.setAppointMents(doctorDtos.getAppointMents());
-        doctor.setName(doctorDtos.getName());
-
-        return doctor;
-    }
 
 
     public static AppointMents appointmentDtOToPost(AppointmentDtO appointmentDtO){

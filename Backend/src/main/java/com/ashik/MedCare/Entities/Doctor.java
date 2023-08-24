@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -14,8 +17,21 @@ public class Doctor {
     private int id;
     private String name;
     private String description;
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<DoctorCategory>doctorCategory;
+    private String specialization;
+    private String email;
+    private String profileImageUrl;
+    private int appointmentFee;
+    private String cvUrl;
+    private boolean approve;
+    private Date appliedTime;
     @OneToMany(mappedBy = "doctor")
+    @JsonManagedReference
+    private List<DoctorAvailability> doctorAvailabilities;
+    @OneToMany(mappedBy = "doctor")
+    @JsonManagedReference
     private List<AppointMents> appointMents;
+
+
+
+
 }
