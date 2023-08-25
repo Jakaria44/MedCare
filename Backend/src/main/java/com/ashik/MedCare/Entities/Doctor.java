@@ -1,5 +1,6 @@
 package com.ashik.MedCare.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,12 +25,16 @@ public class Doctor {
     private String cvUrl;
     private boolean approve;
     private Date appliedTime;
+    private  int loginUserId;
+    private int earnings;
     @OneToMany(mappedBy = "doctor")
     @JsonManagedReference
     private List<DoctorAvailability> doctorAvailabilities;
     @OneToMany(mappedBy = "doctor")
-    @JsonManagedReference
     private List<AppointMents> appointMents;
+    @OneToMany(mappedBy = "doctor")
+    @JsonIgnore
+    private List<Slot>slots;
 
 
 

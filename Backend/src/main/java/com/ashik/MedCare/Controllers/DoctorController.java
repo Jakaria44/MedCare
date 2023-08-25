@@ -3,8 +3,10 @@ package com.ashik.MedCare.Controllers;
 import com.ashik.MedCare.DTOs.DoctorDtos;
 import com.ashik.MedCare.Entities.Doctor;
 import com.ashik.MedCare.Entities.DoctorAvailability;
+import com.ashik.MedCare.Entities.Slot;
 import com.ashik.MedCare.Entities.User;
 import com.ashik.MedCare.Repository.DoctorAvailabilityRepository;
+import com.ashik.MedCare.Repository.SlotRepository;
 import com.ashik.MedCare.Repository.UserRepository;
 import com.ashik.MedCare.Services.DoctorServices;
 import com.ashik.MedCare.Utils.BloodDonatePostPageResponse;
@@ -12,12 +14,15 @@ import com.ashik.MedCare.Utils.DoctorUtills.DoctorApplyRequest;
 import com.ashik.MedCare.Utils.DoctorUtills.DoctorMapper;
 import com.ashik.MedCare.Utils.DoctorUtills.DoctorPagePost;
 import com.ashik.MedCare.Utils.GeneralResponse;
+import com.ashik.MedCare.Utils.SLOT.SlotUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +37,9 @@ public class DoctorController {
     private DoctorAvailabilityRepository doctorAvailabilityRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SlotRepository slotRepository;
+
 
     @PostMapping("/doctor/apply")
     ResponseEntity<GeneralResponse>applyDoctor(@RequestBody DoctorApplyRequest applyRequest
@@ -82,6 +90,38 @@ public class DoctorController {
         user.setPassword(s);
 
         User save = userRepository.save(user);
+
+        List<DoctorAvailability> doctorAvailabilities = doctor.getDoctorAvailabilities();
+
+        for(DoctorAvailability doctorAvailability : doctorAvailabilities){
+            LocalTime startTime = doctorAvailability.getStartTime();
+            LocalTime endTime = doctorAvailability.getEndTime();
+            String weekDays = doctorAvailability.getWeekDays().toUpperCase();
+
+            List<LocalDate> localDates = SlotUtil.upcomingAllDates(weekDays);
+
+            for(LocalDate localDate : localDates){
+                LocalTime temp = startTime;
+                LocalTime midstart = temp;
+                while (midstart != endTime){
+                    LocalTime slotStart = temp;
+                    midstart = temp.plusHours(1);
+                    temp = midstart;
+                    Slot slot = new Slot();
+                    slot.setStartTime(slotStart);
+                    slot.setEndTime(midstart);
+                    slot.setLocalDate(localDate);
+                    slot.setDoctor(doctor);
+                    slotRepository.save(slot);
+
+
+                }
+            }
+
+
+
+        }
+
 
         //Send email to doctor with Credential
 

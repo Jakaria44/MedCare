@@ -72,25 +72,25 @@ public class Mapper {
 
 
 
-    public static AppointMents appointmentDtOToPost(AppointmentDtO appointmentDtO){
-        AppointMents appointMents = new AppointMents();
-        appointMents.setDescription(appointmentDtO.getDescription());
-        appointMents.setUser(appointmentDtO.getUser());
-        appointMents.setDate(appointmentDtO.getDate());
-        appointMents.setDoctor(appointmentDtO.getDoctor());
+//    public static AppointMents appointmentDtOToPost(AppointmentDtO appointmentDtO){
+//        AppointMents appointMents = new AppointMents();
+//        appointMents.setDescription(appointmentDtO.getDescription());
+//        appointMents.setUser(appointmentDtO.getUser());
+//        appointMents.setDate(appointmentDtO.getDate());
+//        appointMents.setDoctor(appointmentDtO.getDoctor());
+//
+//        return appointMents;
+//    }
 
-        return appointMents;
-    }
-
-    public static AppointmentDtO appointmentpostToDTO(AppointMents appointMents){
-       AppointmentDtO appointMentdto = new AppointmentDtO();
-        appointMentdto.setDescription(appointMents.getDescription());
-        appointMentdto.setUser(appointMents.getUser());
-        appointMentdto.setDate(appointMents.getDate());
-        appointMentdto.setDoctor(appointMents.getDoctor());
-
-        return appointMentdto;
-    }
+//    public static AppointmentDtO appointmentpostToDTO(AppointMents appointMents){
+//       AppointmentDtO appointMentdto = new AppointmentDtO();
+//        appointMentdto.setDescription(appointMents.getDescription());
+//        appointMentdto.setUser(appointMents.getUser());
+//        appointMentdto.setDate(appointMents.getDate());
+//        appointMentdto.setDoctor(appointMents.getDoctor());
+//
+//        return appointMentdto;
+//    }
 
 
     public  static  BloodDonatePostResponse bloodDonatePostResponseMapper(BloodDonatePostDto bloodDonatePostDto, User user){

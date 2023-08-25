@@ -5,25 +5,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
-@Data
 @Entity
-public class AppointMents {
-
+@Data
+public class Slot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String description;
-    @ManyToOne
+    private LocalDate localDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    @ManyToOne()
     @JsonIgnore
     private Doctor doctor;
-    @ManyToOne
-    @JsonBackReference
-    private User user;
-
 }

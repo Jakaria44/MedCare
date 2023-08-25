@@ -5,7 +5,10 @@ import com.ashik.MedCare.Entities.Doctor;
 import com.ashik.MedCare.Entities.User;
 import com.ashik.MedCare.Repository.DoctorRepository;
 import com.ashik.MedCare.Repository.UserRepository;
+import com.ashik.MedCare.RequestObject.AppointmentRequest;
 import com.ashik.MedCare.Services.AppointmentServices;
+import com.ashik.MedCare.Utils.AppointMentUtill.AppointmentMapper;
+import com.ashik.MedCare.Utils.AppointMentUtill.AppointmentResponse;
 import com.ashik.MedCare.Utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -30,28 +35,84 @@ public class AppointmentsController {
 
 
     @PostMapping("/createappoint/{doctorId}/{userId}")
-    public ResponseEntity<GeneralResponse>createAppointment(@RequestBody AppointmentDtO appointmentDtO,
+    public ResponseEntity<AppointmentResponse>createAppointment(@RequestBody AppointmentRequest request,
                                                             @PathVariable Integer doctorId,
                                                             @PathVariable Integer userId){
 
 
-        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
-        User user = userRepository.findById(userId).orElse(null);
+        AppointmentDtO appointmentDtO = AppointmentMapper.RequestToDto(new AppointmentDtO(), request);
+        Optional<Doctor> byId = doctorRepository.findById(doctorId);
+        appointmentDtO.setDoctor(byId.get());
+        Optional<User> byId1 = userRepository.findById(userId);
+        appointmentDtO.setUser(byId1.get());
 
-        appointmentDtO.setDoctor(doctor);
-        appointmentDtO.setUser(user);
-        appointmentDtO.setDate(new Date());
+        AppointmentDtO appoinMent = appointmentServices.createAppoinMent(appointmentDtO);
 
-        appointmentServices.createAppoinMent(appointmentDtO);
+        AppointmentResponse appointmentResponse = AppointmentMapper.dtoToResponse(appoinMent, new AppointmentResponse());
 
 
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("succesfully updated post");
-        generalResponse.setSuccess(true);
-
-        return new ResponseEntity<GeneralResponse>(generalResponse, HttpStatus.OK);
+        return new ResponseEntity<AppointmentResponse>(appointmentResponse, HttpStatus.OK);
 
     }
+
+    @GetMapping("/appointment/user/upcoming/{id}")
+    public ResponseEntity<List<AppointmentResponse>>getUpcomingAppointment(
+            @PathVariable Integer id,
+            @RequestParam(name = "SortBy" ,defaultValue = "startTime") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "asc") String Sortdir
+    ){
+
+        List<AppointmentResponse> appointmentResponses = appointmentServices.upcomingAppointmentForPatient(id,SortBy,Sortdir);
+
+        return new ResponseEntity<List<AppointmentResponse>>(appointmentResponses,HttpStatus.OK);
+
+    }
+
+
+    @GetMapping("/appointment/user/ongoing/{id}")
+    public ResponseEntity<List<AppointmentResponse>>getongoingAppointment(
+            @PathVariable Integer id,
+            @RequestParam(name = "SortBy" ,defaultValue = "startTime") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "asc") String Sortdir
+    ){
+
+        List<AppointmentResponse> appointmentResponses = appointmentServices.ongoingAppointmentForPatient(id,SortBy,Sortdir);
+
+        return new ResponseEntity<List<AppointmentResponse>>(appointmentResponses,HttpStatus.OK);
+
+    }
+
+
+    @GetMapping("/appointment/doctor/upcoming/{id}")
+    public ResponseEntity<List<AppointmentResponse>>getUpcomingAppointmentforDoctor(
+            @PathVariable Integer id,
+            @RequestParam(name = "SortBy" ,defaultValue = "startTime") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "asc") String Sortdir
+    ){
+
+        List<AppointmentResponse> appointmentResponses = appointmentServices.upcomingAppointmentForDoctor(id,SortBy,Sortdir);
+
+        return new ResponseEntity<List<AppointmentResponse>>(appointmentResponses,HttpStatus.OK);
+
+    }
+
+
+    @GetMapping("/appointment/doctor/ongoing/{id}")
+    public ResponseEntity<List<AppointmentResponse>>getongoingAppointmentforDoctor(
+            @PathVariable Integer id,
+            @RequestParam(name = "SortBy" ,defaultValue = "startTime") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "asc") String Sortdir
+    ){
+
+        List<AppointmentResponse> appointmentResponses = appointmentServices.ongoingAppointmentForDoctor(id,SortBy,Sortdir);
+
+        return new ResponseEntity<List<AppointmentResponse>>(appointmentResponses,HttpStatus.OK);
+
+    }
+
+
+
+
 
 
 
