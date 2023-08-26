@@ -3,12 +3,19 @@ package com.ashik.MedCare.Controllers;
 import com.ashik.MedCare.DTOs.BloodDonatePostDto;
 import com.ashik.MedCare.DTOs.FundRaisePostDto;
 import com.ashik.MedCare.Entities.FundRaisePost;
+import com.ashik.MedCare.Entities.PostImage;
+import com.ashik.MedCare.Entities.ProvedDocument;
 import com.ashik.MedCare.Entities.User;
 import com.ashik.MedCare.Repository.FundRaisePostRepository;
+import com.ashik.MedCare.Repository.PostImageRepository;
+import com.ashik.MedCare.Repository.ProveDocumentRepository;
 import com.ashik.MedCare.RequestObject.BloodDonatePostReq;
 import com.ashik.MedCare.RequestObject.FundraiseRequest;
 import com.ashik.MedCare.Services.FundraisePostService;
 import com.ashik.MedCare.Services.UserService;
+import com.ashik.MedCare.Utils.FundRaisePostUtils.FundPostPage;
+import com.ashik.MedCare.Utils.FundRaisePostUtils.FundRaisePostMapper;
+import com.ashik.MedCare.Utils.FundRaisePostUtils.FundRaiseResponse;
 import com.ashik.MedCare.Utils.GeneralResponse;
 import com.ashik.MedCare.Utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +36,10 @@ public class FundRaisPostController {
     private FundraisePostService fundraisePostService;
     @Autowired
     private FundRaisePostRepository fundRaisePostRepository;
+    @Autowired
+    private PostImageRepository postImageRepository;
+    @Autowired
+    private ProveDocumentRepository proveDocumentRepository;
 
 
     @PostMapping("/fundpost/create")
@@ -36,25 +47,110 @@ public class FundRaisPostController {
                                               @RequestHeader ("Authorization") String jwt){
 
         User user = userService.findUserByJwt(jwt);
+        List<PostImage> postImages = request.getPostImages();
+        List<ProvedDocument> proveDocuments = request.getProveDocuments();
 
-        FundRaisePostDto fundRaisePostDto = new FundRaisePostDto();
-        fundRaisePostDto.setPostContent(request.getPostContent());
-        fundRaisePostDto.setTitle(request.getTitle());
-        fundRaisePostDto.setAmount(request.getAmount());
+        request.setPostImages(null);
+        request.setProveDocuments(null);
+
+        FundRaisePostDto fundRaisePostDto = FundRaisePostMapper.requestTodto(new FundRaisePostDto(), request);
         fundRaisePostDto.setUser(user);
-        fundRaisePostDto.setPostImages(null);
-        fundRaisePostDto.setProveDocuments(null);
+        FundRaisePostDto post = fundraisePostService.createPost(fundRaisePostDto);
+        FundRaisePost fundRaisePost = FundRaisePostMapper.DtoToPost(new FundRaisePost(), post);
+        int postId = post.getId();
+        fundRaisePost.setId(post.getId());
 
-        fundraisePostService.createPost(fundRaisePostDto);
+
+
+        for (PostImage image : postImages){
+            image.setFundRaisePost(fundRaisePost);
+            postImageRepository.save(image);
+
+        }
+
+        for(ProvedDocument provedDocument : proveDocuments){
+            provedDocument.setFundRaisePost(fundRaisePost);
+            proveDocumentRepository.save(provedDocument);
+        }
+
+
+
 
         GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("succesfully created fundpost");
+        generalResponse.setMessage("succesfully created fundpost wait approve");
         generalResponse.setSuccess(true);
 
-        return new ResponseEntity<GeneralResponse>(generalResponse, HttpStatus.OK);
+        return new ResponseEntity<GeneralResponse>(generalResponse , HttpStatus.OK);
 
 
     }
+
+    //done with admin
+    @PutMapping("/fundPost/approve/{postid}")
+    public ResponseEntity<FundRaiseResponse> approvePost(@PathVariable Integer postid ){
+
+        FundRaisePostDto fundRaisePostDto = fundraisePostService.approvedPost(postid);
+        FundRaiseResponse fundRaiseResponse = FundRaisePostMapper.dtoToResponse(fundRaisePostDto, new FundRaiseResponse());
+
+        return new ResponseEntity<FundRaiseResponse>(fundRaiseResponse,HttpStatus.OK);
+
+    }
+
+
+
+
+    @GetMapping("/fundpost/getallpost/{approve}")
+    public ResponseEntity<List<FundRaiseResponse>> getAllbyApproveStatuswithSort(
+//            @RequestParam(name = "pageNumber",defaultValue ="0") Integer pageNumber,
+//
+//            @RequestParam(name = "pageSize",defaultValue = "1") Integer pageSize,
+
+            @RequestParam(name = "SortBy" ,defaultValue = "approveDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir,
+            @PathVariable("approve") boolean approve ){
+
+
+        List<FundRaiseResponse> allbyApproveStatuswithSort = fundraisePostService.getAllbyApproveStatuswithSort(approve, SortBy, SortDir);
+
+        return new ResponseEntity<List<FundRaiseResponse>>(allbyApproveStatuswithSort,HttpStatus.OK);
+
+
+    }
+
+    @GetMapping("/fundpost/getallpost/page/{approve}")
+    public ResponseEntity<FundPostPage> getAllbyApproveStatuswithSort(
+            @RequestParam(name = "pageNumber",defaultValue ="0") Integer pageNumber,
+
+            @RequestParam(name = "pageSize",defaultValue = "1") Integer pageSize,
+
+            @RequestParam(name = "SortBy" ,defaultValue = "approveDate") String SortBy,
+            @RequestParam(name = "SortDir",defaultValue = "desc") String SortDir,
+            @PathVariable boolean approve
+    ){
+
+        FundPostPage allbyApproveStatuswithSort =
+                fundraisePostService.getAllbyApproveStatuswithSort(approve, pageSize, pageNumber, SortBy, SortDir);
+
+        return new ResponseEntity<FundPostPage>(allbyApproveStatuswithSort,HttpStatus.OK);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @PutMapping("fundpost/update/{id}")
     public ResponseEntity<GeneralResponse> updatePost(@PathVariable Integer id,
@@ -63,14 +159,6 @@ public class FundRaisPostController {
 
         User user = userService.findUserByJwt(jwt);
 
-        Optional<FundRaisePost> byId = fundRaisePostRepository.findById(id);
-        FundRaisePost fundRaisePost = byId.orElse(null);
-        FundRaisePostDto fundRaisePostDto = Mapper.fundraisepostTodto(fundRaisePost);
-        fundRaisePostDto.setPostContent(request.getPostContent());
-        fundRaisePostDto.setTitle(request.getTitle());
-        fundRaisePostDto.setAmount(request.getAmount());
-
-        fundraisePostService.updatePost(fundRaisePostDto,id);
 
 
         GeneralResponse generalResponse = new GeneralResponse();
@@ -95,21 +183,21 @@ public class FundRaisPostController {
 
     }
 
-    @GetMapping("fundpost/getallpost")
-    public ResponseEntity<List<FundRaisePostDto>> getAllPost(){
+//    @GetMapping("fundpost/getallpost")
+//    public ResponseEntity<List<FundRaisePostDto>> getAllPost(){
+//
+//        List<FundRaisePostDto> allposts = fundraisePostService.getAllposts();
+//
+//        return new ResponseEntity<List <FundRaisePostDto>>(allposts,HttpStatus.OK);
+//    }
 
-        List<FundRaisePostDto> allposts = fundraisePostService.getAllposts();
-
-        return new ResponseEntity<List <FundRaisePostDto>>(allposts,HttpStatus.OK);
-    }
-
-    @GetMapping("fundpost/getallpost/{id}")
-    public ResponseEntity<List<FundRaisePostDto>> getAllPostbyUser(@PathVariable Integer id ){
-
-        List<FundRaisePostDto> allpostsbyUser = fundraisePostService.getAllpostsbyUser(id);
-
-        return new ResponseEntity<List<FundRaisePostDto>>( allpostsbyUser,HttpStatus.OK);
-    }
+//    @GetMapping("fundpost/getallpost/{id}")
+//    public ResponseEntity<List<FundRaisePostDto>> getAllPostbyUser(@PathVariable Integer id ){
+//
+//        List<FundRaisePostDto> allpostsbyUser = fundraisePostService.getAllpostsbyUser(id);
+//
+//        return new ResponseEntity<List<FundRaisePostDto>>( allpostsbyUser,HttpStatus.OK);
+//    }
 
 
 

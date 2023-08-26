@@ -1,5 +1,6 @@
 package com.ashik.MedCare.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ public class ProvedDocument {
 
     private String documentName;
     @ManyToOne
+    @JsonIgnore
     private FundRaisePost fundRaisePost;
 
 }

@@ -1,5 +1,6 @@
 package com.ashik.MedCare.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,5 +13,6 @@ public class PostImage {
 
     private String imageName;
     @ManyToOne
+    @JsonIgnore
     private FundRaisePost fundRaisePost;
 }

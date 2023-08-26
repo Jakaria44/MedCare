@@ -42,33 +42,33 @@ public class Mapper {
 
     }
 
-    public  static FundRaisePostDto fundraisepostTodto(FundRaisePost fundRaisePost){
-        FundRaisePostDto fundRaisePostDto = new FundRaisePostDto();
+//    public  static FundRaisePostDto fundraisepostTodto(FundRaisePost fundRaisePost){
+//        FundRaisePostDto fundRaisePostDto = new FundRaisePostDto();
+//
+//        fundRaisePostDto.setId(fundRaisePost.getId());
+//        fundRaisePostDto.setPostContent(fundRaisePost.getPostContent());
+//        fundRaisePostDto.setPostImages(fundRaisePost.getPostImages());
+//        fundRaisePostDto.setUser(fundRaisePost.getUser());
+//        fundRaisePostDto.setAmount(fundRaisePost.getAmount());
+//        fundRaisePostDto.setTitle(fundRaisePost.getTitle());
+//        fundRaisePostDto.setProveDocuments(fundRaisePost.getProveDocuments());
+//
+//        return fundRaisePostDto;
+//    }
 
-        fundRaisePostDto.setId(fundRaisePost.getId());
-        fundRaisePostDto.setPostContent(fundRaisePost.getPostContent());
-        fundRaisePostDto.setPostImages(fundRaisePost.getPostImages());
-        fundRaisePostDto.setUser(fundRaisePost.getUser());
-        fundRaisePostDto.setAmount(fundRaisePost.getAmount());
-        fundRaisePostDto.setTitle(fundRaisePost.getTitle());
-        fundRaisePostDto.setProveDocuments(fundRaisePost.getProveDocuments());
-
-        return fundRaisePostDto;
-    }
-
-    public  static FundRaisePost fundraisedtoTopost(FundRaisePostDto fundRaisePostDto){
-       FundRaisePost fundRaisePost = new FundRaisePost();
-
-
-        fundRaisePost.setPostContent(fundRaisePostDto.getPostContent());
-        fundRaisePost.setPostImages(fundRaisePostDto.getPostImages());
-        fundRaisePost.setUser(fundRaisePostDto.getUser());
-        fundRaisePost.setAmount(fundRaisePostDto.getAmount());
-        fundRaisePost.setTitle(fundRaisePostDto.getTitle());
-        fundRaisePost.setProveDocuments(fundRaisePostDto.getProveDocuments());
-
-        return fundRaisePost;
-    }
+//    public  static FundRaisePost fundraisedtoTopost(FundRaisePostDto fundRaisePostDto){
+//       FundRaisePost fundRaisePost = new FundRaisePost();
+//
+//
+//        fundRaisePost.setPostContent(fundRaisePostDto.getPostContent());
+//        fundRaisePost.setPostImages(fundRaisePostDto.getPostImages());
+//        fundRaisePost.setUser(fundRaisePostDto.getUser());
+//        fundRaisePost.setAmount(fundRaisePostDto.getAmount());
+//        fundRaisePost.setTitle(fundRaisePostDto.getTitle());
+//        fundRaisePost.setProveDocuments(fundRaisePostDto.getProveDocuments());
+//
+//        return fundRaisePost;
+//    }
 
 
 
