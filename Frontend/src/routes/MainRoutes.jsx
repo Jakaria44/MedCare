@@ -8,6 +8,7 @@ const Home = Loadable(lazy(() => import("../pages/Home")));
 const AllAmbulance = Loadable(
   lazy(() => import("../pages/ambulance/AllAmbulance"))
 );
+const AllBlood = Loadable(lazy(() => import("../pages/blood/AllBlood")));
 const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
 // ==============================| MAIN ROUTING ||============================== //
 
@@ -23,6 +24,10 @@ const MainRoutes = {
     {
       path: "/ambulance",
       element: <AllAmbulance />,
+    },
+    {
+      path: "/bloodpost",
+      element: <AllBlood />,
     },
   ],
 };

@@ -18,7 +18,9 @@ import ErrorModal from "../../component/ErrorModal";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
 import server from "./../../HTTP/httpCommonParam";
-import AddNewAmbulance from "./AddNewAmbulance";
+import AddNewBloodPost from "./AddNewBloodPost";
+const defaultBloodPostPicture =
+  "http://res.cloudinary.com/daa9vvvey/image/upload/v1695015921/ycmod3lsknleoonldhjl.png";
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -76,9 +78,9 @@ const MyTypography = ({ children, ...other }) => (
   </Typography>
 );
 
-const AmbulanceCard = ({ load, ambulance }) => {
+const BloodPostCard = ({ load, bloodPost }) => {
   const confirm = useConfirm();
-  const [editingAmbulance, setEditingAmbulance] = useState(false); // [editingAmbulance, setEditingAmbulance
+  const [editingBloodPost, setEditingBloodPost] = useState(false); // [editingBloodPost, setEditingBloodPost
   const [successMessage, setSuccessMessage] = useState("success");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An Error Occured");
@@ -98,21 +100,23 @@ const AmbulanceCard = ({ load, ambulance }) => {
     setAnchorEl(null);
   };
 
-  const isMyPost = localStorage.getItem("user_id") == ambulance.userId;
+  const isMyPost = localStorage.getItem("user_id") == bloodPost.userId;
 
-  const deleteAmbulance = async () => {
+  const deleteBloodPost = async () => {
     try {
       await confirm({
-        title: "Delete Ambulance",
-        description: "Are you sure you want to delete this Ambulance?",
+        title: "Delete Blood Post",
+        description: "Are you sure you want to delete this Blood Post?",
         confirmationText: "Delete",
         cancellationText: "Cancel",
         confirmationButtonProps: { variant: "outlined", color: "error" },
         cancellationButtonProps: { variant: "contained", color: "error" },
       });
       try {
+        handleClose();
+        setLoading(true);
         const res = await server.delete(
-          `/protect/deleteambulancePost/${ambulance.id}`
+          `/protect/blooddonatepost/delete/${bloodPost.id}`
         );
         setSuccessMessage(res.data.message);
         setShowSuccessMessage(true);
@@ -123,10 +127,11 @@ const AmbulanceCard = ({ load, ambulance }) => {
       }
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
-  const editAmbulance = () => {
-    setEditingAmbulance(true);
+  const editBloodPost = () => {
+    setEditingBloodPost(true);
   };
   return (
     <>
@@ -139,11 +144,14 @@ const AmbulanceCard = ({ load, ambulance }) => {
         <ImageListItem cols={1} rows={2}>
           <img
             onMouseEnter={() => setHovered(true)}
-            style={{ height: 160, width: "100%" }}
-            src={ambulance.ambulanceImageName}
-            alt={ambulance.ambulanceModel}
+            style={{ height: 260, width: "100%" }}
+            src={defaultBloodPostPicture}
+            alt={bloodPost.userName}
             loading="lazy"
           />
+          <Typography variant="h2" textAlign="center" gutterBottom>
+            {bloodPost.bloodGroup}
+          </Typography>
           {isMyPost && (
             <ImageListItemBar
               sx={{
@@ -160,7 +168,7 @@ const AmbulanceCard = ({ load, ambulance }) => {
                     onClick={handleClick}
                     center
                     size="large"
-                    sx={{ background: "rgba(90,90,90,0.5)" }}
+                    sx={{ background: "rgba(90,90,90,0.04)" }}
                   >
                     <MoreVert />
                   </IconButton>
@@ -179,30 +187,28 @@ const AmbulanceCard = ({ load, ambulance }) => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={editAmbulance} disableRipple>
+          <MenuItem onClick={editBloodPost} disableRipple>
             <Edit />
             Edit
           </MenuItem>
-          <MenuItem onClick={deleteAmbulance} disableRipple>
+          <MenuItem onClick={deleteBloodPost} disableRipple>
             <Delete color="error" />
             Delete
           </MenuItem>
         </StyledMenu>
+
         <CardContent marginBottom="0px">
-          <Tooltip title={ambulance.ambulanceModel}>
-            <MyTypography>Model: {ambulance.ambulanceModel}</MyTypography>
+          <Tooltip title={bloodPost.userName}>
+            <MyTypography>Model: {bloodPost.userName}</MyTypography>
           </Tooltip>
 
           <MyTypography>
-            AirConditioned: {ambulance.aircon ? "Yes" : "No"}
+            Available : {bloodPost.availibility ? "Yes" : "No"}
           </MyTypography>
-          <Tooltip title={ambulance.driverName}>
-            <MyTypography>Driver: {ambulance.driverName}</MyTypography>
-          </Tooltip>
-          <MyTypography> Division : {ambulance.division}</MyTypography>
-          <MyTypography> District : {ambulance.district}</MyTypography>
-          <MyTypography> Upazilla : {ambulance.upazila}</MyTypography>
-          <MyTypography>Driver Contact: {ambulance.contactInfo}</MyTypography>
+          <MyTypography> Division : {bloodPost.division}</MyTypography>
+          <MyTypography> District : {bloodPost.district}</MyTypography>
+          <MyTypography> Upazilla : {bloodPost.upazila}</MyTypography>
+          <MyTypography>Driver Contact: {bloodPost.contact}</MyTypography>
         </CardContent>
       </Card>
 
@@ -220,12 +226,12 @@ const AmbulanceCard = ({ load, ambulance }) => {
           setShowErrorMessage(false);
         }}
       />
-      <AddNewAmbulance
-        ambulanceProp={ambulance}
+      <AddNewBloodPost
+        bloodPostProp={bloodPost}
         editing={true}
-        open={editingAmbulance}
+        open={editingBloodPost}
         close={() => {
-          setEditingAmbulance(false);
+          setEditingBloodPost(false);
           load();
         }}
       />
@@ -235,4 +241,4 @@ const AmbulanceCard = ({ load, ambulance }) => {
   );
 };
 
-export default AmbulanceCard;
+export default BloodPostCard;
