@@ -88,7 +88,7 @@ const MobileSearch = ({ value, setValue, popupState, searchClickHandler }) => {
       id="input-search-header"
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      placeholder="Search by title, author, ISBN ..."
+      placeholder="Search..."
       sx={{ color: theme.palette.background }}
       data-words="Search by books(ex. Harry Potter),Search by Authors(ex. JK Rowling),Search by Publishers(ex. Bloomsburry)"
       data-delay="100"
@@ -255,7 +255,7 @@ const SearchSection = () => {
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={handleSearchChange}
-          placeholder="Search by title, author, ISBN ..."
+          placeholder="Search..."
           startAdornment={
             <InputAdornment position="start">
               <SearchOutlinedIcon />
@@ -284,14 +284,6 @@ const SearchSection = () => {
                   </Avatar>
                 </ButtonBase>
               </Box>
-              {/* <ButtonBase
-                onClick={searchClickHandler}
-                sx={{ borderRadius: "12px" }}
-              >
-                <HeaderAvatarStyle variant="rounded">
-                  <SearchOutlinedIcon />
-                </HeaderAvatarStyle>
-              </ButtonBase> */}
             </InputAdornment>
           }
           aria-describedby="search-helper-text"

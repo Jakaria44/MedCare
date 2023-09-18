@@ -57,9 +57,11 @@ export default function SignIn() {
       console.log(user);
       const response = await server.post("/login", user);
       console.log(response);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem("image", response.data.image);
+      localStorage.setItem("token", response.data.jwtToken);
+      localStorage.setItem("role", response.data.userDto.role);
+      // localStorage.setItem("image", response.data.image);
+
+      localStorage.setItem("user_id", response.data.userDto.id);
       setSigningIn(false);
       window.location.replace("/profile");
     } catch (err) {

@@ -29,7 +29,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="http://localhost:5173/">
+      <Link color="inherit" href="/">
         MedCare
       </Link>
       {new Date().getFullYear()}
@@ -116,7 +116,8 @@ export default function SignUp() {
       response = await server.post("/signup", fields);
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("role", response.data.userDto.role);
-      localStorage.setItem(fields.image);
+      // localStorage.setItem("image", fields.image);
+      localStorage.setItem("user_id", response.data.userDto.id);
       console.log(response);
 
       setSigningUp(false);
@@ -143,13 +144,7 @@ export default function SignUp() {
       password: data.get("password"),
     };
     console.log(fields);
-    // setSigningUp(false);
     postUser(fields);
-
-    // setTimeout(() => {
-    //   setSigningUp(false);
-    //   navigate("/profile");
-    // }, 3000);
   };
   const handleSubmit = (event) => {
     event.preventDefault();

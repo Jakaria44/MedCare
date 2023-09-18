@@ -19,22 +19,7 @@ const Admin = {
       icon: <SsidChart />,
       breadcrumbs: false,
     },
-    {
-      id: "jobapplications",
-      title: "Job Applications",
-      type: "item",
-      url: "/jobapplications",
-      icon: <Feed />,
-      breadcrumbs: false,
-    },
-    {
-      id: "manageemployees",
-      title: "All Employees",
-      type: "item",
-      url: "/manageemployees",
-      icon: <People />,
-      breadcrumbs: false,
-    },
+    
   ],
 };
 

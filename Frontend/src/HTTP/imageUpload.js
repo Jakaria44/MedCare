@@ -1,9 +1,9 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://medcarefinalapi-production.up.railway.app/api",
+  baseURL: "https://medcarefinalapi-production.up.railway.app/",
   headers: {
-    "Content-type": "application/json",
+    "Content-type": "multipart/form-data",
     "Authorization": localStorage.getItem('token'),
   }
 });
