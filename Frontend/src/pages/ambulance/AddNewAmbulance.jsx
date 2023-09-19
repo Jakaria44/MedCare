@@ -341,7 +341,7 @@ const AddNewAmbulance = ({
           Cancel
         </Button>
         <Button color="success" type="submit">
-          Add
+          {editing ? "Update" : "Add"}
         </Button>
       </DialogActions>
       <Backdrop

@@ -136,11 +136,17 @@ const AddNewBloodPost = ({
         </Grid>
       </Box>
       <DialogActions>
-        <Button color="error" onClick={close}>
+        <Button
+          color="error"
+          onClick={() => {
+            setBloodPost(defaultBloodPost);
+            close();
+          }}
+        >
           Cancel
         </Button>
         <Button color="success" type="submit">
-          Add
+          {editing ? "Update" : "Add"}
         </Button>
       </DialogActions>
       <Backdrop

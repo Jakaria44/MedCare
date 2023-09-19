@@ -20,6 +20,14 @@ const Homepage = {
       breadcrumbs: false,
     },
     {
+      id: "fundpost",
+      title: "Raise Fund",
+      type: "item",
+      url: "/fundpost",
+      icon: <AirportShuttleOutlined />,
+      breadcrumbs: false,
+    },
+    {
       id: "bloodpost",
       title: "Find Blood",
       type: "item",

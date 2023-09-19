@@ -145,7 +145,7 @@ const BloodPostCard = ({ load, bloodPost }) => {
           <img
             onMouseEnter={() => setHovered(true)}
             style={{ height: 260, width: "100%" }}
-            src={defaultBloodPostPicture}
+            src={bloodPost.userImageUrl ?? defaultBloodPostPicture}
             alt={bloodPost.userName}
             loading="lazy"
           />
@@ -199,7 +199,7 @@ const BloodPostCard = ({ load, bloodPost }) => {
 
         <CardContent marginBottom="0px">
           <Tooltip title={bloodPost.userName}>
-            <MyTypography>Model: {bloodPost.userName}</MyTypography>
+            <MyTypography>Name: {bloodPost.userName}</MyTypography>
           </Tooltip>
 
           <MyTypography>

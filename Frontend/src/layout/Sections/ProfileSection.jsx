@@ -30,7 +30,13 @@ import MainCard from "./../../ui-component/cards/MainCard";
 
 // assets
 
-import { CrisisAlert, Feed, Login, Logout, PersonAddAlt } from "@mui/icons-material";
+import {
+  CrisisAlert,
+  Feed,
+  Login,
+  Logout,
+  PersonAddAlt,
+} from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ErrorModal from "../../component/ErrorModal";
 import SuccessfulModal from "../../component/SuccessfulModal";
@@ -52,18 +58,10 @@ const ProfileSection = () => {
   const [name, setName] = useState(null);
   const [image, setImage] = useState(null);
 
-  const getUserDetails = async () => {
-    try {
-      const response = await server.get("/user/details");
-      console.log(response.data);
-      setName(response.data.FIRST_NAME + " " + response.data.LAST_NAME);
-      setImage(response.data.IMAGE);
-      // setUser();
-    } catch (err) {
-      console.log(err);
-      setImage(null);
-      setName(null);
-    }
+  const getUserDetails = () => {
+    setName(localStorage.getItem("name"));
+    setImage(localStorage.getItem("image"));
+    // setUser();
   };
   useEffect(() => {
     getUserDetails();
@@ -77,7 +75,7 @@ const ProfileSection = () => {
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
-  const handleLogout =  () => {
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
 
@@ -467,7 +465,7 @@ const ProfileSection = () => {
                           }
                         />
                       </ListItemButton>
-                      
+
                       {["admin"].includes(
                         localStorage.getItem("role")?.toLowerCase()
                       ) && (
@@ -498,7 +496,7 @@ const ProfileSection = () => {
                                                         </ListItemText> */}
                         </ListItemButton>
                       )}
-                       {["employee"].includes(
+                      {["employee"].includes(
                         localStorage.getItem("role")?.toLowerCase()
                       ) && (
                         <ListItemButton
@@ -528,7 +526,6 @@ const ProfileSection = () => {
                                                         </ListItemText> */}
                         </ListItemButton>
                       )}
-                      
                     </List>
                   </Box>
                 </MainCard>

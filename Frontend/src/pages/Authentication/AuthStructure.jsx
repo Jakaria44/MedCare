@@ -3,6 +3,7 @@ import {
   Box,
   Container,
   Toolbar,
+  alpha,
   useScrollTrigger,
   useTheme,
 } from "@mui/material";
@@ -32,7 +33,11 @@ const AuthStructure = () => {
     <>
       <Box sx={{ flexGrow: 1 }}>
         <ElevationScroll>
-          <AppBar enableColorOnDark position="fixed" color="inherit">
+          <AppBar
+            enableColorOnDark
+            position="fixed"
+            sx={{ bgcolor: alpha(theme.palette.background.default, 0.9) }}
+          >
             <Toolbar sx={{ paddingY: "6px" }} disableGutters>
               <Box
                 // component="span"

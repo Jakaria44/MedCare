@@ -8,7 +8,7 @@ const BloodList = ({ load, data, loading }) => {
     <Grid item xs={12} md={8} lg={9} container direction="row" spacing={2}>
       {data.length === 0 && !loading && (
         <Grid item xs={12} md={12} lg={12}>
-          <h3>No Books Found</h3>
+          <h3>No Post Found</h3>
         </Grid>
       )}
       {!loading &&

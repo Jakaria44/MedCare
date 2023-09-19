@@ -8,7 +8,6 @@ import DarkModeSwitch from "../component/DarkModeSwitch.jsx";
 import { useMyTheme } from "../contexts/ThemeContextProvider.jsx";
 import Notification from "./Sections/Notification.jsx";
 import ProfileSection from "./Sections/ProfileSection.jsx";
-import SearchSection from "./Sections/SearchSection.jsx";
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -71,8 +70,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
       </Box>
 
       {/* header search */}
-      <SearchSection />
-      <Box sx={{ flexGrow: 1 }} />
+      {/* <SearchSection /> */}
+      <Box sx={{ flexGrow: 10 }} />
       <Box sx={{ flexGrow: 2 }} />
 
       {/* notification & profile */}

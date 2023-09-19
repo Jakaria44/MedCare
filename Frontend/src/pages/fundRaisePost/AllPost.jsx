@@ -12,10 +12,9 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import server from "./../../HTTP/httpCommonParam";
-import AddNewBloodPost from "./AddNewBloodPost";
-import BloodList from "./BloodList";
-import Filters from "./Filters";
+import server from "../../HTTP/httpCommonParam";
+import AddNewFundPost from "./AddPost";
+import FundPostList from "./PostList";
 
 export const sortOptions = [
   { query: "createdDate", name: "Newest", order: "desc" },
@@ -39,34 +38,33 @@ export const defaultQueryOptions = {
   pageSize: 50,
   SortBy: "Newest",
   SortDir: "asc",
-  availability: true,
 };
-const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
+const AllPost = ({
+  queries = defaultQueryOptions,
+  title = "Fund Raise Post",
+}) => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("sm"));
   const [queryOptions, setQueryOptions] = useState(defaultQueryOptions);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]); // [] is the initial state value
-  const [total, setTotal] = useState(0); // 0 is the initial state value
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
   const [page, setPage] = useState(queries.page || 1);
-  const [addingNewBloodPost, setAddingNewBloodPost] = useState(false);
-  const [editBloodPost, setEditBloodPost] = useState(null);
-  // const count = Math.ceil(data.length / queryOptions.perPage);
-  // const count = Math.ceil(total / queryOptions.perPage);
+  const [addingNewFundPost, setAddingNewFundPost] = useState(false);
   const count = useMemo(() => total, [total]);
 
   const handleChange = (e, p) => {
     setPage(p);
     setQueryOptions({ ...queryOptions, page: p });
-    loadAllBloodPost({ ...queryOptions, page: p });
+    loadFundPost({ ...queryOptions, page: p });
   };
   useEffect(() => {
-    loadAllBloodPost(queries);
+    loadFundPost(queries);
   }, []);
 
-  const loadAllBloodPost = async (
+  const loadFundPost = async (
     queries = queryOptions,
-    apiPath = "/blooddonatepost/getallpostbySortandPage"
+    apiPath = "/fundpost/getallpost/page/"
   ) => {
     setLoading(true);
     queries = {
@@ -78,7 +76,7 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
     };
     console.log(queries);
     try {
-      const res = await server.get(apiPath, {
+      const res = await server.get(apiPath + "false", {
         params: queries,
       });
       console.log("res");
@@ -111,7 +109,6 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
             {title}
           </Typography>
         </Box>
-        {/* Place your components to be displayed at the right end here */}
         <Box
           id="sort-by"
           sx={{
@@ -168,18 +165,17 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
                 startIcon={<Add />}
                 variant="contained"
                 color="success"
-                onClick={() => setAddingNewBloodPost(true)}
+                onClick={() => setAddingNewFundPost(true)}
               >
-                Add new BloodPost
+                New Post
               </Button>
             </Box>
           )}
         </Box>
       </Box>
-      <Grid container spacing={2}>
-        <Filters queries={queryOptions} load={loadAllBloodPost} />
 
-        <BloodList data={data} loading={loading} load={loadAllBloodPost} />
+      <Grid container spacing={2}>
+        <FundPostList data={data} loading={loading} load={loadFundPost} />
       </Grid>
       <Box
         sx={{
@@ -200,26 +196,14 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
         />
       </Box>
 
-      <AddNewBloodPost
-        open={addingNewBloodPost}
+      <AddNewFundPost
+        open={addingNewFundPost}
         close={() => {
-          setAddingNewBloodPost(false);
-
-          loadAllBloodPost();
+          setAddingNewFundPost(false);
         }}
-      />
-
-      <AddNewBloodPost
-        open={editBloodPost !== null}
-        close={() => {
-          setAddingNewBloodPost(false);
-
-          loadAllBloodPost();
-        }}
-        editing={true}
-        ambulance={editBloodPost}
+        load={loadFundPost}
       />
     </>
   );
 };
-export default AllBlood;
+export default AllPost;

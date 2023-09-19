@@ -59,7 +59,9 @@ export default function SignIn() {
       console.log(response);
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("role", response.data.userDto.role);
-      // localStorage.setItem("image", response.data.image);
+      localStorage.setItem("image", response.userDto.imageUrl);
+      localStorage.setItem("name", response.userDto.name);
+      localStorage.setItem("user_id", response.data.userDto.id);
 
       localStorage.setItem("user_id", response.data.userDto.id);
       setSigningIn(false);
