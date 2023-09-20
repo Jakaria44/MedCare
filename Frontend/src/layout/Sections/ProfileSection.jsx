@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 // import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 import { useConfirm } from "material-ui-confirm";
+import { Link, useNavigate } from "react-router-dom";
 
 // material-ui
 import {
@@ -22,7 +22,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import server from "./../../HTTP/httpCommonParam";
 // third-party
 
 // project imports
@@ -30,13 +29,7 @@ import MainCard from "./../../ui-component/cards/MainCard";
 
 // assets
 
-import {
-  CrisisAlert,
-  Feed,
-  Login,
-  Logout,
-  PersonAddAlt,
-} from "@mui/icons-material";
+import { Logout, PersonAddAlt } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ErrorModal from "../../component/ErrorModal";
 import SuccessfulModal from "../../component/SuccessfulModal";
@@ -55,17 +48,11 @@ const ProfileSection = () => {
   const [news, setNews] = useState("");
   const navigate = useNavigate();
   //   const customization = useSelector((state) => state.customization);
-  const [name, setName] = useState(null);
-  const [image, setImage] = useState(null);
+  // const [name, setName] = useState();
+  const name = localStorage.getItem("name");
+  // const [image, setImage] = useState(null);
+  const image = localStorage.getItem("image");
 
-  const getUserDetails = () => {
-    setName(localStorage.getItem("name"));
-    setImage(localStorage.getItem("image"));
-    // setUser();
-  };
-  useEffect(() => {
-    getUserDetails();
-  }, []);
   const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState("");
   const [notification, setNotification] = useState(false);
@@ -76,10 +63,9 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    localStorage.clear();
 
-    window.location.reload();
+    navigate("/signin");
   };
 
   const handleClose = (event) => {
@@ -112,79 +98,6 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
-
-  const submitNews = async () => {
-    try {
-      const res = await server.post("/publish-news", {
-        NEWS: news,
-      });
-      console.log(res.data);
-      setSuccessMessage(res.data.message);
-      setShowSuccessMessage(true);
-    } catch (err) {
-      setErrorMessage(err.response.data.message);
-      setShowErrorMessage(true);
-      console.log(err);
-    }
-  };
-
-  const resignFromAdmin = async () => {
-    try {
-      await confirm({
-        title: (
-          <Typography variant="h3" gutterBottom>
-            Resign From Admin?
-          </Typography>
-        ),
-        content: (
-          <Typography variant="body1">
-            Are you sure you want to resign from Admin?
-          </Typography>
-        ),
-      });
-      try {
-        const res = await server.delete("/admin/resign");
-        setSuccessMessage(res.data.message);
-        setShowSuccessMessage(true);
-        handleLogout();
-      } catch (err) {
-        setErrorMessage(err.response.data.message);
-        setShowErrorMessage(true);
-        console.log(err);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const resignFromJob = async () => {
-    try {
-      await confirm({
-        title: (
-          <Typography variant="h3" gutterBottom>
-            Resign From Employee?
-          </Typography>
-        ),
-        content: (
-          <Typography variant="body1">
-            Are you sure you want to resign from Employee?
-          </Typography>
-        ),
-      });
-      try {
-        const res = await server.delete("/employee/resign");
-        setSuccessMessage(res.data.message);
-        setShowSuccessMessage(true);
-        handleLogout();
-      } catch (err) {
-        setErrorMessage(err.response.data.message);
-        setShowErrorMessage(true);
-        console.log(err);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <>
@@ -287,89 +200,11 @@ const ProfileSection = () => {
                           "Please Sign In"}
                       </Typography>
                     </Stack>
-                    {/* <OutlinedInput
-                      sx={{ width: "100%", pr: 1, pl: 2, my: 2 }}
-                      id="input-search-profile"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                      placeholder="Search profile options"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <SearchIcon
-                            fontSize="small"
-                            color={theme.palette.grey[500]}
-                          />
-                        </InputAdornment>
-                      }
-                      aria-describedby="search-helper-text"
-                      inputProps={{
-                        "aria-label": "weight",
-                      }}
-                    /> */}
+
                     <Divider />
                   </Box>
 
                   <Box sx={{ p: 2 }}>
-                    {/* <Card
-                        sx={{
-                          bgcolor: theme.palette.primary.light,
-                          my: 2,
-                        }}
-                      >
-                        <CardContent>
-                          <Grid container spacing={3} direction="column">
-                            <Grid item>
-                              <Grid
-                                item
-                                container
-                                alignItems="center"
-                                justifyContent="space-between"
-                              >
-                                <Grid item>
-                                  <Typography variant="subtitle1">
-                                    Start DND Mode
-                                  </Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    color="primary"
-                                    checked={sdm}
-                                    onChange={(e) => setSdm(e.target.checked)}
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                            <Grid item>
-                              <Grid
-                                item
-                                container
-                                alignItems="center"
-                                justifyContent="space-between"
-                              >
-                                <Grid item>
-                                  <Typography variant="subtitle1">
-                                    Allow Notifications
-                                  </Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    checked={notification}
-                                    onChange={(e) =>
-                                      setNotification(e.target.checked)
-                                    }
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card> */}
-
-                    {/* <Divider /> */}
                     <List
                       component="nav"
                       sx={{
@@ -407,123 +242,23 @@ const ProfileSection = () => {
                           />
                         </ListItemButton>
                       )}
-                      {["admin", "employee"].includes(
-                        localStorage.getItem("role")?.toLowerCase()
-                      ) && (
+                      {name && (
                         <ListItemButton
                           sx={{
                             borderRadius: "12px",
                           }}
-                          selected={selectedIndex === 1}
-                          onClick={(event) => setShowingNewsModal(true)}
+                          onClick={handleLogout}
                         >
                           <ListItemIcon>
-                            <Feed stroke={1.5} size="1.3rem" />
+                            <Logout fontSize="medium" />
                           </ListItemIcon>
                           <ListItemText
                             primary={
                               <Typography variant="body2" color="inherit">
-                                Publish News
+                                Log out
                               </Typography>
                             }
                           />
-                          {/* <Grid container spacing={1} justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="body2" color="inherit">
-                                                                        Publish News
-                                                                    </Typography>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </ListItemText> */}
-                        </ListItemButton>
-                      )}
-                      <ListItemButton
-                        sx={{
-                          borderRadius: "12px",
-                        }}
-                        selected={selectedIndex === 4}
-                        onClick={() => {
-                          if (name) {
-                            handleLogout();
-                          } else {
-                            navigate("/signin");
-                          }
-                        }}
-                      >
-                        <ListItemIcon>
-                          {name ? (
-                            <Logout stroke={1.5} size="1.3rem" />
-                          ) : (
-                            <Login stroke={1.5} size="1.3rem" />
-                          )}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" color="inherit">
-                              {name ? "Sign out" : "Sign in"}
-                            </Typography>
-                          }
-                        />
-                      </ListItemButton>
-
-                      {["admin"].includes(
-                        localStorage.getItem("role")?.toLowerCase()
-                      ) && (
-                        <ListItemButton
-                          sx={{
-                            borderRadius: "12px",
-                          }}
-                          selected={selectedIndex === 5}
-                          onClick={() => resignFromAdmin()}
-                        >
-                          <ListItemIcon>
-                            <CrisisAlert stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography variant="body2" color="inherit">
-                                Resign From Admin
-                              </Typography>
-                            }
-                          />
-                          {/* <Grid container spacing={1} justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="body2" color="inherit">
-                                                                        Publish News
-                                                                    </Typography>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </ListItemText> */}
-                        </ListItemButton>
-                      )}
-                      {["employee"].includes(
-                        localStorage.getItem("role")?.toLowerCase()
-                      ) && (
-                        <ListItemButton
-                          sx={{
-                            borderRadius: "12px",
-                          }}
-                          selected={selectedIndex === 6}
-                          onClick={() => resignFromJob()}
-                        >
-                          <ListItemIcon>
-                            <CrisisAlert stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography variant="body2" color="inherit">
-                                Resign From Employee
-                              </Typography>
-                            }
-                          />
-                          {/* <Grid container spacing={1} justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="body2" color="inherit">
-                                                                        Publish News
-                                                                    </Typography>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </ListItemText> */}
                         </ListItemButton>
                       )}
                     </List>

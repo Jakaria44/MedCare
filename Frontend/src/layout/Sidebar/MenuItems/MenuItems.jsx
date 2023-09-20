@@ -3,7 +3,7 @@ import { Doctor, DoctorAppoint, DoctorReg } from "./Doctor";
 import Homepage from "./Homepage";
 export const MenuItems = {
   items:
-    localStorage.getItem("role") == "ROLE_Admin"
+    localStorage.getItem("role") == "ROLE_ADMIN"
       ? [Homepage, Admin]
       : localStorage.getItem("role") == "ROLE_Normal"
       ? [Homepage, DoctorAppoint]

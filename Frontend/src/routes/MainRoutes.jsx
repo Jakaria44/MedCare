@@ -15,8 +15,10 @@ const RaiseFund = Loadable(
 const SinglePost = Loadable(
   lazy(() => import("../pages/fundRaisePost/SinglePost"))
 );
-
-const DoctorList = Loadable(lazy(() => import("../pages/doctor/DoctorList")));
+const PendingApplications = Loadable(
+  lazy(() => import("../pages/doctor/PendingApplications"))
+);
+const AllDoctors = Loadable(lazy(() => import("../pages/doctor/AllDoctors")));
 const RegisterDoctor = Loadable(
   lazy(() => import("../pages/doctor/RegisterDoctor"))
 );
@@ -57,8 +59,8 @@ const MainRoutes = {
       element: <AllBlood />,
     },
     {
-      path: "/doctorslist",
-      element: <DoctorList />,
+      path: "/doctorList",
+      element: <AllDoctors />,
     },
     {
       path: "/registerDoctor",
@@ -67,6 +69,10 @@ const MainRoutes = {
     {
       path: "/doctorprofile",
       element: <DoctorProfile />,
+    },
+    {
+      path: "/pendingdoctor",
+      element: <PendingApplications />,
     },
   ],
 };

@@ -1,6 +1,6 @@
 // assets
 
-import { Feed, People, SsidChart } from "@mui/icons-material";
+import { Feed, People, SsidChart, StickyNote2 } from "@mui/icons-material";
 
 // constant
 
@@ -12,14 +12,13 @@ const Admin = {
   type: "group",
   children: [
     {
-      id: "stat",
-      title: "Statistics",
+      id: "pendingdoctor",
+      title: "Doctor Applications",
       type: "item",
-      url: "/stat",
-      icon: <SsidChart />,
+      url: "/pendingdoctor",
+      icon: <StickyNote2 />,
       breadcrumbs: false,
     },
-    
   ],
 };
 

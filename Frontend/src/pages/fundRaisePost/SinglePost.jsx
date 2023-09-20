@@ -218,7 +218,7 @@ const SinglePost = () => {
               Posted by:{"  "}
               {data.userid == localStorage.getItem("user_id")
                 ? "You"
-                : data.userid}
+                : data.userName}
             </Typography>
           </Box>
 

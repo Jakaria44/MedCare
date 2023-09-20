@@ -1,23 +1,10 @@
-import {
-  AppRegistration,
-  NoteAdd,
-  Person,
-  RecentActors,
-} from "@mui/icons-material";
+import { AppRegistration, NoteAdd, Person } from "@mui/icons-material";
 
 export const DoctorReg = {
   id: "",
   title: "Doctor Support",
   type: "group",
   children: [
-    {
-      id: "doctorslist",
-      title: "List of Doctors",
-      type: "item",
-      url: "/doctorslist",
-      icon: <RecentActors />,
-      breadcrumbs: false,
-    },
     {
       id: "registerDoctor",
       title: "Register as Doctor",
@@ -34,14 +21,6 @@ export const Doctor = {
   type: "group",
   children: [
     {
-      id: "doctorslist",
-      title: "List of Doctors",
-      type: "item",
-      url: "/doctorslist",
-      icon: <RecentActors />,
-      breadcrumbs: false,
-    },
-    {
       id: "doctorprofile",
       title: "My Profile",
       type: "item",
@@ -56,14 +35,6 @@ export const DoctorAppoint = {
   title: "Doctor Support",
   type: "group",
   children: [
-    {
-      id: "doctorslist",
-      title: "List of Doctors",
-      type: "item",
-      url: "/doctorslist",
-      icon: <RecentActors />,
-      breadcrumbs: false,
-    },
     {
       id: "registerDoctor",
       title: "Register as Doctor",

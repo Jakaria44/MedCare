@@ -43,6 +43,14 @@ const Homepage = {
       icon: <AirportShuttleOutlined />,
       breadcrumbs: false,
     },
+    {
+      id: "doctorList",
+      title: "Doctors",
+      type: "item",
+      url: "/doctorList",
+      icon: <AirportShuttleOutlined />,
+      breadcrumbs: false,
+    },
   ],
 };
 

@@ -114,15 +114,17 @@ export default function SignUp() {
     let response;
     try {
       response = await server.post("/signup", fields);
+
+      localStorage.setItem("user_id", response.data.userDto.id);
+
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("role", response.data.userDto.role);
-      localStorage.setItem("image", response.userDto.imageUrl);
-      localStorage.setItem("name", response.userDto.name);
-      localStorage.setItem("user_id", response.data.userDto.id);
+      localStorage.setItem("image", response.data.userDto.imageUrl);
+      localStorage.setItem("name", response.data.userDto.name);
       console.log(response.data);
 
       setSigningUp(false);
-      window.location.replace("/profile");
+      window.location.replace("/");
     } catch (err) {
       setErrorMessage(err?.response?.data?.message || "Something went wrong");
       setShowErrorMessage(true);
