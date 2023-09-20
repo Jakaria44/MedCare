@@ -5,6 +5,7 @@ import { useConfirm } from "material-ui-confirm";
 // import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import React, { useCallback, useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import StyledDataGrid from "../../component/StyledDataGrid";
 import SuccessfullModal from "../../component/SuccessfulModal";
@@ -163,6 +164,19 @@ const PendingApplications = () => {
             headerName: "Name",
             align: "center",
             width: 170,
+            renderCell: (params) => (
+              <Tooltip title="View Profile">
+                <Typography
+                  component={Link}
+                  to={`/doctorprofile/${params.row.id}`}
+                  variant="body2"
+                  color="primary"
+                  sx={{ cursor: "pointer", textDecoration: "none" }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Tooltip>
+            ),
           },
           {
             field: "email",

@@ -67,7 +67,7 @@ const MainRoutes = {
       element: <RegisterDoctor />,
     },
     {
-      path: "/doctorprofile",
+      path: "/doctorprofile/:id",
       element: <DoctorProfile />,
     },
     {
