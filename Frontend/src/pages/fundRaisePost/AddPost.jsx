@@ -177,9 +177,13 @@ const AddPost = ({
   const handleImageChange = (event, index) => {
     const newImages = [...formData.images];
     newImages[index] = event.target.files[0];
+
+    // for showing:
     const newImage = images;
     newImage[index] = URL.createObjectURL(event.target.files[0]);
     setImages(newImage);
+    //
+
     setFormData({
       ...formData,
       images: newImages,
