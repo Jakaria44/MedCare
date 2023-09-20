@@ -13,30 +13,25 @@ import {
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import server from "./../../HTTP/httpCommonParam";
-import AddNewAmbulance from "./AddNewAmbulance";
-import AmbulanceList from "./AmbulanceList";
+import AddNewBloodPost from "./AddNewBloodPost";
+import BloodList from "./BloodList";
 import Filters from "./Filters";
-
-const sortMapping = [];
 
 export const sortOptions = [
   { query: "createdDate", name: "Newest", order: "desc" },
   { query: "createdDate", name: "Oldest", order: "asc" },
 
+  { query: "bloodGroup", name: "Blood Group (A-O)", order: "asc" },
+  { query: "bloodGroup", name: "Blood Group (O-A)", order: "desc" },
+
   { query: "division", name: "Division (A-Z)", order: "asc" },
   { query: "division", name: "Division (Z-A)", order: "desc" },
-
-  { query: "driverName", name: "Driver Name (A-Z)", order: "asc" },
-  { query: "driverName", name: "Driver Name (Z-A)", order: "desc" },
 
   { query: "district", name: "District (A-Z)", order: "asc" },
   { query: "district", name: "District (Z-A)", order: "desc" },
 
   { query: "upazila", name: "Upazila (A-Z)", order: "asc" },
   { query: "upazila", name: "Upazila (Z-A)", order: "desc" },
-
-  { query: "ambulanceModel", name: "Ambulance Model (A-Z)", order: "asc" },
-  { query: "ambulanceModel", name: "Ambulance Model (Z-A)", order: "desc" },
 ];
 
 export const defaultQueryOptions = {
@@ -44,11 +39,9 @@ export const defaultQueryOptions = {
   pageSize: 50,
   SortBy: "Newest",
   SortDir: "asc",
+  availability: true,
 };
-const AllAmbulance = ({
-  queries = defaultQueryOptions,
-  title = "Ambulance",
-}) => {
+const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("sm"));
   const [queryOptions, setQueryOptions] = useState(defaultQueryOptions);
@@ -56,8 +49,8 @@ const AllAmbulance = ({
   const [data, setData] = useState([]); // [] is the initial state value
   const [total, setTotal] = useState(0); // 0 is the initial state value
   const [page, setPage] = useState(queries.page || 1);
-  const [addingNewAmbulance, setAddingNewAmbulance] = useState(false);
-  const [editAmbulance, setEditAmbulance] = useState(null);
+  const [addingNewBloodPost, setAddingNewBloodPost] = useState(false);
+  const [editBloodPost, setEditBloodPost] = useState(null);
   // const count = Math.ceil(data.length / queryOptions.perPage);
   // const count = Math.ceil(total / queryOptions.perPage);
   const count = useMemo(() => total, [total]);
@@ -65,16 +58,15 @@ const AllAmbulance = ({
   const handleChange = (e, p) => {
     setPage(p);
     setQueryOptions({ ...queryOptions, page: p });
-    loadAllAmbulance({ ...queryOptions, page: p });
+    loadAllBloodPost({ ...queryOptions, page: p });
   };
   useEffect(() => {
-    // loadAllBooks(queries);
-    loadAllAmbulance(queries);
+    loadAllBloodPost(queries);
   }, []);
 
-  const loadAllAmbulance = async (
+  const loadAllBloodPost = async (
     queries = queryOptions,
-    apiPath = "/ambulance/getallpostbySortAndPage"
+    apiPath = "/blooddonatepost/getallpostbySortandPage"
   ) => {
     setLoading(true);
     queries = {
@@ -150,7 +142,7 @@ const AllAmbulance = ({
                       ...queryOptions,
                       SortBy: selectedSort, // Set the selectedSort value
                     });
-                    loadAllAmbulance({
+                    loadAllBloodPost({
                       ...queryOptions,
                       SortBy: selectedSort,
                     });
@@ -176,18 +168,18 @@ const AllAmbulance = ({
                 startIcon={<Add />}
                 variant="contained"
                 color="success"
-                onClick={() => setAddingNewAmbulance(true)}
+                onClick={() => setAddingNewBloodPost(true)}
               >
-                Add new Ambulance
+                Add new BloodPost
               </Button>
             </Box>
           )}
         </Box>
       </Box>
       <Grid container spacing={2}>
-        <Filters queryOptions={queryOptions} load={loadAllAmbulance} />
+        <Filters queries={queryOptions} load={loadAllBloodPost} />
 
-        <AmbulanceList data={data} loading={loading} load={loadAllAmbulance} />
+        <BloodList data={data} loading={loading} load={loadAllBloodPost} />
       </Grid>
       <Box
         sx={{
@@ -208,26 +200,26 @@ const AllAmbulance = ({
         />
       </Box>
 
-      <AddNewAmbulance
-        open={addingNewAmbulance}
+      <AddNewBloodPost
+        open={addingNewBloodPost}
         close={() => {
-          setAddingNewAmbulance(false);
+          setAddingNewBloodPost(false);
 
-          loadAllAmbulance();
+          loadAllBloodPost();
         }}
       />
 
-      <AddNewAmbulance
-        open={editAmbulance !== null}
+      <AddNewBloodPost
+        open={editBloodPost !== null}
         close={() => {
-          setAddingNewAmbulance(false);
+          setAddingNewBloodPost(false);
 
-          loadAllAmbulance();
+          loadAllBloodPost();
         }}
         editing={true}
-        ambulance={editAmbulance}
+        ambulance={editBloodPost}
       />
     </>
   );
 };
-export default AllAmbulance;
+export default AllBlood;

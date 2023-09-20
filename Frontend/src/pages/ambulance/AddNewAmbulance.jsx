@@ -5,6 +5,7 @@ import {
   Backdrop,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -21,7 +22,6 @@ import React, { useMemo, useState } from "react";
 import { districts } from "../../assets/bdInfo/districts";
 import { divisions } from "../../assets/bdInfo/divisions";
 import { upazilas } from "../../assets/bdInfo/upazilas";
-import CustomizedCheckbox from "../../component/CustomizedCheckbox";
 import api from "./../../HTTP/httpCommonParam";
 import server from "./../../HTTP/imageUpload";
 const defaultAmbulancePicture =
@@ -35,7 +35,7 @@ const defaultAmbulance = {
   division: "",
   district: "",
   upazila: "",
-  aircon: true,
+  aircon: false,
 };
 const AddNewAmbulance = ({
   ambulanceProp = defaultAmbulance,
@@ -122,7 +122,7 @@ const AddNewAmbulance = ({
     console.log(newAmbulance);
     try {
       let res;
-      if (editing) res = await api.post("/createAmbulancePost", newAmbulance);
+      if (!editing) res = await api.post("/createAmbulancePost", newAmbulance);
       else
         res = await api.put(
           "/updateAmbulancePost/" + ambulance.id,
@@ -229,10 +229,14 @@ const AddNewAmbulance = ({
               onChange={(e) => handleChange("contactInfo", e.target.value)}
             />
             <FormControlLabel
-              control={<CustomizedCheckbox checked={ambulance.aircon} />}
+              control={
+                <Checkbox
+                  onChange={(e) => handleChange("aircon", e.target.checked)}
+                  checked={ambulance.aircon}
+                />
+              }
               label="Air Condition"
               labelPlacement="end"
-              onChange={(e) => handleChange("aircon", e.target.value)}
             />
           </Stack>
           <TextField
@@ -337,7 +341,7 @@ const AddNewAmbulance = ({
           Cancel
         </Button>
         <Button color="success" type="submit">
-          Add
+          {editing ? "Update" : "Add"}
         </Button>
       </DialogActions>
       <Backdrop

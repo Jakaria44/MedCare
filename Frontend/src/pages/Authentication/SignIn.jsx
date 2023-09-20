@@ -26,7 +26,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="/">
-        Library Management System
+        MedCare
       </Link>
       {new Date().getFullYear()}
     </Typography>
@@ -59,11 +59,11 @@ export default function SignIn() {
       console.log(response);
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("role", response.data.userDto.role);
-      // localStorage.setItem("image", response.data.image);
-
+      localStorage.setItem("image", response.data.userDto.imageUrl);
+      localStorage.setItem("name", response.data.userDto.name);
       localStorage.setItem("user_id", response.data.userDto.id);
       setSigningIn(false);
-      window.location.replace("/profile");
+      window.location.replace("/");
     } catch (err) {
       setErrorMessage(err?.response?.data?.message || "Something went wrong");
       setShowErrorMessage(true);

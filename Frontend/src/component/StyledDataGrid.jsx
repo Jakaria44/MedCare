@@ -102,9 +102,9 @@ export default function StyledDataGrid(props) {
   return (
     <CustomDataGrid
       initialState={{
-        pagination: { paginationModel: { pageSize: 10 } },
+        pagination: { paginationModel: { pageSize: 25 } },
       }}
-      pageSizeOptions={[10, 25, 50]}
+      // pageSizeOptions={[10, 25, 50]}
       {...props}
     />
   );

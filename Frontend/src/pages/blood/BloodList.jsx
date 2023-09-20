@@ -1,14 +1,14 @@
 import { Grid } from "@mui/material";
 import CardSkeleton from "../../component/CardSkeleton";
-import AmbulanceCard from "./AmbulanceCard";
+import BloodPostCard from "./BloodPostCard";
 
-const AmbulanceList = ({ load, data, loading }) => {
+const BloodList = ({ load, data, loading }) => {
   console.log(data);
   return (
     <Grid item xs={12} md={8} lg={9} container direction="row" spacing={2}>
       {data.length === 0 && !loading && (
-        <Grid item xs={12} m="auto">
-          <h3>No Ambulance Found</h3>
+        <Grid item xs={12} md={12} lg={12}>
+          <h3>No Post Found</h3>
         </Grid>
       )}
       {!loading &&
@@ -23,7 +23,7 @@ const AmbulanceList = ({ load, data, loading }) => {
             paddingX={2}
             paddingY={2}
           >
-            <AmbulanceCard load={load} ambulance={item} />
+            <BloodPostCard load={load} bloodPost={item} />
           </Grid>
         ))}
       {/* <SpinnerWithBackdrop backdropOpen={loading} helperText="Loading..." /> */}
@@ -48,4 +48,4 @@ const AmbulanceList = ({ load, data, loading }) => {
   );
 };
 
-export default AmbulanceList;
+export default BloodList;

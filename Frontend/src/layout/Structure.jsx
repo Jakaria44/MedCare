@@ -4,10 +4,10 @@ import {
   Box,
   CssBaseline,
   Toolbar,
+  alpha,
   useMediaQuery,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
-import logo from "./../assets/IconChevronRight.svg";
 import Header from "./Header";
 
 import { Outlet } from "react-router-dom";
@@ -16,7 +16,6 @@ import { actions } from "../contexts/actions.jsx";
 
 import { drawerWidth } from "./../store/constants";
 import Sidebar from "./Sidebar/Sidebar";
-const IconChevronRight = logo;
 // styles
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -72,11 +71,9 @@ const Structure = () => {
       {/* header */}
       <AppBar
         enableColorOnDark
-        position="fixed"
-        color="inherit"
         elevation={0}
         sx={{
-          bgcolor: theme.palette.background.default,
+          bgcolor: alpha(theme.palette.background.default, 0.9),
           transition: menuOpened.opened
             ? theme.transitions.create("width")
             : "none",

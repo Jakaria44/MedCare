@@ -1,4 +1,4 @@
-import { Add } from "@mui/icons-material";
+import { LocalHospital } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -12,52 +12,46 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import server from "./../../HTTP/httpCommonParam";
-import AddNewAmbulance from "./AddNewAmbulance";
-import AmbulanceList from "./AmbulanceList";
+import { Link } from "react-router-dom";
+import server from "../../HTTP/httpCommonParam";
+import DoctorList from "./DoctorList";
 import Filters from "./Filters";
 
-const sortMapping = [];
-
 export const sortOptions = [
-  { query: "createdDate", name: "Newest", order: "desc" },
-  { query: "createdDate", name: "Oldest", order: "asc" },
+  { query: "name", name: "Name (A-Z)", order: "asc" },
+  { query: "name", name: "Name (Z-A)", order: "desc" },
 
-  { query: "division", name: "Division (A-Z)", order: "asc" },
-  { query: "division", name: "Division (Z-A)", order: "desc" },
+  { query: "specialization", name: "Specialization (A-Z)", order: "asc" },
+  { query: "specialization", name: "Specialization (Z-A)", order: "desc" },
 
-  { query: "driverName", name: "Driver Name (A-Z)", order: "asc" },
-  { query: "driverName", name: "Driver Name (Z-A)", order: "desc" },
+  { query: "appointmentFee", name: "Appointment Fee (low-high)", order: "asc" },
+  {
+    query: "appointmentFee",
+    name: "Appointment Fee (high-low)",
+    order: "desc",
+  },
 
   { query: "district", name: "District (A-Z)", order: "asc" },
   { query: "district", name: "District (Z-A)", order: "desc" },
 
   { query: "upazila", name: "Upazila (A-Z)", order: "asc" },
   { query: "upazila", name: "Upazila (Z-A)", order: "desc" },
-
-  { query: "ambulanceModel", name: "Ambulance Model (A-Z)", order: "asc" },
-  { query: "ambulanceModel", name: "Ambulance Model (Z-A)", order: "desc" },
 ];
 
 export const defaultQueryOptions = {
   pageNumber: 0,
   pageSize: 50,
-  SortBy: "Newest",
+  SortBy: "Name (A-Z)",
   SortDir: "asc",
 };
-const AllAmbulance = ({
-  queries = defaultQueryOptions,
-  title = "Ambulance",
-}) => {
+const AllDoctors = () => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("sm"));
   const [queryOptions, setQueryOptions] = useState(defaultQueryOptions);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]); // [] is the initial state value
   const [total, setTotal] = useState(0); // 0 is the initial state value
-  const [page, setPage] = useState(queries.page || 1);
-  const [addingNewAmbulance, setAddingNewAmbulance] = useState(false);
-  const [editAmbulance, setEditAmbulance] = useState(null);
+  const [page, setPage] = useState(queryOptions.pageNumber + 1);
   // const count = Math.ceil(data.length / queryOptions.perPage);
   // const count = Math.ceil(total / queryOptions.perPage);
   const count = useMemo(() => total, [total]);
@@ -65,23 +59,21 @@ const AllAmbulance = ({
   const handleChange = (e, p) => {
     setPage(p);
     setQueryOptions({ ...queryOptions, page: p });
-    loadAllAmbulance({ ...queryOptions, page: p });
+    loadAllDoctors({ ...queryOptions, page: p });
   };
   useEffect(() => {
-    // loadAllBooks(queries);
-    loadAllAmbulance(queries);
+    loadAllDoctors();
   }, []);
 
-  const loadAllAmbulance = async (
-    queries = queryOptions,
-    apiPath = "/ambulance/getallpostbySortAndPage"
+  const loadAllDoctors = async (
+    apiPath = "/doctor/getAllapproveDoctorWithPge/true"
   ) => {
     setLoading(true);
-    queries = {
-      ...queries,
-      SortBy: sortOptions.find((option) => option.name === queries.SortBy)
+    const queries = {
+      ...queryOptions,
+      SortBy: sortOptions.find((option) => option.name === queryOptions.SortBy)
         .query,
-      SortDir: sortOptions.find((option) => option.name === queries.SortBy)
+      SortDir: sortOptions.find((option) => option.name === queryOptions.SortBy)
         .order,
     };
     console.log(queries);
@@ -89,7 +81,7 @@ const AllAmbulance = ({
       const res = await server.get(apiPath, {
         params: queries,
       });
-      console.log("res");
+      // console.log("res");
       setTotal(res.data.totalPages);
       console.log(res.data.content);
       setData(res.data.content);
@@ -116,7 +108,7 @@ const AllAmbulance = ({
             gutterBottom
             component="div"
           >
-            {title}
+            All the Doctors you need
           </Typography>
         </Box>
         {/* Place your components to be displayed at the right end here */}
@@ -150,7 +142,7 @@ const AllAmbulance = ({
                       ...queryOptions,
                       SortBy: selectedSort, // Set the selectedSort value
                     });
-                    loadAllAmbulance({
+                    loadAllDoctors({
                       ...queryOptions,
                       SortBy: selectedSort,
                     });
@@ -170,24 +162,26 @@ const AllAmbulance = ({
           </Box>
 
           <Box flexGrow={2} />
-          {localStorage.getItem("user_id") !== null && (
+          {(localStorage.getItem("user_id") === null ||
+            localStorage.getItem("user_id") === "ROLE_Normal") && (
             <Box flexGrow={1}>
               <Button
-                startIcon={<Add />}
+                startIcon={<LocalHospital />}
                 variant="contained"
                 color="success"
-                onClick={() => setAddingNewAmbulance(true)}
+                component={Link}
+                to="/registerDoctor"
               >
-                Add new Ambulance
+                Register as Doctor
               </Button>
             </Box>
           )}
         </Box>
       </Box>
       <Grid container spacing={2}>
-        <Filters queryOptions={queryOptions} load={loadAllAmbulance} />
+        <Filters queries={queryOptions} load={loadAllDoctors} />
 
-        <AmbulanceList data={data} loading={loading} load={loadAllAmbulance} />
+        <DoctorList data={data} loading={loading} load={loadAllDoctors} />
       </Grid>
       <Box
         sx={{
@@ -207,27 +201,7 @@ const AllAmbulance = ({
           onChange={handleChange}
         />
       </Box>
-
-      <AddNewAmbulance
-        open={addingNewAmbulance}
-        close={() => {
-          setAddingNewAmbulance(false);
-
-          loadAllAmbulance();
-        }}
-      />
-
-      <AddNewAmbulance
-        open={editAmbulance !== null}
-        close={() => {
-          setAddingNewAmbulance(false);
-
-          loadAllAmbulance();
-        }}
-        editing={true}
-        ambulance={editAmbulance}
-      />
     </>
   );
 };
-export default AllAmbulance;
+export default AllDoctors;
