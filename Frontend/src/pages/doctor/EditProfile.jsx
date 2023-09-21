@@ -19,19 +19,20 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import SuccessfulModal from "../../component/SuccessfulModal";
 import uploadImage from "../../utils/UploadImage";
 import api from "./../../HTTP/httpCommonParam";
 const WeekDays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
 ];
 
 const defaultFields = {
@@ -46,26 +47,45 @@ const defaultFields = {
     {
       startTime: "10:00",
       endTime: "17:00",
-      weekDays: "Sunday",
+      weekDays: "sunday",
     },
   ],
 };
 
-export default function RegisterDoctor() {
-  return <DoctorForm />;
-}
-
-function DoctorForm() {
+export default function DoctorForm() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
   const [fields, setFields] = useState(defaultFields);
   const [dp, setDp] = useState("");
   const [cv, setCv] = useState("");
-  const [uploadText, setUploadText] = useState("Uploading Profile Picture...");
-
+  const [uploadText, setUploadText] = useState("Please Wait...");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    loadDoctor();
+  }, []);
 
+  const loadDoctor = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/getSingleDoctor/" + id);
+      console.log(res.data);
+
+      setFields(res.data);
+      setFields({
+        ...res.data,
+        description: res.data.description.replaceAll(/''/g, "'"),
+      });
+      setCv(res.data.cvUrl);
+      setDp(res.data.profileImageUrl);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleImageChange = (e, field) => {
     const file = e.target.files[0];
     const previewDp = URL.createObjectURL(file);
@@ -116,26 +136,46 @@ function DoctorForm() {
   };
   const submit = async () => {
     try {
-      const dp = await uploadImage(fields.profileImageUrl);
-      setUploadText("Uploading CV...");
-      const cv = await uploadImage(fields.cvUrl);
+      let dpUrl, cvUrl;
+      if (fields.profileImageUrl != dp) {
+        setUploadText("Uploading Profile Picture...");
+        dpUrl = await uploadImage(fields.profileImageUrl);
+      } else {
+        dpUrl = dp;
+      }
+      if (fields.cvUrl != cv) {
+        setUploadText("Uploading CV...");
+        cvUrl = await uploadImage(fields.cvUrl);
+      } else {
+        cvUrl = cv;
+      }
       setUploadText("Uploading Data...");
       const values = {
-        ...fields,
-        profileImageUrl: dp,
-        cvUrl: cv,
+        name: fields.name,
+        specialization: fields.specialization,
+        profileImageUrl: dpUrl,
+        cvUrl: cvUrl,
         description: fields.description.replaceAll(/'/g, "''"),
         appointmentFee: parseInt(fields.appointmentFee),
-        doctorAvailabilities: fields.doctorAvailabilities.map((item) => ({
-          weekDays: item.weekDays.toLowerCase(),
-          startTime: item.startTime + ":00",
-          endTime: item.endTime + ":00",
-        })),
+        doctorAvailabilities: fields.doctorAvailabilities.map(
+          (item, index) => ({
+            weekDays: item.weekDays.toLowerCase(),
+
+            startTime:
+              item.startTime.split(":").length == 3
+                ? item.startTime
+                : item.startTime + ":00",
+            endTime:
+              item.endTime.split(":").length == 3
+                ? item.endTime
+                : item.endTime + ":00",
+          })
+        ),
       };
 
       console.log(values);
       let res;
-      res = await api.post("/doctor/apply", values);
+      res = await api.put("/protect/doctor/update/" + fields.id, values);
       console.log(res.data);
       setShowSuccessMessage(true);
     } catch (err) {
@@ -146,6 +186,7 @@ function DoctorForm() {
       setCv("");
       setDp("");
       setUploading(false);
+      navigate("/doctorprofile/" + fields.id);
     }
   };
   return (
@@ -258,7 +299,8 @@ function DoctorForm() {
               variant="standard"
               fullWidth
               value={fields.email}
-              required
+              // required
+              disabled
               id="email"
               label="Email"
               type="email"
@@ -312,7 +354,7 @@ function DoctorForm() {
               required
               fullWidth
               multiline
-              rows={4}
+              maxRows={4}
               value={fields.description}
               id="description"
               label="Description"
@@ -442,7 +484,7 @@ function DoctorForm() {
                 ? "Please upload a Profile Picture"
                 : cv === ""
                 ? "Please upload a CV"
-                : "submit"
+                : "Update"
             }
             arrow
           >
@@ -452,8 +494,9 @@ function DoctorForm() {
               color="success"
               size="large"
               sx={{ marginTop: "2vh" }}
+              onClick={submitHandler}
             >
-              Submit
+              Update
             </Button>
           </Tooltip>
         </Grid>
@@ -462,7 +505,7 @@ function DoctorForm() {
         {/* spinner with backdrop */}
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={uploading}
+          open={uploading || loading}
         >
           <Box
             sx={{

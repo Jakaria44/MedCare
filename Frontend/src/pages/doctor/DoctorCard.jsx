@@ -7,7 +7,7 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 import { Link } from "react-router-dom";
 const MyTypography = ({ children, ...other }) => (
@@ -56,7 +56,7 @@ const DoctorCard = ({ doctor }) => {
         <CardActions>
           <Button
             component={Link}
-            to={`/doctor/${doctor.id}`}
+            to={`/doctorprofile/${doctor.id}`}
             size="small"
             p={2}
           >

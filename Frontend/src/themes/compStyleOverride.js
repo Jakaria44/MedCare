@@ -9,6 +9,13 @@ export default function componentStyleOverrides(theme) {
                 },
             },
         },
+        MuiTableCell:{
+            styleOverrides:{
+                root:{
+                    align: 'center'
+                }
+            }
+        },
         MuiLoadingButton: {
             styleOverrides: {
                 root: {

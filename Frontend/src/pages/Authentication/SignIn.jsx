@@ -56,7 +56,7 @@ export default function SignIn() {
     try {
       console.log(user);
       const response = await server.post("/login", user);
-      console.log(response);
+      console.log(response.data);
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("role", response.data.userDto.role);
       localStorage.setItem("image", response.data.userDto.imageUrl);
