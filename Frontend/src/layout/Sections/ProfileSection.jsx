@@ -29,7 +29,7 @@ import MainCard from "./../../ui-component/cards/MainCard";
 
 // assets
 
-import { Logout, PersonAddAlt } from "@mui/icons-material";
+import { Login, Logout, PersonAddAlt } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ErrorModal from "../../component/ErrorModal";
 import SuccessfulModal from "../../component/SuccessfulModal";
@@ -242,25 +242,34 @@ const ProfileSection = () => {
                           />
                         </ListItemButton>
                       )}
-                      {name && (
-                        <ListItemButton
-                          sx={{
-                            borderRadius: "12px",
-                          }}
-                          onClick={handleLogout}
-                        >
-                          <ListItemIcon>
-                            <Logout fontSize="medium" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography variant="body2" color="inherit">
-                                Log out
-                              </Typography>
-                            }
-                          />
-                        </ListItemButton>
-                      )}
+                      <ListItemButton
+                        sx={{
+                          borderRadius: "12px",
+                        }}
+                        selected={selectedIndex === 4}
+                        onClick={() => {
+                          if (name) {
+                            handleLogout();
+                          } else {
+                            navigate("/signin");
+                          }
+                        }}
+                      >
+                        <ListItemIcon>
+                          {name ? (
+                            <Logout stroke={1.5} size="1.3rem" />
+                          ) : (
+                            <Login stroke={1.5} size="1.3rem" />
+                          )}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" color="inherit">
+                              {name ? "Sign out" : "Sign in"}
+                            </Typography>
+                          }
+                        />
+                      </ListItemButton>
                     </List>
                   </Box>
                 </MainCard>

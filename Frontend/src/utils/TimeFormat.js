@@ -25,3 +25,15 @@ export function TimeFormat2(dateIn) {
 }
 
 export default TimeFormat
+
+/**
+ * 
+ * @param {'13:00:00'} dateIn 
+ * @returns 1:00 PM
+ */
+export function TimeFormat3(dateIn) {
+  const [hour, min, sec] = dateIn.split(':');
+  const amPm = hour >= 12 ? 'PM' : 'AM';
+  
+  return `${hour % 12 || 12}:${min} ${amPm}`;
+}

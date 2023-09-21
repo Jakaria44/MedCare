@@ -12,6 +12,7 @@ import SuccessfullModal from "../../component/SuccessfulModal";
 import TimeFormat from "../../utils/TimeFormat";
 import server from "./../../HTTP/httpCommonParam";
 import CustomNoRowsOverlay from "./../../component/CustomNoRowsOverlay";
+import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 
 const NoRequestOverlay = () => (
   <CustomNoRowsOverlay text="No Pending Requests" />
@@ -30,7 +31,7 @@ const PendingApplications = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
+  const [uploading, setUploading] = useState(false);
   const handleApproveRequest = useCallback((row) => async () => {
     try {
       await confirm({
@@ -47,10 +48,11 @@ const PendingApplications = () => {
       });
 
       try {
+        setUploading(true);
         const res = await server.get("/protect/doctor/approved/" + row.id);
+        setUploading(false);
         setSuccessMessage("Successful! " + res.data.message);
         setShowSuccessMessage(true);
-        fetchData();
       } catch (err) {
         setErrorMessage("Something went wrong");
         setShowErrorMessage(true);
@@ -77,14 +79,11 @@ const PendingApplications = () => {
       });
 
       try {
-        // const res = await server.delete("/handle-request", {
-        //   data: {
-        //     USER_ID: row.USER_ID,
-        //     EDITION_ID: row.EDITION_ID,
-        //   },
-        // });
+        setUploading(true);
+        const res = await server.delete("/protect/deleteDoctor/" + row.id);
 
-        // setSuccessMessage(res.data.message);
+        setUploading(false);
+        setSuccessMessage(res.data.message);
         setShowSuccessMessage(true);
       } catch (err) {
         // setErrorMessage(err.response.data.message);
@@ -274,17 +273,22 @@ const PendingApplications = () => {
         setShowSuccessMessage={setShowSuccessMessage}
         successMessage={successMessage}
         HandleModalClosed={() => {
-          setShowSuccessMessage(false);
           fetchData();
+          setShowSuccessMessage(false);
         }}
       />
       <ErrorModal
         showErrorMessage={showErrorMessage}
         errorMessage={errorMessage}
         HandleModalClosed={() => {
-          setShowErrorMessage(false);
           fetchData();
+          setShowErrorMessage(false);
         }}
+      />
+
+      <SpinnerWithBackdrop
+        backdropOpen={uploading}
+        helperText="Please Wait..."
       />
     </Box>
   );

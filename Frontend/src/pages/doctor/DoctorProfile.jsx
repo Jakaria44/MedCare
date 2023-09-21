@@ -1,19 +1,21 @@
 import { Email, OpenInNew, Person, Sell, TaskAlt } from "@mui/icons-material";
-import {
-  Button,
-  Chip,
-  Divider,
-  Grid,
-  Stack,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Button, Chip, Divider, Grid, Stack, Typography } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { styled } from "@mui/material/styles";
 import { useConfirm } from "material-ui-confirm";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import SuccessfullModal from "../../component/SuccessfulModal";
+import { TimeFormat3 } from "../../utils/TimeFormat";
 import api from "./../../HTTP/httpCommonParam";
+import SlotsTable from "./SlotsTable";
 const MyTypography = styled(Typography)(({ theme }) => ({
   fontSize: 18,
   variant: "body2",
@@ -30,8 +32,10 @@ const DoctorProfile = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { id } = useParams();
   const [doctor, setDoctor] = useState();
+
   useEffect(() => {
     loadDoctor();
+    // loadAllSlots();
   }, []);
 
   const loadDoctor = async () => {
@@ -84,7 +88,7 @@ const DoctorProfile = () => {
       });
 
       try {
-        const res = await server.get("/protect/doctor/approved/" + row.id);
+        const res = await server.get("/protect/doctor/approved/" + doctor.id);
         setSuccessMessage("Successful! " + res.data.message);
         setShowSuccessMessage(true);
         fetchData();
@@ -154,7 +158,7 @@ const DoctorProfile = () => {
             <Chip
               variant="outlined"
               component="a"
-              href={doctor.cvUrl}
+              href={doctor?.cvUrl}
               target="_blank"
               label="View CV"
               icon={<OpenInNew />}
@@ -164,7 +168,12 @@ const DoctorProfile = () => {
         </Grid>
         <Grid item xs={12} m="auto" display="flex" justifyContent="center">
           {localStorage.getItem("role") === "ROLE_DOCTOR" && (
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to={"/editdoctor/" + doctor?.id}
+            >
               Edit Profile
             </Button>
           )}
@@ -179,22 +188,53 @@ const DoctorProfile = () => {
               </Button>
             )}
         </Grid>
+        <Grid item xs={12} m="auto" display="flex" justifyContent="center">
+          <Stack spacing={2} divider={<Divider />}>
+            <Typography variant="h2" textAlign="center" gutterBottom>
+              Availabilities
+            </Typography>
+            <CustomizedTables rows={doctor?.doctorAvailabilities} />
+          </Stack>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          m="auto"
+          width="100%"
+          display="flex"
+          justifyContent="center"
+        >
+          <Stack
+            spacing={2}
+            m="auto"
+            mt={3}
+            divider={<Divider />}
+            width="100%"
+            justifyContent="center"
+          >
+            <Typography variant="h2" textAlign="center" gutterBottom>
+              Upcoming Available Slots
+            </Typography>
+
+            <SlotsTable id={id} />
+          </Stack>
+        </Grid>
       </Grid>
       <SuccessfullModal
         showSuccessMessage={showSuccessMessage}
         setShowSuccessMessage={setShowSuccessMessage}
         successMessage={successMessage}
         HandleModalClosed={() => {
-          setShowSuccessMessage(false);
           fetchData();
+          setShowSuccessMessage(false);
         }}
       />
       <ErrorModal
         showErrorMessage={showErrorMessage}
         errorMessage={errorMessage}
         HandleModalClosed={() => {
-          setShowErrorMessage(false);
           fetchData();
+          setShowErrorMessage(false);
         }}
       />
     </>
@@ -202,3 +242,57 @@ const DoctorProfile = () => {
 };
 
 export default DoctorProfile;
+
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor:
+      theme.palette.mode == "dark"
+        ? theme.palette.grey[500]
+        : theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+function CustomizedTables({ rows }) {
+  return (
+    <TableContainer component={Paper}>
+      <Table aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell align="center">Start time</StyledTableCell>
+            <StyledTableCell align="center">End Time</StyledTableCell>
+            <StyledTableCell align="center">Week Days</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows?.map((row, index) => (
+            <StyledTableRow key={index}>
+              <StyledTableCell component="th" scope="row" align="center">
+                {TimeFormat3(row.startTime)}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {TimeFormat3(row.endTime)}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.weekDays.charAt(0).toUpperCase() + row.weekDays.slice(1)}
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}

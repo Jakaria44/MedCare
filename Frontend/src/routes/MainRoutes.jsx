@@ -25,6 +25,7 @@ const RegisterDoctor = Loadable(
 const DoctorProfile = Loadable(
   lazy(() => import("../pages/doctor/DoctorProfile"))
 );
+const EditDoctor = Loadable(lazy(() => import("../pages/doctor/EditProfile")));
 const AllBlood = Loadable(lazy(() => import("../pages/blood/AllBlood")));
 const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
 // ==============================| MAIN ROUTING ||============================== //
@@ -69,6 +70,10 @@ const MainRoutes = {
     {
       path: "/doctorprofile/:id",
       element: <DoctorProfile />,
+    },
+    {
+      path: "/editdoctor/:id",
+      element: <EditDoctor />,
     },
     {
       path: "/pendingdoctor",
