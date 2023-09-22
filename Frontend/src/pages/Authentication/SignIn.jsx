@@ -58,10 +58,21 @@ export default function SignIn() {
       const response = await server.post("/login", user);
       console.log(response.data);
       localStorage.setItem("token", response.data.jwtToken);
-      localStorage.setItem("role", response.data.userDto.role);
-      localStorage.setItem("image", response.data.userDto.imageUrl);
-      localStorage.setItem("name", response.data.userDto.name);
-      localStorage.setItem("user_id", response.data.userDto.id);
+      localStorage.setItem("role", response.data.userDto?.role);
+      localStorage.setItem("image", response.data.userDto?.imageUrl);
+      localStorage.setItem("name", response.data.userDto?.name);
+      localStorage.setItem("user_id", response.data.userDto?.id);
+
+      if (response.data.doctorDtos !== null) {
+        localStorage.setItem("role", "ROLE_DOCTOR");
+        localStorage.setItem(
+          "image",
+          response.data.doctorDtos?.profileImageUrl
+        );
+        localStorage.setItem("name", response.data.doctorDtos?.name);
+        localStorage.setItem("doctor_id", response.data.doctorDtos?.id);
+      }
+
       setSigningIn(false);
       window.location.replace("/");
     } catch (err) {

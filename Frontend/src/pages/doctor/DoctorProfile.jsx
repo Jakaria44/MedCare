@@ -10,42 +10,40 @@ import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import { useConfirm } from "material-ui-confirm";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
+import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfullModal from "../../component/SuccessfulModal";
+import MyTypography from "../../ui-component/MyTypography";
 import { TimeFormat3 } from "../../utils/TimeFormat";
-import api from "./../../HTTP/httpCommonParam";
+import server from "./../../HTTP/httpCommonParam";
 import SlotsTable from "./SlotsTable";
-const MyTypography = styled(Typography)(({ theme }) => ({
-  fontSize: 18,
-  variant: "body2",
-  paddingLeft: theme.spacing(1),
-  paddingTop: theme.spacing(1),
-  paddingBottom: theme.spacing(1),
-  paddingRight: theme.spacing(1),
-}));
 const DoctorProfile = () => {
   const confirm = useConfirm();
+  const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { id } = useParams();
   const [doctor, setDoctor] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadDoctor();
-    // loadAllSlots();
   }, []);
 
   const loadDoctor = async () => {
     try {
-      const res = await api.get("/getSingleDoctor/" + id);
+      setLoading(true);
+      const res = await server.get("/getSingleDoctor/" + id);
       console.log(res.data);
 
       setDoctor(res.data);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,14 +86,94 @@ const DoctorProfile = () => {
       });
 
       try {
+        setLoading(true);
         const res = await server.get("/protect/doctor/approved/" + doctor.id);
         setSuccessMessage("Successful! " + res.data.message);
         setShowSuccessMessage(true);
-        fetchData();
+        // fetchData();
       } catch (err) {
         setErrorMessage("Something went wrong");
         setShowErrorMessage(true);
         console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDeclineRequest = async () => {
+    try {
+      await confirm({
+        title: (
+          <Typography variant="h3" gutterBottom>
+            Delete This Application?
+          </Typography>
+        ),
+        content: (
+          <Typography variant="body1">
+            Are you sure you want to delete {doctor?.name}'s application?
+          </Typography>
+        ),
+      });
+
+      try {
+        setLoading(true);
+        const res = await server.delete("/protect/deleteDoctor/" + doctor?.id);
+
+        setSuccessMessage(res.data.message);
+        setShowSuccessMessage(true);
+        navigate(-1);
+      } catch (err) {
+        setErrorMessage("Request could not be completed");
+        setShowErrorMessage(true);
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDeleteRequest = async () => {
+    try {
+      await confirm({
+        title: (
+          <Typography variant="h3" gutterBottom>
+            Delete Doctor
+          </Typography>
+        ),
+        content: (
+          <Typography variant="body1">
+            Are you sure you want to delete{" "}
+            <b>
+              {localStorage.getItem("doctor_id") == doctor?.id
+                ? "yourself"
+                : doctor?.name}{" "}
+            </b>
+            from list?
+          </Typography>
+        ),
+      });
+
+      try {
+        setLoading(true);
+        const res = await server.delete("/protect/deleteDoctor/" + doctor?.id);
+
+        setSuccessMessage(res.data.message);
+        setShowSuccessMessage(true);
+        const mode = localStorage.getItem("colorMode");
+        localStorage.clear();
+        localStorage.setItem("colorMode", mode);
+        navigate(-1);
+      } catch (err) {
+        setErrorMessage("Request could not be completed");
+        setShowErrorMessage(true);
+        console.log(err);
+      } finally {
+        setLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -167,26 +245,53 @@ const DoctorProfile = () => {
           </Stack>
         </Grid>
         <Grid item xs={12} m="auto" display="flex" justifyContent="center">
-          {localStorage.getItem("role") === "ROLE_DOCTOR" && (
-            <Button
-              variant="contained"
-              color="primary"
-              component={Link}
-              to={"/editdoctor/" + doctor?.id}
-            >
-              Edit Profile
-            </Button>
-          )}
-          {localStorage.getItem("role") === "ROLE_ADMIN" &&
-            !doctor?.approve && (
+          {localStorage.getItem("doctor_id") == doctor?.id && (
+            <Stack spacing={2} direction="row">
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleApproveRequest}
+                component={Link}
+                to={"/editdoctor/" + doctor?.id}
               >
-                Approve
+                Edit Profile
               </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleDeleteRequest}
+              >
+                Delete
+              </Button>
+            </Stack>
+          )}
+          {localStorage.getItem("role") === "ROLE_ADMIN" &&
+            !doctor?.approve && (
+              <Stack spacing={2} direction="row">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleApproveRequest}
+                >
+                  Approve
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleDeclineRequest}
+                >
+                  Decline
+                </Button>
+              </Stack>
             )}
+          {localStorage.getItem("role") === "ROLE_ADMIN" && doctor?.approve && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleDeleteRequest}
+            >
+              Delete
+            </Button>
+          )}
         </Grid>
         <Grid item xs={12} m="auto" display="flex" justifyContent="center">
           <Stack spacing={2} divider={<Divider />}>
@@ -220,21 +325,22 @@ const DoctorProfile = () => {
           </Stack>
         </Grid>
       </Grid>
+      <SpinnerWithBackdrop backdropOpen={loading} helperText="Please wait..." />
       <SuccessfullModal
         showSuccessMessage={showSuccessMessage}
         setShowSuccessMessage={setShowSuccessMessage}
         successMessage={successMessage}
         HandleModalClosed={() => {
-          fetchData();
           setShowSuccessMessage(false);
+          loadDoctor();
         }}
       />
       <ErrorModal
         showErrorMessage={showErrorMessage}
         errorMessage={errorMessage}
         HandleModalClosed={() => {
-          fetchData();
           setShowErrorMessage(false);
+          loadDoctor();
         }}
       />
     </>

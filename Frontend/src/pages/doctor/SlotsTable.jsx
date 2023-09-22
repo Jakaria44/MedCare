@@ -32,8 +32,8 @@ import { StyledTableCell, StyledTableRow } from "./DoctorProfile";
 
 function createData(arr) {
   return {
-    localDate: TimeFormat2(arr[0].localDate),
-    day: new Date(arr[0].localDate).toLocaleDateString("en-US", {
+    localDate: TimeFormat2(arr[0]?.localDate),
+    day: new Date(arr[0]?.localDate).toLocaleDateString("en-US", {
       weekday: "long",
     }),
     items: arr.map((item) => ({
@@ -44,7 +44,7 @@ function createData(arr) {
   };
 }
 
-const CollapsedTable = ({ items, handleBook }) => (
+const CollapsedTable = ({ items, handleBook, doctorId, handleDelete }) => (
   <Table size="small" aria-label="purchases">
     <TableHead>
       <StyledTableRow>
@@ -61,13 +61,23 @@ const CollapsedTable = ({ items, handleBook }) => (
           </StyledTableCell>
           <StyledTableCell align="center">{historyRow.endTime}</StyledTableCell>
           <StyledTableCell align="center">
-            <Button
-              variant="outlined"
-              color="success"
-              onClick={() => handleBook(historyRow.id)}
-            >
-              Book Now
-            </Button>
+            {localStorage.getItem("doctor_id") == doctorId ? (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleDelete(historyRow.id)}
+              >
+                Delete
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                color="success"
+                onClick={() => handleBook(historyRow.id)}
+              >
+                Book Now
+              </Button>
+            )}
           </StyledTableCell>
         </StyledTableRow>
       ))}
@@ -132,6 +142,8 @@ export default function SlotsTable({ id }) {
             />
           </Stack>
         ),
+
+        confirmationText: "Confirm",
       });
       // console.log(body, description);
       const submissionBody = {
@@ -146,7 +158,7 @@ export default function SlotsTable({ id }) {
           `/protect/createappoint/${id}/${localStorage.getItem("user_id")}`,
           submissionBody
         );
-        setSuccessMessage("Successful! " + res.data.message);
+        setSuccessMessage("Successful!");
         setShowSuccessMessage(true);
         // loadAllSlots();
       } catch (err) {
@@ -177,17 +189,77 @@ export default function SlotsTable({ id }) {
 
         return result;
       }, {});
-      console.log(groupedData);
+      console.log();
 
       const customRows = Object.entries(groupedData)
+        .map((item) => [
+          item[0],
+          item[1].filter(
+            (item2) => new Date(item[0] + " " + item2.startTime) >= new Date()
+          ),
+        ])
+        .filter((item) => item[1].length > 0)
+
         .sort((a, b) => new Date(a[0]) - new Date(b[0]))
+
         .map(([, item]) => createData(item));
+      console.log(customRows);
       setAllSlots(customRows);
       setLoadedData(res.data);
     } catch (err) {
       console.log(err);
     }
   };
+  const handleDelete = async (slotId) => {
+    const body = loadedData.filter((item) => item.id == slotId)[0];
+    let description = "";
+    try {
+      await confirm({
+        title: (
+          <Typography variant="h3" gutterBottom>
+            Confirm Deleting Slot
+          </Typography>
+        ),
+        content: (
+          <Stack spacing={2} divider={<Divider />}>
+            <Typography variant="h4">Appointment details</Typography>
+            <Typography variant="body2">
+              Date: {TimeFormat2(body.localDate)} <br />
+              Day:{" "}
+              {new Date(body.localDate).toLocaleDateString("en-US", {
+                weekday: "long",
+              })}
+              <br />
+              Time: {TimeFormat3(body.startTime)} - {TimeFormat3(body.endTime)}
+            </Typography>
+            <Typography variant="body2">
+              Are you sure want to delete this appointment?
+            </Typography>
+          </Stack>
+        ),
+        confirmationText: "Delete",
+      });
+      // console.log(body, description);
+
+      try {
+        setLoading(true);
+        const res = await api.delete(`/slot/delete/${slotId}`);
+        setSuccessMessage("Successfully Deleted the slot");
+        setShowSuccessMessage(true);
+        // loadAllSlots();
+      } catch (err) {
+        setErrorMessage("Something went wrong");
+        setShowErrorMessage(true);
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    // }
+  };
+
   return (
     <Grid
       item
@@ -243,11 +315,13 @@ export default function SlotsTable({ id }) {
                         style={{ paddingBottom: 0, paddingTop: 0 }}
                         colSpan={6}
                       >
-                        <Collapse in={open !== -1} timeout="auto" unmountOnExit>
+                        <Collapse in={open === i} timeout="auto" unmountOnExit>
                           <Box sx={{ margin: 1 }}>
                             <CollapsedTable
                               items={row.items}
                               handleBook={handleBook}
+                              handleDelete={handleDelete}
+                              doctorId={id}
                             />
                           </Box>
                         </Collapse>
@@ -267,6 +341,8 @@ export default function SlotsTable({ id }) {
             <CollapsedTable
               items={allSlots[open].items}
               handleBook={handleBook}
+              handleDelete={handleDelete}
+              doctorId={id}
             />
           )}
         </TableContainer>

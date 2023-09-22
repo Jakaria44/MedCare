@@ -1,6 +1,6 @@
 // assets
 
-import { AirportShuttleOutlined, Home } from "@mui/icons-material";
+import { AirportShuttleOutlined, Home, Medication } from "@mui/icons-material";
 
 // constant
 
@@ -49,6 +49,14 @@ const Homepage = {
       type: "item",
       url: "/doctorList",
       icon: <AirportShuttleOutlined />,
+      breadcrumbs: false,
+    },
+    {
+      id: "appointments",
+      title: "Appointments",
+      type: "item",
+      url: "/appointments",
+      icon: <Medication />,
       breadcrumbs: false,
     },
   ],

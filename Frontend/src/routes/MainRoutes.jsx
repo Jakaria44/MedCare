@@ -25,6 +25,10 @@ const RegisterDoctor = Loadable(
 const DoctorProfile = Loadable(
   lazy(() => import("../pages/doctor/DoctorProfile"))
 );
+
+const AppointMents = Loadable(
+  lazy(() => import("../pages/appointment/AppointmentPage"))
+);
 const EditDoctor = Loadable(lazy(() => import("../pages/doctor/EditProfile")));
 const AllBlood = Loadable(lazy(() => import("../pages/blood/AllBlood")));
 const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
@@ -78,6 +82,11 @@ const MainRoutes = {
     {
       path: "/pendingdoctor",
       element: <PendingApplications />,
+    },
+
+    {
+      path: "/appointments",
+      element: <AppointMents />,
     },
   ],
 };

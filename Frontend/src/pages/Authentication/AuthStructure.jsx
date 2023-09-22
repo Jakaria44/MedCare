@@ -3,6 +3,7 @@ import {
   Box,
   Container,
   Toolbar,
+  Typography,
   alpha,
   useScrollTrigger,
   useTheme,
@@ -45,7 +46,7 @@ const AuthStructure = () => {
                 marginY="0px"
                 sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
               >
-                {theme.palette.mode == "light" ? (
+                {/* {theme.palette.mode == "light" ? (
                   <img
                     src="./../../public/LibraryLogo2.png"
                     alt="Book Breeze"
@@ -57,7 +58,15 @@ const AuthStructure = () => {
                     alt="Book Breeze"
                     width="100"
                   />
-                )}
+                )} */}
+                <Typography
+                  variant="h2"
+                  fontFamily="cursive"
+                  component="div"
+                  my={2}
+                >
+                  MedCare
+                </Typography>
               </Box>
               <DarkModeSwitch />
             </Toolbar>

@@ -1,5 +1,5 @@
 // material-ui
-import { Avatar, Box, ButtonBase } from "@mui/material";
+import { Avatar, Box, ButtonBase, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // project imports
@@ -53,19 +53,14 @@ const Header = ({ handleLeftDrawerToggle }) => {
               CSE Library
             </Typography>
           </ButtonBase> */}
-          {theme.palette.mode == "light" ? (
-            <img
-              src="./../../public/LibraryLogo2.png"
-              alt="Book Breeze"
-              width="100"
-            />
+          {/* {theme.palette.mode == "light" ? (
+            <img src="/light_logo_top.png" alt="MedCare" width="100" />
           ) : (
-            <img
-              src="./../../public/LibraryLogo.png"
-              alt="Book Breeze"
-              width="100"
-            />
-          )}
+            <img src="/light.png" alt="MedCare" width="100" />
+          )} */}
+          <Typography variant="h2" fontFamily="cursive" component="div" my={2}>
+            MedCare
+          </Typography>
         </Box>
       </Box>
 
