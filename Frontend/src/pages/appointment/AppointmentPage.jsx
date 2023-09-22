@@ -1,8 +1,8 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "./../../HTTP/httpCommonParam";
-import AppointmentCard from "./appointmentCard";
 import UpcomingTable from "./UpcomingTable";
+import AppointmentCard from "./appointmentCard";
 const AppointmentPage = () => {
   const [loading, setLoading] = useState(false);
 
@@ -62,13 +62,18 @@ const AppointmentPage = () => {
         Ongoing Appointments
       </Typography>
       <Divider sx={{ marginBottom: "2vh" }} />
-      {ongoing?.length !== 0 && (
-        <AppointmentCard
-          doctorId={ongoing?.doctorid}
-          userId={ongoing?.userid}
-          appoint={ongoing}
-        />
-      )}
+      <Stack spacing={2}>
+        {ongoing?.length !== 0 &&
+          ongoing?.map((item, i) => (
+            <AppointmentCard
+              key={i}
+              appoint={item}
+              doctorId={item?.doctorid}
+              userId={item?.userid}
+              upcoming={false}
+            />
+          ))}
+      </Stack>
       <Typography
         variant="body2"
         fontSize={20}

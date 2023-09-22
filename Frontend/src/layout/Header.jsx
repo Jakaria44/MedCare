@@ -6,7 +6,6 @@ import { useTheme } from "@mui/material/styles";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import DarkModeSwitch from "../component/DarkModeSwitch.jsx";
 import { useMyTheme } from "../contexts/ThemeContextProvider.jsx";
-import Notification from "./Sections/Notification.jsx";
 import ProfileSection from "./Sections/ProfileSection.jsx";
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
@@ -66,8 +65,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       {/* header search */}
       {/* <SearchSection /> */}
-      <Box sx={{ flexGrow: 10 }} />
-      <Box sx={{ flexGrow: 2 }} />
+      <Box sx={{ flexGrow: 14 }} />
 
       {/* notification & profile */}
       <Box>
@@ -87,8 +85,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
         </Avatar> */}
         <DarkModeSwitch />
       </Box>
-      <Box sx={{ flexGrow: 1 }} />
-      <Notification />
+      {/* <Notification /> */}
       <Box sx={{ flexGrow: 1 }} />
 
       <ProfileSection />

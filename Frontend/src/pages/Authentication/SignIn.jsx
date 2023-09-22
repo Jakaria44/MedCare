@@ -63,7 +63,7 @@ export default function SignIn() {
       localStorage.setItem("name", response.data.userDto?.name);
       localStorage.setItem("user_id", response.data.userDto?.id);
 
-      if (response.data.doctorDtos !== null) {
+      if (!response.data?.userDto || response.data?.doctorDtos) {
         localStorage.setItem("role", "ROLE_DOCTOR");
         localStorage.setItem(
           "image",

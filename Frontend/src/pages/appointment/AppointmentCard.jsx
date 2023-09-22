@@ -8,6 +8,7 @@ import {
   Person,
   Sell,
   TaskAlt,
+  Videocam,
 } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -176,13 +177,14 @@ const AppointmentCard = ({ doctorId, appoint, userId, upcoming = false }) => {
           m="auto"
         >
           <Button
+            startIcon={<Videocam />}
             variant="contained"
             onClick={() => {
               // history.push(`/createMeet/${appoint._id}`);
               window.location.href = `/meet/${appoint.id}/${randomString(7)}`;
             }}
           >
-            Create Meet
+            Consult Now
           </Button>
         </Grid>
       )}

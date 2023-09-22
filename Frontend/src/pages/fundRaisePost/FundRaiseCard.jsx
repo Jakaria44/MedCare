@@ -4,65 +4,21 @@ import {
   CardActions,
   CardContent,
   ImageListItem,
-  Menu,
   Tooltip,
   Typography,
-  alpha,
-  styled,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useConfirm } from "material-ui-confirm";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import server from "../../HTTP/httpCommonParam";
 import ErrorModal from "../../component/ErrorModal";
 import PrettoSlider from "../../component/PrettoSlider";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
+import api from "./../../HTTP/httpCommonParam";
 import AddNewFundPost from "./AddPost";
 import DonateNow from "./DonateNow";
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "right",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "right",
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  "& .MuiPaper-root": {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === "light"
-        ? "rgb(55, 65, 81)"
-        : theme.palette.grey[300],
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-    "& .MuiMenu-list": {
-      padding: "4px 0",
-    },
-    "& .MuiMenuItem-root": {
-      "& .MuiSvgIcon-root": {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      "&:active": {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
-      },
-    },
-  },
-}));
+
 const MyTypography = ({ children, ...other }) => (
   <Typography
     gutterBottom
@@ -78,7 +34,7 @@ const MyTypography = ({ children, ...other }) => (
   </Typography>
 );
 
-const FundRaiseCard = ({ load, fundPost }) => {
+const FundRaiseCard = ({ load, fundPost, toApprove }) => {
   const confirm = useConfirm();
   const [showDonate, setShowDonate] = useState(false);
 
@@ -89,6 +45,60 @@ const FundRaiseCard = ({ load, fundPost }) => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const approveFundPost = async () => {
+    try {
+      await confirm({
+        title: "Approve Fund Post",
+        description: "Are you sure you want to approve this Fund Post?",
+        confirmationText: "Approve",
+        cancellationText: "Cancel",
+        confirmationButtonProps: { variant: "outlined", color: "success" },
+        cancellationButtonProps: { variant: "contained", color: "error" },
+      });
+      try {
+        setLoading(true);
+        const res = await api.put(`/protect/fundPost/approve/${fundPost.id}`);
+        setSuccessMessage("Post Approved Successfully");
+        setShowSuccessMessage(true);
+        load();
+      } catch (err) {
+        // setErrorMessage(err.response.fundPost.message);
+        setShowErrorMessage(true);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteFundPost = async () => {
+    try {
+      await confirm({
+        title: "Delete Fund Post",
+        description: "Are you sure you want to delete this Fund Post?",
+        confirmationText: "Delete",
+        cancellationText: "Cancel",
+        confirmationButtonProps: { variant: "outlined", color: "error" },
+        cancellationButtonProps: { variant: "contained", color: "error" },
+      });
+      try {
+        setLoading(true);
+        const res = await api.delete(`/fundpost/delete/${fundPost.id}`);
+        setSuccessMessage("Post Deleted Successfully");
+        setShowSuccessMessage(true);
+        load();
+      } catch (err) {
+        console.log(err);
+        // setErrorMessage(err.response.data.message);
+        setShowErrorMessage(true);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <Card raised sx={{ width: { xs: "100%" } }} elevation={12}>
@@ -125,16 +135,27 @@ const FundRaiseCard = ({ load, fundPost }) => {
         </CardContent>
         <CardActions>
           <Box display="flex" flexGrow={1} justifyContent="space-between">
-            <Button variant="outlined" onClick={() => setShowDonate(true)}>
-              Donate Now
-            </Button>
+            {toApprove ? (
+              <>
+                <Button variant="outlined" onClick={approveFundPost}>
+                  Approve
+                </Button>{" "}
+                <Button variant="outlined" onClick={deleteFundPost}>
+                  Decline
+                </Button>
+              </>
+            ) : (
+              <Button variant="outlined" onClick={() => setShowDonate(true)}>
+                Donate Now
+              </Button>
+            )}
 
             <Button
               variant="outlined"
               component={Link}
               to={"/fundpost/" + fundPost.id}
             >
-              View Details
+              Details
             </Button>
           </Box>
         </CardActions>

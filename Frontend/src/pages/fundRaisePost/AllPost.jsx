@@ -39,10 +39,7 @@ export const defaultQueryOptions = {
   SortBy: "Newest",
   SortDir: "asc",
 };
-const AllPost = ({
-  queries = defaultQueryOptions,
-  title = "Fund Raise Post",
-}) => {
+const AllPost = ({ queries = defaultQueryOptions, pending = false }) => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("sm"));
   const [queryOptions, setQueryOptions] = useState(defaultQueryOptions);
@@ -53,6 +50,8 @@ const AllPost = ({
   const [addingNewFundPost, setAddingNewFundPost] = useState(false);
   const count = useMemo(() => total, [total]);
 
+  // const pending = localStorage.getItem("role") === "ROLE_ADMIN";
+
   const handleChange = (e, p) => {
     setPage(p);
     setQueryOptions({ ...queryOptions, page: p });
@@ -60,8 +59,10 @@ const AllPost = ({
   };
   useEffect(() => {
     loadFundPost(queries);
+  }, [pending]);
+  useEffect(() => {
+    loadFundPost(queries);
   }, []);
-
   const loadFundPost = async (
     queries = queryOptions,
     apiPath = "/fundpost/getallpost/page/"
@@ -76,10 +77,9 @@ const AllPost = ({
     };
     console.log(queries);
     try {
-      const res = await server.get(apiPath + "false", {
+      const res = await server.get(apiPath + !pending, {
         params: queries,
       });
-      console.log("res");
       setTotal(res.data.totalPages);
       console.log(res.data.content);
       setData(res.data.content);
@@ -106,7 +106,7 @@ const AllPost = ({
             gutterBottom
             component="div"
           >
-            {title}
+            {pending ? "Pending Fund Raise Posts" : "All Fund Raise Post"}
           </Typography>
         </Box>
         <Box
@@ -159,7 +159,7 @@ const AllPost = ({
           </Box>
 
           <Box flexGrow={2} />
-          {localStorage.getItem("user_id") !== null && (
+          {localStorage.getItem("user_id") && !pending && (
             <Box flexGrow={1}>
               <Button
                 startIcon={<Add />}
@@ -175,7 +175,12 @@ const AllPost = ({
       </Box>
 
       <Grid container spacing={2}>
-        <FundPostList data={data} loading={loading} load={loadFundPost} />
+        <FundPostList
+          data={data}
+          loading={loading}
+          load={loadFundPost}
+          toApprove={pending}
+        />
       </Grid>
       <Box
         sx={{

@@ -82,7 +82,7 @@ const UpcomingTable = ({ list }) => {
                   <Collapse in={open === i} timeout="auto" unmountOnExit>
                     <Box sx={{ margin: 1 }}>
                       <AppointmentCard
-                        // upcoming={true}
+                        upcoming={true}
                         doctorId={row.doctorid}
                         userId={row.userid}
                         appoint={row}

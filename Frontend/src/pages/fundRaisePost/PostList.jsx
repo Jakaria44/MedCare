@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import CardSkeleton from "../../component/CardSkeleton";
 import FundRaiseCard from "./FundRaiseCard";
 
-const PostList = ({ load, data, loading }) => {
+const PostList = ({ load, data, loading, toApprove }) => {
   console.log(data);
   return (
     <Grid item xs={12} container direction="row" spacing={2}>
@@ -23,7 +23,7 @@ const PostList = ({ load, data, loading }) => {
             paddingX={2}
             paddingY={2}
           >
-            <FundRaiseCard load={load} fundPost={item} />
+            <FundRaiseCard load={load} fundPost={item} toApprove={toApprove} />
           </Grid>
         ))}
       {/* <SpinnerWithBackdrop backdropOpen={loading} helperText="Loading..." /> */}
