@@ -68,6 +68,21 @@ const DoctorProfile = () => {
       details: doctor?.appointmentFee,
       property: "Appointment Fee",
     },
+    {
+      icon: <Sell />,
+      details: (
+        <Chip
+          variant="outlined"
+          component="a"
+          href={doctor?.cvUrl}
+          target="_blank"
+          label="View CV"
+          icon={<OpenInNew />}
+          clickable
+        />
+      ),
+      property: "CV",
+    },
   ];
 
   const handleApproveRequest = async () => {
@@ -194,7 +209,7 @@ const DoctorProfile = () => {
         <Grid
           item
           xs={12}
-          md={3}
+          md={6}
           m="auto"
           display="flex"
           justifyContent="center"
@@ -206,7 +221,7 @@ const DoctorProfile = () => {
             width={260}
           />
         </Grid>
-        <Grid item xs={12} md={5} display="flex" justifyContent="center">
+        <Grid item xs={12} md={6} display="flex" justifyContent="center">
           <Stack spacing={2} divider={<Divider />}>
             {rows?.map((item) => (
               <Stack
@@ -227,21 +242,14 @@ const DoctorProfile = () => {
             ))}
           </Stack>
         </Grid>
-        <Grid item xs={12} md={4} display="flex" justifyContent="left">
+        <Grid item xs={12} display="flex" justifyContent="left">
           <Stack spacing={2} divider={<Divider />}>
-            <MyTypography>Description</MyTypography>
+            <Typography fontSize={27} variant="body2" padding={1}>
+              Description
+            </Typography>
             <MyTypography textAlign="justify">
               {doctor?.description.replaceAll(/''/g, "'")}
             </MyTypography>
-            <Chip
-              variant="outlined"
-              component="a"
-              href={doctor?.cvUrl}
-              target="_blank"
-              label="View CV"
-              icon={<OpenInNew />}
-              clickable
-            />
           </Stack>
         </Grid>
         <Grid item xs={12} m="auto" display="flex" justifyContent="center">

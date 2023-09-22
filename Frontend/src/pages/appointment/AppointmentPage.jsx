@@ -2,6 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "./../../HTTP/httpCommonParam";
 import AppointmentCard from "./appointmentCard";
+import UpcomingTable from "./UpcomingTable";
 const AppointmentPage = () => {
   const [loading, setLoading] = useState(false);
 
@@ -79,18 +80,7 @@ const AppointmentPage = () => {
         Upcoming Appointments
       </Typography>
       <Divider />
-      {upcoming?.length !== 0 && (
-        <Stack spacing={2} divider={<Divider />}>
-          {upcoming?.map((item, i) => (
-            <AppointmentCard
-              key={i}
-              doctorId={item.doctorid}
-              userId={item.userid}
-              appoint={item}
-            />
-          ))}
-        </Stack>
-      )}
+      {upcoming?.length !== 0 && <UpcomingTable list={upcoming} />}
     </>
   );
 };

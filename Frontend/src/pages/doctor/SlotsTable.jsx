@@ -158,6 +158,8 @@ export default function SlotsTable({ id }) {
           `/protect/createappoint/${id}/${localStorage.getItem("user_id")}`,
           submissionBody
         );
+        const response = await api.delete(`/slot/delete/${slotId}`);
+
         setSuccessMessage("Successful!");
         setShowSuccessMessage(true);
         // loadAllSlots();

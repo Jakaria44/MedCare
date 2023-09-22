@@ -1,3 +1,7 @@
+import { Button, Divider, Grid, Stack } from "@mui/material";
+
+import api from "./../../HTTP/httpCommonParam";
+
 import {
   AccessAlarm,
   Description,
@@ -5,16 +9,17 @@ import {
   Sell,
   TaskAlt,
 } from "@mui/icons-material";
-import { Button, Divider, Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MyTypography from "../../ui-component/MyTypography";
-import TimeFormat from "../../utils/TimeFormat";
-import api from "./../../HTTP/httpCommonParam";
 import { Link } from "react-router-dom";
-const appointmentCard = ({ doctorId, appoint, userId }) => {
+import MyTypography from "../../ui-component/MyTypography";
+import randomString from "../../utils/RandomString";
+import TimeFormat from "../../utils/TimeFormat";
+
+// import { useHistory } from "react-router-dom";
+const AppointmentCard = ({ doctorId, appoint, userId, upcoming = false }) => {
   const [doctor, setDoctor] = useState();
   const [user, setUser] = useState();
-
+  // const history = useHistory();
   useEffect(() => {
     // if (doctorId == localStorage.getItem("doctor_id")) {
     loadDoctor();
@@ -41,7 +46,18 @@ const appointmentCard = ({ doctorId, appoint, userId }) => {
   const rowsForUser = [
     {
       icon: <Person />,
-      details: <Link to={`/doctorprofile/${doctorId}`}> {doctor?.name}</Link>,
+      details: (
+        <Link to={`/doctorprofile/${doctorId}`}>
+          <MyTypography
+            fontWeight="bold"
+            color="primary"
+            sx={{ textDecoration: "none" }}
+          >
+            {" "}
+            {doctor?.name}
+          </MyTypography>
+        </Link>
+      ),
       property: "Name",
     },
     {
@@ -49,11 +65,7 @@ const appointmentCard = ({ doctorId, appoint, userId }) => {
       details: doctor?.specialization,
       property: "Specialization",
     },
-    {
-      icon: <AccessAlarm />,
-      details: TimeFormat(appoint?.endTime),
-      property: "End Time",
-    },
+
     {
       icon: <Sell />,
       details: doctor?.appointmentFee,
@@ -74,11 +86,6 @@ const appointmentCard = ({ doctorId, appoint, userId }) => {
     },
 
     {
-      icon: <AccessAlarm />,
-      details: TimeFormat(appoint?.endTime),
-      property: "End Time",
-    },
-    {
       icon: <Sell />,
       details: doctor?.appointmentFee,
       property: "Appointment Fee",
@@ -91,14 +98,32 @@ const appointmentCard = ({ doctorId, appoint, userId }) => {
     },
   ];
 
+  if (!upcoming) {
+    rowsForDoctor.push({
+      icon: <AccessAlarm />,
+      details: TimeFormat(appoint?.endTime),
+      property: "End Time",
+    });
+    rowsForUser.push({
+      icon: <AccessAlarm />,
+      details: TimeFormat(appoint?.endTime),
+      property: "End Time",
+    });
+  }
   const image =
     localStorage.getItem("doctor_id") != doctorId
       ? doctor?.profileImageUrl
       : user?.image;
   // console.log(image);
   return (
-    <Grid container spacing={2} justifyContent="center">
-      <Grid item xs={12} md={4}>
+    <Grid
+      container
+      spacing={2}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item xs={12} md={upcoming ? 6 : 4} m="auto">
         <img src={image} alt="Doctor Image" height={300} width={260} />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -140,21 +165,29 @@ const appointmentCard = ({ doctorId, appoint, userId }) => {
               ))}
         </Stack>
       </Grid>
-      <Grid
-        item
-        xs={12}
-        md={2}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        m="auto"
-      >
-        <Button variant="contained" color="success">
-          Consult Now
-        </Button>
-      </Grid>
+      {!upcoming && (
+        <Grid
+          item
+          xs={12}
+          md={2}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          m="auto"
+        >
+          <Button
+            variant="contained"
+            onClick={() => {
+              // history.push(`/createMeet/${appoint._id}`);
+              window.location.href = `/meet/${appoint.id}/${randomString(7)}`;
+            }}
+          >
+            Create Meet
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 };
 
-export default appointmentCard;
+export default AppointmentCard;
