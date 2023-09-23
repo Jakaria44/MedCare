@@ -55,6 +55,7 @@ const DoctorCard = ({ doctor }) => {
         </CardContent>
         <CardActions>
           <Button
+            variant="contained"
             component={Link}
             to={`/doctorprofile/${doctor.id}`}
             size="small"

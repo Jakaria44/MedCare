@@ -8,13 +8,15 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
-import Header from "./Header";
-
+import React from "react";
 import { Outlet } from "react-router-dom";
 import { useMenu } from "../contexts/MenuContextProvider.jsx";
 import { actions } from "../contexts/actions.jsx";
+import Header from "./Header";
+// import "./chat.css";
 
 import { drawerWidth } from "./../store/constants";
+import Message from "./Message.jsx";
 import Sidebar from "./Sidebar/Sidebar";
 // styles
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -91,10 +93,42 @@ const Structure = () => {
         drawerToggle={handleLeftDrawerToggle}
       />
 
+      {/* <button class="chatbot-toggle">
+        <span class="material-symbols-outlined">mode_comment</span>
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="chatbot">
+        <header>
+          <h2>chatbot</h2>
+          <span class="material-symbols-outlined">close</span>
+        </header>
+
+        <ul class="chatbox">
+          <li class="chat incoming">
+            <span class="material-symbols-outlined">smart_toy</span>
+            <p>
+              Hi there <br /> please provide the symptoms for predicting
+              diesease.
+            </p>
+          </li>
+        </ul>
+
+        <div class="chat-input">
+          <textarea placeholder="Enter a message....." required></textarea>
+          <span id="send-btn" class="material-symbols-outlined">
+            send
+          </span>
+        </div>
+      </div> */}
+
       {/*/!* main content *!/*/}
       <Main theme={theme} open={menuOpened.opened}>
         <Outlet />
       </Main>
+      <Box position="fixed" bottom="40px" right="40px">
+        <Message />
+      </Box>
     </Box>
   );
 };

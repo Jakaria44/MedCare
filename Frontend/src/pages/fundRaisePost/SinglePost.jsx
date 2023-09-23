@@ -162,7 +162,11 @@ const SinglePost = () => {
           {/* <Button onClick={editFundPost} startIcon={<Edit />}>
             Edit Post
           </Button> */}
-          <Button onClick={deleteFundPost} startIcon={<Delete />}>
+          <Button
+            variant="outlined"
+            onClick={deleteFundPost}
+            startIcon={<Delete />}
+          >
             Delete Post
           </Button>
         </Stack>
@@ -170,11 +174,16 @@ const SinglePost = () => {
     else if (localStorage.getItem("role") == "ROLE_ADMIN")
       return (
         <Stack direction="row" spacing={3}>
-          <Button onClick={deleteFundPost} startIcon={<Delete />}>
+          <Button
+            variant="outlined"
+            onClick={deleteFundPost}
+            startIcon={<Delete />}
+          >
             Delete Post
           </Button>
           {!data?.approve && (
             <Button
+              variant="contained"
               onClick={approveFundPost}
               startIcon={<CheckCircleOutline />}
             >
@@ -279,7 +288,7 @@ const SinglePost = () => {
           arrow
         >
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={() => {
               if (data?.approve) setShowDonate(true);
             }}

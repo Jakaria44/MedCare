@@ -24,6 +24,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { useConfirm } from "material-ui-confirm";
 import * as React from "react";
 import ErrorModal from "../../component/ErrorModal";
+import SignupDialog from "../../component/SignupDialog";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
 import { TimeFormat2, TimeFormat3 } from "../../utils/TimeFormat";
@@ -85,6 +86,7 @@ const CollapsedTable = ({ items, handleBook, doctorId, handleDelete }) => (
   </Table>
 );
 export default function SlotsTable({ id }) {
+  const [showSignDialog, setShowSignDialog] = React.useState(false);
   const [open, setOpen] = React.useState(-1);
   const confirm = useConfirm();
   const [loading, setLoading] = React.useState(false);
@@ -106,6 +108,11 @@ export default function SlotsTable({ id }) {
 
   const handleBook = async (slotId) => {
     // setBooking(true);
+
+    if (localStorage.getItem("user_id") == null) {
+      setShowSignDialog(true);
+      return;
+    }
 
     const body = loadedData.filter((item) => item.id == slotId)[0];
     let description = "";
@@ -367,6 +374,11 @@ export default function SlotsTable({ id }) {
           setShowErrorMessage(false);
           loadAllSlots();
         }}
+      />
+      <SignupDialog
+        showMessage={showSignDialog}
+        message={"You must log in as user to make appointment."}
+        HandleModalClosed={() => setShowSignDialog(false)}
       />
     </Grid>
   );

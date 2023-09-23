@@ -16,57 +16,67 @@ export default function componentStyleOverrides(theme) {
                 }
             }
         },
-        MuiLoadingButton: {
-            styleOverrides: {
-                root: {
-                    '&.Mui-disabled': {
-                        color: bgColor,
-                        background: theme.colors?.grey300,
-                    },
-                },
-                textSuccess: {
-                    color: theme.colors?.textDark,
-                    background: theme.colors?.successMain,
-                    '&:hover': {
-                        background: theme.colors?.seccessDark,
-                    },
-                },
-                loading: {
-                    color: theme.colors?.textDark,
-                    background: theme.colors?.successMain,
-                    '&:hover': {
-                        background: theme.colors?.seccessDark,
-                    },
-                },
-            },
-        },
+        // MuiLoadingButton: {
+        //     styleOverrides: {
+        //         root: {
+        //             '&.Mui-disabled': {
+        //                 color: bgColor,
+        //                 background: theme.colors?.grey300,
+        //             },
+        //         },
+        //         textSuccess: {
+        //             color: theme.colors?.textDark,
+        //             background: theme.colors?.successMain,
+        //             '&:hover': {
+        //                 background: theme.colors?.seccessDark,
+        //             },
+        //         },
+        //         loading: {
+        //             color: theme.colors?.textDark,
+        //             background: theme.colors?.successMain,
+        //             '&:hover': {
+        //                 background: theme.colors?.seccessDark,
+        //             },
+        //         },
+        //     },
+        // },
 
         MuiButton: {
             styleOverrides: {
                 root: {
-                    fontWeight: 500,
-                    borderRadius: '4px',
-                    color: theme.textDark,
-                    transition: 'all .2s ease-in-out',
-                    background: theme.buttonBackground,
+                    // fontWeight: 500,
+                    // borderRadius: '4px',
+                    // transition: 'all .2s ease-in-out',
+                    // background: theme.buttonBackground,
                     '&:hover': {
-                        color: theme.background,
+                        color: theme.textLight,
                         background: theme.heading,
                     },
                 },
-                textError: {
-                    background: theme.colors?.errorMain,
-                    '&:hover': {
-                        background: theme.colors?.errorDark,
-                    },
-                },
-                textSuccess: {
-                    color: theme.colors?.textDark,
-                    background: theme.colors?.successMain,
-                    '&:hover': {
-                        background: theme.colors?.seccessDark,
-                    },
-                },
+                // contained : {
+                //     '&:hover': {
+                //         color: theme.textLight,
+                //         background: theme.heading,
+                //     },
+                // },
+                // contained : {
+                //     '&:hover': {
+                //         color: '#000',    
+                //     },
+                // },
+                // textError: {
+                //     background: theme.colors?.errorMain,
+                //     '&:hover': {
+                //         background: theme.colors?.errorDark,
+                //     },
+                // },
+                // textSuccess: {
+                //     color: theme.colors?.textDark,
+                //     background: theme.colors?.successMain,
+                //     '&:hover': {
+                //         background: theme.colors?.seccessDark,
+                //     },
+                // },
             },
         },
         MuiAvatar: {
@@ -191,41 +201,41 @@ export default function componentStyleOverrides(theme) {
                 },
             },
         },
-        MuiOutlinedInput: {
-            styleOverrides: {
-                root: {
-                    background: bgColor,
-                    borderRadius: '12px',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.colors?.grey400,
-                    },
-                    '&:hover $notchedOutline': {
-                        borderColor: theme.colors?.primaryLight,
-                    },
-                    '&.MuiInputBase-multiline': {
-                        padding: 1,
-                    },
-                },
-                input: {
-                    fontWeight: 500,
-                    background: bgColor,
-                    padding: '15.5px 14px',
-                    borderRadius: '12px',
-                    '&.MuiInputBase-inputSizeSmall': {
-                        padding: '10px 14px',
-                        '&.MuiInputBase-inputAdornedStart': {
-                            paddingLeft: 0,
-                        },
-                    },
-                },
-                inputAdornedStart: {
-                    paddingLeft: 4,
-                },
-                notchedOutline: {
-                    borderRadius: '12px',
-                },
-            },
-        },
+        // MuiOutlinedInput: {
+        //     styleOverrides: {
+        //         root: {
+        //             background: bgColor,
+        //             borderRadius: '12px',
+        //             '& .MuiOutlinedInput-notchedOutline': {
+        //                 borderColor: theme.colors?.grey400,
+        //             },
+        //             '&:hover $notchedOutline': {
+        //                 borderColor: theme.colors?.primaryLight,
+        //             },
+        //             '&.MuiInputBase-multiline': {
+        //                 padding: 1,
+        //             },
+        //         },
+        //         input: {
+        //             fontWeight: 500,
+        //             background: bgColor,
+        //             padding: '15.5px 14px',
+        //             borderRadius: '12px',
+        //             '&.MuiInputBase-inputSizeSmall': {
+        //                 padding: '10px 14px',
+        //                 '&.MuiInputBase-inputAdornedStart': {
+        //                     paddingLeft: 0,
+        //                 },
+        //             },
+        //         },
+        //         inputAdornedStart: {
+        //             paddingLeft: 4,
+        //         },
+        //         notchedOutline: {
+        //             borderRadius: '12px',
+        //         },
+        //     },
+        // },
         MuiPaper: {
             styleOverrides: {
                 root: {
