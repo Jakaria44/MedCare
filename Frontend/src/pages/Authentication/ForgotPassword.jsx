@@ -1,6 +1,5 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { IconButton, InputAdornment, Slide } from "@mui/material";
+import { Slide } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -17,7 +16,7 @@ import server from "./../../HTTP/Auth";
 
 const emailRegex =
   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-export default function SignIn() {
+export default function ForgotPassword() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
   const [signingIn, setSigningIn] = React.useState(false);
@@ -26,56 +25,31 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = React.useState(
     "Something went wrong. Pleae try again"
   );
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-  React.useEffect(() => {
-    console.log("hi");
-  }, []);
-  const signin = async (user) => {
-    try {
-      console.log(user);
-      const response = await server.post("/login", user);
-      console.log(response.data);
-      localStorage.setItem("token", response.data.jwtToken);
-      localStorage.setItem("role", response.data.userDto?.role);
-      localStorage.setItem("image", response.data.userDto?.imageUrl);
-      localStorage.setItem("name", response.data.userDto?.name);
-      localStorage.setItem("user_id", response.data.userDto?.id);
-
-      if (!response.data?.userDto || response.data?.doctorDtos) {
-        localStorage.setItem("role", "ROLE_DOCTOR");
-        localStorage.setItem(
-          "image",
-          response.data.doctorDtos?.profileImageUrl
-        );
-        localStorage.setItem("name", response.data.doctorDtos?.name);
-        localStorage.setItem("doctor_id", response.data.doctorDtos?.id);
-      }
-
-      setSigningIn(false);
-      window.location.replace("/");
-    } catch (err) {
-      setErrorMessage(err?.response?.data?.message || "Something went wrong");
-      setShowErrorMessage(true);
-      console.log(err);
-    }
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setSigningIn(true);
     const data = new FormData(event.currentTarget);
-    const user = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
-    signin(user);
+    const mail = data.get("email");
+    console.log(mail);
+    server
+      .post(`/sendOtp/${mail}`)
+      .then((res) => {
+        console.log(res.data);
+        setSigningIn(false);
+        navigate("/confirm-otp/" + encodeURIComponent(mail));
+      })
+      .catch((err) => {
+        console.log(err);
+        setSigningIn(false);
+        setShowErrorMessage(true);
+        setErrorMessage("Something went wrong. Pleae try again");
+      });
   };
 
   const isEmailValid = email ? emailRegex.test(email) : true;
   return (
-    <Slide in={true} direction="left">
+    <Slide in={true} direction="right">
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -89,8 +63,8 @@ export default function SignIn() {
           <Avatar sx={{ m: 1, bgColor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h2">
-            Sign in
+          <Typography component="h1" variant="h5">
+            Enter your Email address
           </Typography>
           <Box
             component="form"
@@ -113,48 +87,20 @@ export default function SignIn() {
                 isEmailValid ? "" : "Please enter a valid email address"
               }
             />
-            <Box sx={{ mb: 1 }} />
-            <TextField
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              id="password"
-              autoComplete="new-password"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleTogglePassword}
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Send OTP
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to="/forgot-password">
+                <Link to="/signin" variant="body2">
                   <Typography variant="body2" color="primary.main">
-                    Forgot password?
-                  </Typography>
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link to="/signup">
-                  <Typography variant="body2" color="primary.main">
-                    Don't have an account? Sign Up
+                    Remember password? Sign In
                   </Typography>
                 </Link>
               </Grid>
@@ -163,7 +109,7 @@ export default function SignIn() {
         </Box>
         <SpinnerWithBackdrop
           backdropOpen={signingIn}
-          helperText="Please wait while we signing you in"
+          helperText="Please wait ..."
         />
         <ErrorModal
           showErrorMessage={showErrorMessage}

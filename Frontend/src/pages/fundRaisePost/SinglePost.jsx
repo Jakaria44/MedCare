@@ -3,14 +3,15 @@ import {
   CheckCircleOutline,
   Delete,
   Edit,
+  OpenInNew,
   Person,
 } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Chip,
   Divider,
   Skeleton,
-  Slider,
   Stack,
   Tooltip,
   Typography,
@@ -22,6 +23,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../HTTP/httpCommonParam";
 import Carousel from "../../component/Carousel";
 import ErrorModal from "../../component/ErrorModal";
+import PrettoSlider from "../../component/PrettoSlider";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
 import TimeFormat from "./../../utils/TimeFormat";
@@ -160,7 +162,11 @@ const SinglePost = () => {
           {/* <Button onClick={editFundPost} startIcon={<Edit />}>
             Edit Post
           </Button> */}
-          <Button onClick={deleteFundPost} startIcon={<Delete />}>
+          <Button
+            variant="outlined"
+            onClick={deleteFundPost}
+            startIcon={<Delete />}
+          >
             Delete Post
           </Button>
         </Stack>
@@ -168,11 +174,16 @@ const SinglePost = () => {
     else if (localStorage.getItem("role") == "ROLE_ADMIN")
       return (
         <Stack direction="row" spacing={3}>
-          <Button onClick={deleteFundPost} startIcon={<Delete />}>
+          <Button
+            variant="outlined"
+            onClick={deleteFundPost}
+            startIcon={<Delete />}
+          >
             Delete Post
           </Button>
-          {!data.approve && (
+          {!data?.approve && (
             <Button
+              variant="contained"
               onClick={approveFundPost}
               startIcon={<CheckCircleOutline />}
             >
@@ -187,7 +198,7 @@ const SinglePost = () => {
   return (
     <Stack
       // justifyContent="center"
-      alignItems="center"
+      // alignItems="center"
       height="100%"
       width="100%"
       spacing={3}
@@ -202,7 +213,9 @@ const SinglePost = () => {
       {!data?.title ? (
         <Skeleton variant="text" />
       ) : (
-        <Typography variant="h2">{data.title}</Typography>
+        <Typography variant="h2" textAlign="center">
+          {data.title}
+        </Typography>
       )}
 
       {!data?.title ? (
@@ -229,34 +242,28 @@ const SinglePost = () => {
               Posted on: {TimeFormat(data.createdDate)}
             </Typography>
           </Box>
-          <Box display={"flex"} flexDirection="row" alignItems="center">
-            <Beenhere />
+          {!data?.approve && (
+            <Box display={"flex"} flexDirection="row" alignItems="center">
+              <Beenhere />
 
-            <Typography
-              variant="subtitle2"
-              fontSize={17}
-              mx={2}
-              color={data.approve ? "success.main" : "error.main"}
-            >
-              Approved: {data.approve ? "Yes" : "No"}
-            </Typography>
-          </Box>
+              <Typography
+                variant="subtitle2"
+                fontSize={17}
+                mx={2}
+                color={data.approve ? "success.main" : "error.main"}
+              >
+                Approved: {data.approve ? "Yes" : "No"}
+              </Typography>
+            </Box>
+          )}
         </FullWidthBox>
       )}
 
       <Divider width="100%" />
-      {!data?.title ? (
-        <>
-          <Skeleton variant="text" width="70%" />
-          <Skeleton variant="text" width="70%" />
-          <Skeleton variant="text" width="70%" />
-        </>
-      ) : (
-        <>
-          <Typography variant="body1" fontSize={19} textAlign="justify">
-            {data.postContent}
-          </Typography>
-        </>
+      {data?.title && (
+        <Typography variant="body1" fontSize={19} textAlign="justify">
+          {data?.postContent}
+        </Typography>
       )}
       {data && (
         <FullWidthBox>
@@ -264,7 +271,7 @@ const SinglePost = () => {
             Raised {data.donatedAmount} BDT
           </Typography>
           <Box width="50%">
-            <Slider
+            <PrettoSlider
               value={data.donatedAmount}
               max={data.amount}
               valueLabelDisplay="auto"
@@ -275,30 +282,46 @@ const SinglePost = () => {
           </Typography>
         </FullWidthBox>
       )}
-      <Tooltip
-        title={data?.approve ? "Donate Now" : "This post is not approved yet"}
-        arrow
-      >
-        <Button
-          variant="outlined"
-          onClick={() => {
-            if (data?.approve) setShowDonate(true);
-          }}
+      <Box width="100%" display="flex" justifyContent="center">
+        <Tooltip
+          title={data?.approve ? "Donate Now" : "This post is not approved yet"}
+          arrow
         >
-          Donate Now
-        </Button>
-      </Tooltip>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (data?.approve) setShowDonate(true);
+            }}
+          >
+            Donate Now
+          </Button>
+        </Tooltip>
+      </Box>
       <Divider width="100%" />
       {data?.proveDocuments.length && (
-        <Stack spacing={2}>
+        <Stack spacing={2} direction="row">
           <Typography variant="h2">Proof Documents</Typography>
-          <Carousel
+          {/* <Carousel
             items={data?.proveDocuments?.map((item) => item.documentName)}
-          />
+          /> */}
+
+          {data?.proveDocuments?.map((item) => (
+            <Chip
+              variant="outlined"
+              component="a"
+              href={item}
+              target="_blank"
+              label="View Document"
+              icon={<OpenInNew />}
+              clickable
+            />
+          ))}
         </Stack>
       )}
-
-      <Footer />
+      <Stack spacing={2} />
+      <Box width="100%" display="flex" justifyContent="center">
+        <Footer />
+      </Box>
       <SuccessfulModal
         showSuccessMessage={showSuccessMessage}
         successMessage={successMessage}

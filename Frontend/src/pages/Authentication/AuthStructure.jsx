@@ -2,7 +2,10 @@ import {
   AppBar,
   Box,
   Container,
+  Link as MuiLink,
+  Slide,
   Toolbar,
+  Typography,
   alpha,
   useScrollTrigger,
   useTheme,
@@ -26,7 +29,22 @@ function ElevationScroll(props) {
     elevation: trigger ? 4 : 0,
   });
 }
-
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <MuiLink href="/" color="text.secondary">
+        MedCare
+      </MuiLink>
+      {new Date().getFullYear()}
+    </Typography>
+  );
+}
 const AuthStructure = () => {
   const theme = useTheme();
   return (
@@ -45,7 +63,7 @@ const AuthStructure = () => {
                 marginY="0px"
                 sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
               >
-                {theme.palette.mode == "light" ? (
+                {/* {theme.palette.mode == "light" ? (
                   <img
                     src="./../../public/LibraryLogo2.png"
                     alt="Book Breeze"
@@ -57,7 +75,15 @@ const AuthStructure = () => {
                     alt="Book Breeze"
                     width="100"
                   />
-                )}
+                )} */}
+                <Typography
+                  variant="h2"
+                  fontFamily="cursive"
+                  component="div"
+                  my={2}
+                >
+                  MedCare
+                </Typography>
               </Box>
               <DarkModeSwitch />
             </Toolbar>
@@ -69,6 +95,7 @@ const AuthStructure = () => {
         <Box sx={{ my: 4 }}>
           <Outlet />
         </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </>
   );

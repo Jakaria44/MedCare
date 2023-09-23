@@ -63,7 +63,10 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = () => {
+    // localStorage.clear();
+    const mode = localStorage.getItem("colorMode");
     localStorage.clear();
+    localStorage.setItem("colorMode", mode);
 
     navigate("/signin");
   };

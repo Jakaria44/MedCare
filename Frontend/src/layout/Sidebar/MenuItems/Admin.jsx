@@ -1,6 +1,6 @@
 // assets
 
-import { Feed, People, SsidChart, StickyNote2 } from "@mui/icons-material";
+import { StickyNote2 } from "@mui/icons-material";
 
 // constant
 
@@ -16,6 +16,14 @@ const Admin = {
       title: "Doctor Applications",
       type: "item",
       url: "/pendingdoctor",
+      icon: <StickyNote2 />,
+      breadcrumbs: false,
+    },
+    {
+      id: "pendingfundpost",
+      title: "Pending Fund Raise Posts",
+      type: "item",
+      url: "/pendingfundpost",
       icon: <StickyNote2 />,
       breadcrumbs: false,
     },

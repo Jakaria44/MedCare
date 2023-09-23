@@ -1,12 +1,11 @@
 // material-ui
-import { Avatar, Box, ButtonBase } from "@mui/material";
+import { Avatar, Box, ButtonBase, Link, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // project imports
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import DarkModeSwitch from "../component/DarkModeSwitch.jsx";
 import { useMyTheme } from "../contexts/ThemeContextProvider.jsx";
-import Notification from "./Sections/Notification.jsx";
 import ProfileSection from "./Sections/ProfileSection.jsx";
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
@@ -53,26 +52,29 @@ const Header = ({ handleLeftDrawerToggle }) => {
               CSE Library
             </Typography>
           </ButtonBase> */}
-          {theme.palette.mode == "light" ? (
-            <img
-              src="./../../public/LibraryLogo2.png"
-              alt="Book Breeze"
-              width="100"
-            />
+          {/* {theme.palette.mode == "light" ? (
+            <img src="/light_logo_top.png" alt="MedCare" width="100" />
           ) : (
-            <img
-              src="./../../public/LibraryLogo.png"
-              alt="Book Breeze"
-              width="100"
-            />
-          )}
+            <img src="/light.png" alt="MedCare" width="100" />
+          )} */}
+
+          <Typography component="div" my={2}>
+            <Link
+              href="/"
+              color="text.primary"
+              variant="h2"
+              sx={{ textDecoration: "none" }}
+              fontFamily="cursive"
+            >
+              MedCare
+            </Link>
+          </Typography>
         </Box>
       </Box>
 
       {/* header search */}
       {/* <SearchSection /> */}
-      <Box sx={{ flexGrow: 10 }} />
-      <Box sx={{ flexGrow: 2 }} />
+      <Box sx={{ flexGrow: 14 }} />
 
       {/* notification & profile */}
       <Box>
@@ -92,8 +94,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
         </Avatar> */}
         <DarkModeSwitch />
       </Box>
-      <Box sx={{ flexGrow: 1 }} />
-      <Notification />
+      {/* <Notification /> */}
       <Box sx={{ flexGrow: 1 }} />
 
       <ProfileSection />

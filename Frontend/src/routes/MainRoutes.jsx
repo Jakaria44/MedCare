@@ -25,6 +25,11 @@ const RegisterDoctor = Loadable(
 const DoctorProfile = Loadable(
   lazy(() => import("../pages/doctor/DoctorProfile"))
 );
+
+const AppointMents = Loadable(
+  lazy(() => import("../pages/appointment/AppointmentPage"))
+);
+const Meet = Loadable(lazy(() => import("../pages/meeting/Meeting")));
 const EditDoctor = Loadable(lazy(() => import("../pages/doctor/EditProfile")));
 const AllBlood = Loadable(lazy(() => import("../pages/blood/AllBlood")));
 const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
@@ -78,6 +83,21 @@ const MainRoutes = {
     {
       path: "/pendingdoctor",
       element: <PendingApplications />,
+    },
+
+    {
+      path: "/appointments",
+      element: <AppointMents />,
+    },
+    {
+      path: "/meet/:appointId/:meetingId",
+      element: <Meet />,
+    },
+    {
+      path: "/pendingfundpost",
+      element: (
+        <RaiseFund pending={localStorage.getItem("role") == "ROLE_ADMIN"} />
+      ),
     },
   ],
 };

@@ -1,16 +1,16 @@
 import { CameraAlt, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Autocomplete, IconButton, InputAdornment } from "@mui/material";
+import { Autocomplete, IconButton, InputAdornment, Slide } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { v4 } from "uuid";
 import { districts } from "../../assets/bdInfo/districts";
 import { divisions } from "../../assets/bdInfo/divisions";
@@ -20,22 +20,6 @@ import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import { storage } from "../../firebaseConfig";
 import server from "./../../HTTP/Auth";
 const defaultImage = "https://img.freepik.com/free-icon/user_318-159711.jpg";
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="/">
-        MedCare
-      </Link>
-      {new Date().getFullYear()}
-    </Typography>
-  );
-}
 
 const emailRegex =
   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -161,126 +145,96 @@ export default function SignUp() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Grid
-          item
-          container
-          xs={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid item>
-            <Avatar
-              alt="Preview"
-              src={previewUrl}
-              sx={{ width: 150, height: 150 }}
-            />
-          </Grid>
-          <Grid item mt={17}>
-            <IconButton variant="contained" color="primary" component="label">
-              <CameraAlt />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                style={{ display: "none" }}
-              />
-            </IconButton>
-          </Grid>
-        </Grid>
-
-        <Typography component="h1" variant="h3">
-          Sign up
-        </Typography>
+    <Slide in={true} direction="left" mountOnEnter unmountOnExit>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
         <Box
-          component="form"
-          noValidate={false}
-          onSubmit={handleSubmit}
-          sx={{ mt: 3 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
+          <Grid
+            item
+            container
+            xs={12}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item>
+              <Avatar
+                alt="Preview"
+                src={previewUrl}
+                sx={{ width: 150, height: 150 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-              />
+            <Grid item mt={17}>
+              <IconButton variant="contained" color="primary" component="label">
+                <CameraAlt />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  style={{ display: "none" }}
+                />
+              </IconButton>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                error={!isEmailValid}
-                onChange={(e) => setEmail(e.target.value)}
-                helperText={
-                  isEmailValid ? "" : "Please enter a valid email address"
-                }
-              />
-            </Grid>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Autocomplete
-                fullWidth
-                options={divOption}
-                id="division"
-                value={selectedDivision || ""}
-                autoHighlight
-                getOptionLabel={(option) => option?.name || ""}
-                renderOption={(props, option) => (
-                  <li key={option.id} {...props}>
-                    {option.name}
-                  </li>
-                )}
-                onChange={(e, value) => {
-                  setSelectedDivision(value);
-                  setSelectedDistrict(null);
-                  setSelectedUpazila(null);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    required
-                    label="Select Division"
-                    placeholder="Select Division"
-                  />
-                )}
-                isOptionEqualToValue={(option, value) => 1 === 1}
-                noOptionsText="No Division Matched"
-              />
-            </Grid>
-            {selectedDivision && (
+          <Typography component="h1" variant="h3">
+            Sign up
+          </Typography>
+          <Box
+            component="form"
+            noValidate={false}
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  error={!isEmailValid}
+                  onChange={(e) => setEmail(e.target.value)}
+                  helperText={
+                    isEmailValid ? "" : "Please enter a valid email address"
+                  }
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <Autocomplete
                   fullWidth
-                  options={distOption}
-                  id="district"
-                  value={selectedDistrict || ""}
+                  options={divOption}
+                  id="division"
+                  value={selectedDivision || ""}
                   autoHighlight
                   getOptionLabel={(option) => option?.name || ""}
                   renderOption={(props, option) => (
@@ -289,101 +243,134 @@ export default function SignUp() {
                     </li>
                   )}
                   onChange={(e, value) => {
-                    setSelectedDistrict(value);
+                    setSelectedDivision(value);
+                    setSelectedDistrict(null);
                     setSelectedUpazila(null);
                   }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       required
-                      label="Select District"
-                      placeholder="Select District"
+                      label="Select Division"
+                      placeholder="Select Division"
                     />
                   )}
                   isOptionEqualToValue={(option, value) => 1 === 1}
-                  noOptionsText="No District Matched"
+                  noOptionsText="No Division Matched"
                 />
               </Grid>
-            )}
-            {selectedDivision && selectedDistrict && (
+              {selectedDivision && (
+                <Grid item xs={12}>
+                  <Autocomplete
+                    fullWidth
+                    options={distOption}
+                    id="district"
+                    value={selectedDistrict || ""}
+                    autoHighlight
+                    getOptionLabel={(option) => option?.name || ""}
+                    renderOption={(props, option) => (
+                      <li key={option.id} {...props}>
+                        {option.name}
+                      </li>
+                    )}
+                    onChange={(e, value) => {
+                      setSelectedDistrict(value);
+                      setSelectedUpazila(null);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        required
+                        label="Select District"
+                        placeholder="Select District"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) => 1 === 1}
+                    noOptionsText="No District Matched"
+                  />
+                </Grid>
+              )}
+              {selectedDivision && selectedDistrict && (
+                <Grid item xs={12}>
+                  <Autocomplete
+                    fullWidth
+                    options={upazilaOption}
+                    id="district"
+                    value={selectedUpazila || ""}
+                    autoHighlight
+                    getOptionLabel={(option) => option?.name || ""}
+                    renderOption={(props, option) => (
+                      <li key={option.id} {...props}>
+                        {option.name}
+                      </li>
+                    )}
+                    onChange={(e, value) => setSelectedUpazila(value)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        required
+                        label="Select Upazilla"
+                        placeholder="Select Upazilla"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) => 1 === 1}
+                    noOptionsText="No Upazilla Matched"
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
-                <Autocomplete
+                <TextField
+                  required
                   fullWidth
-                  options={upazilaOption}
-                  id="district"
-                  value={selectedUpazila || ""}
-                  autoHighlight
-                  getOptionLabel={(option) => option?.name || ""}
-                  renderOption={(props, option) => (
-                    <li key={option.id} {...props}>
-                      {option.name}
-                    </li>
-                  )}
-                  onChange={(e, value) => setSelectedUpazila(value)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      required
-                      label="Select Upazilla"
-                      placeholder="Select Upazilla"
-                    />
-                  )}
-                  isOptionEqualToValue={(option, value) => 1 === 1}
-                  noOptionsText="No Upazilla Matched"
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleTogglePassword}
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
-            )}
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type={showPassword ? "text" : "password"}
-                id="password"
-                autoComplete="new-password"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleTogglePassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
             </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link to="/signin">
+                  <Typography variant="body2" color="primary.main">
+                    Already have an account? Sign in
+                  </Typography>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
 
-      <ErrorModal
-        showErrorMessage={showErrorMessage}
-        errorMessage={errorMessage}
-        HandleModalClosed={() => {
-          setShowErrorMessage(false), setSigningUp(false);
-        }}
-      />
-      <SpinnerWithBackdrop backdropOpen={signingUp} helperText="Signing Up" />
-      <Copyright sx={{ mt: 3 }} />
-    </Container>
+        <ErrorModal
+          showErrorMessage={showErrorMessage}
+          errorMessage={errorMessage}
+          HandleModalClosed={() => {
+            setShowErrorMessage(false), setSigningUp(false);
+          }}
+        />
+        <SpinnerWithBackdrop backdropOpen={signingUp} helperText="Signing Up" />
+      </Container>
+    </Slide>
   );
 }

@@ -73,7 +73,7 @@ const PendingApplications = () => {
         ),
         content: (
           <Typography variant="body1">
-            Are you sure you want to delete {row.NAME}'s application?
+            Are you sure you want to delete {row?.name}'s application?
           </Typography>
         ),
       });
