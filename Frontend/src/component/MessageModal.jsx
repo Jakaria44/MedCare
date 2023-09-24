@@ -1,6 +1,12 @@
-import styled from "@emotion/styled";
 import { NotificationsNone } from "@mui/icons-material";
-import { Button, Grid, Modal, Typography, useTheme } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Modal,
+  Typography,
+  styled,
+  useTheme,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 

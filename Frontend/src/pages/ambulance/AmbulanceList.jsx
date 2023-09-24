@@ -23,7 +23,7 @@ const AmbulanceList = ({ load, data, loading }) => {
             paddingX={2}
             paddingY={2}
           >
-            <AmbulanceCard load={load} ambulance={item} />
+            <AmbulanceCard load={load} item={item} />
           </Grid>
         ))}
       {/* <SpinnerWithBackdrop backdropOpen={loading} helperText="Loading..." /> */}

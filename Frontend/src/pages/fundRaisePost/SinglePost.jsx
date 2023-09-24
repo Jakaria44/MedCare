@@ -5,6 +5,7 @@ import {
   Edit,
   OpenInNew,
   Person,
+  Sell,
 } from "@mui/icons-material";
 import {
   Box,
@@ -164,6 +165,7 @@ const SinglePost = () => {
           </Button> */}
           <Button
             variant="outlined"
+            color="error"
             onClick={deleteFundPost}
             startIcon={<Delete />}
           >
@@ -176,6 +178,7 @@ const SinglePost = () => {
         <Stack direction="row" spacing={3}>
           <Button
             variant="outlined"
+            color="error"
             onClick={deleteFundPost}
             startIcon={<Delete />}
           >
@@ -184,6 +187,7 @@ const SinglePost = () => {
           {!data?.approve && (
             <Button
               variant="contained"
+              color="success"
               onClick={approveFundPost}
               startIcon={<CheckCircleOutline />}
             >
@@ -289,6 +293,7 @@ const SinglePost = () => {
         >
           <Button
             variant="contained"
+            startIcon={<Sell />}
             onClick={() => {
               if (data?.approve) setShowDonate(true);
             }}

@@ -140,7 +140,7 @@ const Message = () => {
   function populatReqBody() {
     for (let i = 1; i <= 17; i++) {
       if (!reqBody[`Symptom_${i}`]) {
-        reqBody[`Symptom_${i}`] = " ";
+        reqBody[`Symptom_${i}`] = "";
       }
     }
   }
@@ -168,7 +168,7 @@ const Message = () => {
       </ChatToggleButton>
       {open && (
         <Paper
-          elevation={15}
+          elevation={24}
           sx={{
             borderRadius: "20px",
             position: "fixed",
@@ -190,6 +190,7 @@ const Message = () => {
             <Typography variant="body2" color={"primary.light"} fontSize={23}>
               HealthGPT
             </Typography>
+
             <IconButton onClick={() => setOpen(!open)}>
               <CloseOutlined />
             </IconButton>

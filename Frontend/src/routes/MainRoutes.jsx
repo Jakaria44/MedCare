@@ -1,6 +1,7 @@
 import { lazy } from "react";
 
 // project imports
+import ProfilePage from "../pages/profile/ProfilePage";
 import Loadable from "./../ui-component/Loadable";
 import Test from "./test";
 // main routing
@@ -98,6 +99,10 @@ const MainRoutes = {
       element: (
         <RaiseFund pending={localStorage.getItem("role") == "ROLE_ADMIN"} />
       ),
+    },
+    {
+      path: "/userprofile",
+      element: <ProfilePage />,
     },
   ],
 };

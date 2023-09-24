@@ -1,10 +1,11 @@
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import {
+  Avatar,
   Card,
   CardContent,
+  CardHeader,
   IconButton,
   ImageListItem,
-  ImageListItemBar,
   Menu,
   MenuItem,
   Tooltip,
@@ -17,6 +18,7 @@ import React, { useRef, useState } from "react";
 import ErrorModal from "../../component/ErrorModal";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
+import TimeFormat from "../../utils/TimeFormat";
 import server from "./../../HTTP/httpCommonParam";
 import AddNewAmbulance from "./AddNewAmbulance";
 const StyledMenu = styled((props) => (
@@ -76,7 +78,7 @@ const MyTypography = ({ children, ...other }) => (
   </Typography>
 );
 
-const AmbulanceCard = ({ load, ambulance }) => {
+const AmCard = ({ load, ambulance }) => {
   const confirm = useConfirm();
   const [editingAmbulance, setEditingAmbulance] = useState(false); // [editingAmbulance, setEditingAmbulance
   const [successMessage, setSuccessMessage] = useState("success");
@@ -99,7 +101,6 @@ const AmbulanceCard = ({ load, ambulance }) => {
   };
 
   const isMyPost = localStorage.getItem("user_id") == ambulance.userId;
-
   const deleteAmbulance = async () => {
     try {
       await confirm({
@@ -136,7 +137,19 @@ const AmbulanceCard = ({ load, ambulance }) => {
         elevation={12}
         onMouseLeave={() => setHovered(false)}
       >
-        <ImageListItem cols={1} rows={2}>
+        <CardHeader
+          avatar={<Avatar aria-label="recipe">R</Avatar>}
+          action={
+            isMyPost ? (
+              <IconButton aria-label="settings">
+                <MoreVert />
+              </IconButton>
+            ) : null
+          }
+          title={ambulance?.userName}
+          subheader={TimeFormat(ambulance?.createdDate)}
+        />
+        <ImageListItem cols={1} rows={2} sx={{ marginTop: "1vh" }}>
           <img
             onMouseEnter={() => setHovered(true)}
             style={{ height: 160, width: "100%" }}
@@ -144,7 +157,7 @@ const AmbulanceCard = ({ load, ambulance }) => {
             alt={ambulance.ambulanceModel}
             loading="lazy"
           />
-          {isMyPost && (
+          {/* {isMyPost && (
             <ImageListItemBar
               sx={{
                 background:
@@ -160,7 +173,7 @@ const AmbulanceCard = ({ load, ambulance }) => {
                     onClick={handleClick}
                     center
                     size="large"
-                    sx={{ background: "rgba(90,90,90,0.5)" }}
+                    sx={{ background: "rgba(90,90,90,0.1)" }}
                   >
                     <MoreVert />
                   </IconButton>
@@ -168,7 +181,7 @@ const AmbulanceCard = ({ load, ambulance }) => {
               }
               actionPosition="right"
             />
-          )}
+          )} */}
         </ImageListItem>
         <StyledMenu
           id="demo-customized-menu"
@@ -235,4 +248,6 @@ const AmbulanceCard = ({ load, ambulance }) => {
   );
 };
 
-export default AmbulanceCard;
+export default function AmbulanceCard({ load, item }) {
+  return <AmCard load={load} ambulance={item} />;
+}

@@ -17,20 +17,21 @@ import AddNewFundPost from "./AddPost";
 import FundPostList from "./PostList";
 
 export const sortOptions = [
-  { query: "createdDate", name: "Newest", order: "desc" },
-  { query: "createdDate", name: "Oldest", order: "asc" },
+  { query: "approveDate", name: "Newest", order: "desc" },
+  { query: "approveDate", name: "Oldest", order: "asc" },
 
-  { query: "bloodGroup", name: "Blood Group (A-O)", order: "asc" },
-  { query: "bloodGroup", name: "Blood Group (O-A)", order: "desc" },
+  { query: "title", name: "Title (A-Z)", order: "asc" },
+  { query: "title", name: "Title (Z-A)", order: "desc" },
 
-  { query: "division", name: "Division (A-Z)", order: "asc" },
-  { query: "division", name: "Division (Z-A)", order: "desc" },
+  { query: "amount", name: "Required Amount (low-high)", order: "asc" },
+  { query: "amount", name: "Required Amount (high-low)", order: "desc" },
 
-  { query: "district", name: "District (A-Z)", order: "asc" },
-  { query: "district", name: "District (Z-A)", order: "desc" },
-
-  { query: "upazila", name: "Upazila (A-Z)", order: "asc" },
-  { query: "upazila", name: "Upazila (Z-A)", order: "desc" },
+  { query: "donatedAmount", name: "Collected Amount (low-high)", order: "asc" },
+  {
+    query: "donatedAmount",
+    name: "Collected Amount (high-low)",
+    order: "desc",
+  },
 ];
 
 export const defaultQueryOptions = {
@@ -139,7 +140,7 @@ const AllPost = ({ queries = defaultQueryOptions, pending = false }) => {
                       ...queryOptions,
                       SortBy: selectedSort, // Set the selectedSort value
                     });
-                    loadAllBloodPost({
+                    loadFundPost({
                       ...queryOptions,
                       SortBy: selectedSort,
                     });

@@ -23,7 +23,7 @@ const PostList = ({ load, data, loading, toApprove }) => {
             paddingX={2}
             paddingY={2}
           >
-            <FundRaiseCard load={load} fundPost={item} toApprove={toApprove} />
+            <FundRaiseCard load={load} item={item} toApprove={toApprove} />
           </Grid>
         ))}
       {/* <SpinnerWithBackdrop backdropOpen={loading} helperText="Loading..." /> */}

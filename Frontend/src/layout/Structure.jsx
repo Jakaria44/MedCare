@@ -126,7 +126,7 @@ const Structure = () => {
       <Main theme={theme} open={menuOpened.opened}>
         <Outlet />
       </Main>
-      <Box position="fixed" bottom="40px" right="40px">
+      <Box position="fixed" bottom="40px" right="40px" sx={{ zIndex: 1000 }}>
         <Message />
       </Box>
     </Box>

@@ -17,8 +17,6 @@ import AddNewAmbulance from "./AddNewAmbulance";
 import AmbulanceList from "./AmbulanceList";
 import Filters from "./Filters";
 
-const sortMapping = [];
-
 export const sortOptions = [
   { query: "createdDate", name: "Newest", order: "desc" },
   { query: "createdDate", name: "Oldest", order: "asc" },
@@ -61,6 +59,23 @@ const AllAmbulance = ({
   // const count = Math.ceil(data.length / queryOptions.perPage);
   // const count = Math.ceil(total / queryOptions.perPage);
   const count = useMemo(() => total, [total]);
+  const [isMy, setIsMy] = useState(false);
+
+  const handleMyPostsChange = (e) => {
+    setIsMy(e.target.checked);
+    console.log(e.target.checked);
+    setQueryOptions(defaultQueryOptions);
+    if (e.target.checked) {
+      loadAllAmbulance(
+        defaultQueryOptions,
+        `/ambulance/getallpostbyuserbySortAndPage/${localStorage.getItem(
+          "user_id"
+        )}`
+      );
+    } else {
+      loadAllAmbulance();
+    }
+  };
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -108,7 +123,18 @@ const AllAmbulance = ({
         justifyContent="space-between"
         alignItems={matchesXs ? "center" : "center"} // Align items differently on small devices
       >
+        {/* <Stack
+          direction="row"
+          spacing={2}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Switch value={isMy} onChange={handleMyPostsChange} />
+          <Typography variant="subtitle1">My Posts</Typography>
+        </Stack> */}
         <Box flexGrow={1} />
+
         <Box>
           <Typography
             variant="h2"
