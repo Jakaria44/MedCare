@@ -1,10 +1,9 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { actions } from "./actions.jsx";
 
 // menu opened
 const MenuContext = createContext(true);
 
-// TODO: add initial id from current location of the url
 const initialState = {
   opened: true,
   id: document.location.pathname.toString().split("/")[1],
@@ -12,6 +11,9 @@ const initialState = {
 export function MenuContextProvider({ children }) {
   const [menuOpened, dispatch] = useReducer(MenuReducer, initialState);
 
+  useEffect(() => {
+    console.log("MenuContextProvider", menuOpened);
+  }, [menuOpened]);
   return (
     <MenuContext.Provider value={{ menuOpened, dispatch }}>
       {children}

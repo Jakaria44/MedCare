@@ -12,7 +12,7 @@ import {
 import { Box } from "@mui/system";
 import { useConfirm } from "material-ui-confirm";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import PrettoSlider from "../../component/PrettoSlider";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
@@ -39,6 +39,7 @@ const MyTypography = ({ children, ...other }) => (
 
 const FundRaiseCard = ({ load, item, toApprove = false }) => {
   const confirm = useConfirm();
+  const navigate = useNavigate();
   const [showDonate, setShowDonate] = useState(false);
 
   const [editingFundPost, setEditingFundPost] = useState(false); // [editingFundPost, setEditingFundPost
@@ -106,7 +107,15 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
     <>
       <Card raised sx={{ width: { xs: "100%" } }} elevation={12}>
         <CardHeader
-          avatar={<Avatar aria-label="recipe">R</Avatar>}
+          avatar={
+            <Avatar
+              aria-label="recipe"
+              component={Link}
+              to={"/userprofile/" + item?.userid}
+            >
+              M
+            </Avatar>
+          }
           // action={
           //   isMyPost ? (
           //     <IconButton aria-label="settings">
@@ -114,10 +123,27 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
           //     </IconButton>
           //   ) : null
           // }
-          title={item?.userName}
+          title={
+            <Typography
+              component={Link}
+              to={"/userprofile/" + item?.userid}
+              variant="body2"
+              fontSize={18}
+              sx={{ textDecoration: "none" }}
+            >
+              {item?.userName}
+            </Typography>
+          }
           subheader={TimeFormat(item?.approveDate)}
         />
-        <ImageListItem cols={1} rows={2} sx={{ marginTop: "1vh" }}>
+        <ImageListItem
+          cols={1}
+          rows={2}
+          sx={{ marginTop: "1vh" }}
+          // onClick={() => {
+          //   navigate("/userprofile/" + item?.userid);
+          // }}
+        >
           {item?.postImages?.length != 0 && (
             <img
               style={{ height: 360, width: "100%" }}

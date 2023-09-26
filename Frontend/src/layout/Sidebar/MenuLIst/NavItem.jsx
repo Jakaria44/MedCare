@@ -1,5 +1,5 @@
 import { forwardRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // material-ui
 import {
@@ -26,20 +26,8 @@ const NavItem = ({ item, level }) => {
   const theme = useTheme();
   const { menuOpened, dispatch } = useMenu();
   const menu = menuOpened;
-  const { pathname } = useLocation();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
-  //   const itemIcon = item?.icon ? (
-  //     <Icon stroke={1.5} size="1.3rem" />
-  //   ) : (
-  //     <FiberManualRecordIcon
-  //       sx={{
-  //         width: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
-  //         height: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6
-  //       }}
-  //       fontSize={level > 0 ? 'inherit' : 'medium'}
-  //     />
-  //   );
   const itemIcon = item?.icon;
 
   let listItemProps = {
@@ -80,7 +68,7 @@ const NavItem = ({ item, level }) => {
       selected={menu.id === item.id}
       onClick={() => itemHandler(item.id)}
     >
-      <ListItemIcon sx={{ my: "auto", minWidth: !item?.icon ? 18 : 36 }} >
+      <ListItemIcon sx={{ my: "auto", minWidth: !item?.icon ? 18 : 36 }}>
         {itemIcon}
       </ListItemIcon>
       <ListItemText

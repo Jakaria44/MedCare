@@ -6,9 +6,9 @@ import { Medication, Person } from "@mui/icons-material";
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-const Doctor = {
-  id: "Doctor",
-  title: "Doctor",
+const User = {
+  id: "User",
+  title: "User",
   type: "group",
   children: [
     {
@@ -20,14 +20,14 @@ const Doctor = {
       breadcrumbs: false,
     },
     {
-      id: "doctorProfile",
+      id: "userprofile",
       title: "My Profile",
       type: "item",
-      url: `/doctorProfile/${localStorage.getItem("doctor_id")}`,
+      url: `/userprofile/${localStorage.getItem("user_id")}`,
       icon: <Person />,
       breadcrumbs: false,
     },
   ],
 };
 
-export default Doctor;
+export default User;

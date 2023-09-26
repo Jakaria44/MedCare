@@ -1,13 +1,14 @@
 import Admin from "./Admin";
-import { Doctor, DoctorAppoint, DoctorReg } from "./Doctor";
+import Doctor from "./Doctor";
 import Homepage from "./Homepage";
+import Normal from "./Normaluser";
 export const MenuItems = {
   items:
     localStorage.getItem("role") == "ROLE_ADMIN"
       ? [Homepage, Admin]
       : localStorage.getItem("role") == "ROLE_Normal"
-      ? [Homepage, DoctorAppoint]
-      : localStorage.getItem("role") == "ROLE_Doctor"
+      ? [Homepage, Normal]
+      : localStorage.getItem("role") == "ROLE_DOCTOR"
       ? [Homepage, Doctor]
-      : [Homepage, DoctorReg],
+      : [Homepage],
 };

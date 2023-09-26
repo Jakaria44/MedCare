@@ -6,13 +6,14 @@ import HorizontalScrollingContent from "../../component/HorizontalScrollingConte
 import AmbulanceCard from "../ambulance/AmbulanceCard";
 import FundRaiseCard from "../fundRaisePost/FundRaiseCard";
 import BasicInfo from "./BasicInfo";
-import { user } from "./dummyUser";
+// import { user } from "./dummyUser";
 const ProfilePage = () => {
   const { id } = useParams();
   console.log(id);
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [myFundPost, setMyFundPost] = useState([]);
+  const [user, setUser] = useState(null);
   const [pendingFundPost, setPendingFundPost] = useState([]); // [pendingFundPost, setPendingFundPost
   const [myAmbulancePost, setMyAmbulancePost] = useState([]);
 
@@ -65,7 +66,18 @@ const ProfilePage = () => {
     }
   };
 
+  const loadUser = async () => {
+    try {
+      const res = await server.get(`/getuserbyid/${id}`);
+      console.log(res.data);
+      setUser(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
+    loadUser();
     loadMyFundRaisePosts();
     loadMyAmbulancePost();
   }, []);

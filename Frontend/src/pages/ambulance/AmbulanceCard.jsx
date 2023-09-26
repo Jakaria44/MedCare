@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
 import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
@@ -138,7 +139,15 @@ const AmCard = ({ load, ambulance }) => {
         onMouseLeave={() => setHovered(false)}
       >
         <CardHeader
-          avatar={<Avatar aria-label="recipe">R</Avatar>}
+          avatar={
+            <Avatar
+              aria-label="recipe"
+              component={Link}
+              to={"/userprofile/" + ambulance?.userId}
+            >
+              R
+            </Avatar>
+          }
           action={
             isMyPost ? (
               <IconButton aria-label="settings" onClick={handleClick}>
@@ -146,7 +155,17 @@ const AmCard = ({ load, ambulance }) => {
               </IconButton>
             ) : null
           }
-          title={ambulance?.userName}
+          title={
+            <Typography
+              component={Link}
+              to={"/userprofile/" + ambulance?.userId}
+              variant="body2"
+              fontSize={18}
+              sx={{ textDecoration: "none" }}
+            >
+              {ambulance?.userName}
+            </Typography>
+          }
           subheader={TimeFormat(ambulance?.createdDate)}
         />
         <ImageListItem cols={1} rows={2} sx={{ marginTop: "1vh" }}>
