@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import AuthStructure from "../pages/Authentication/AuthStructure";
 // project imports
 
@@ -10,7 +11,7 @@ import AuthStructure from "../pages/Authentication/AuthStructure";
 // const ConfirmOTP = Loadable(
 //   lazy(() => import("../pages/Authentication/ConfirmOTP"))
 // );
-// const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
+const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
 // const AuthStructure = Loadable(
 //   lazy(() => import("../pages/Authentication/AuthStructure"))
 // );
@@ -20,7 +21,7 @@ import ForgotPassword from "../pages/Authentication/ForgotPassword";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SignIn from "../pages/Authentication/SignIn";
 import SignUp from "../pages/Authentication/SignUp";
-import ErrorPage from "./../pages/ErrorPage";
+import Loadable from "../ui-component/Loadable";
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
