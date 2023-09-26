@@ -101,7 +101,7 @@ const MainRoutes = {
       ),
     },
     {
-      path: "/userprofile",
+      path: "/userprofile/:id",
       element: <ProfilePage />,
     },
   ],

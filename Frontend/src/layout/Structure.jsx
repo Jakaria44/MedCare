@@ -15,6 +15,7 @@ import { actions } from "../contexts/actions.jsx";
 import Header from "./Header";
 // import "./chat.css";
 
+import RouteChangeHandler from "../utils/RouteChange.jsx";
 import { drawerWidth } from "./../store/constants";
 import Message from "./Message.jsx";
 import Sidebar from "./Sidebar/Sidebar";
@@ -72,6 +73,7 @@ const Structure = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+      <RouteChangeHandler />
       {/* header */}
       <AppBar
         enableColorOnDark

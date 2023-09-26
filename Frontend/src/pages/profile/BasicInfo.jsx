@@ -25,17 +25,17 @@ const BasicInfo = ({ user }) => {
     {
       icon: <LocationOn />,
       property: "Division",
-      info: user?.address.division,
+      info: user?.address?.division || "N/A",
     },
     {
       icon: <LocationOn />,
       property: "District",
-      info: user?.address.district,
+      info: user?.address?.district || "N/A",
     },
     {
       icon: <LocationOn />,
       property: "Upazilla",
-      info: user?.address.upazila,
+      info: user?.address?.upazila || "N/A",
     },
   ];
 

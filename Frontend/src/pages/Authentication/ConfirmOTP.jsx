@@ -42,7 +42,7 @@ export default function ConfirmOTP() {
         console.log(res.data);
         localStorage.setItem("token", res.data.message);
         setSigningIn(false);
-        // navigate("/confirm-otp");
+        navigate("/reset-password");
       })
       .catch((err) => {
         console.log(err);
@@ -67,7 +67,7 @@ export default function ConfirmOTP() {
           <Avatar sx={{ m: 1, bgColor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" fontSize={29} mb={2} variant="h5">
             Confirm OTP
           </Typography>
           <Box

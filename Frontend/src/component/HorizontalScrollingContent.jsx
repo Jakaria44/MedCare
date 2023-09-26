@@ -1,5 +1,11 @@
-import { KeyboardArrowRight } from "@mui/icons-material";
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -11,6 +17,7 @@ const HorizontalScrollingContent = ({
   load,
 }) => {
   console.log(items);
+  const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
   return (
     <Paper
       elevation={0}
@@ -20,25 +27,30 @@ const HorizontalScrollingContent = ({
       }}
     >
       <Box
-        m={2}
+        // m={1}
         display="flex"
         flexDirection="row"
         justifyContent="space-between"
       >
-        <Typography variant="button" fontSize={23} gutterBottom>
+        <Typography variant="body1" fontSize={23} gutterBottom>
           {title}
         </Typography>
-        <Button
-          LinkComponent={Link}
-          to={allItemLink}
-          variant="contained"
-          color="primary"
-          size="large"
-          endIcon={<KeyboardArrowRight />}
-          boxShadow={10}
-        >
-          See All
-        </Button>
+        {items?.length != 0 && (
+          <Box display="flex" alignItems="right" justifyContent="center">
+            <Button
+              LinkComponent={Link}
+              to={allItemLink}
+              variant="contained"
+              // sx={{ px: 2 }}
+              color="primary"
+              size="large"
+              // endIcon={small ? "" : <KeyboardArrowRight />}
+              // boxShadow={10}
+            >
+              See All
+            </Button>
+          </Box>
+        )}
       </Box>
       {items?.length == 0 ? (
         <Paper elevation={0} sx={{ padding: 2, margin: 2 }}>

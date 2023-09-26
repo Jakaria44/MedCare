@@ -2,10 +2,13 @@
 
 import {
   AirportShuttleOutlined,
+  AppRegistration,
+  Bloodtype,
   Home,
-  Medication,
-  Person,
+  ListAlt,
+  VolunteerActivism,
 } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
 
 // constant
 
@@ -29,7 +32,7 @@ const Homepage = {
       title: "Raise Fund",
       type: "item",
       url: "/fundpost",
-      icon: <AirportShuttleOutlined />,
+      icon: <VolunteerActivism />,
       breadcrumbs: false,
     },
     {
@@ -37,7 +40,7 @@ const Homepage = {
       title: "Find Blood",
       type: "item",
       url: "/bloodpost",
-      icon: <AirportShuttleOutlined />,
+      icon: <Bloodtype />,
       breadcrumbs: false,
     },
     {
@@ -53,23 +56,16 @@ const Homepage = {
       title: "Doctors",
       type: "item",
       url: "/doctorList",
-      icon: <AirportShuttleOutlined />,
+      icon: <ListAlt />,
       breadcrumbs: false,
     },
+
     {
-      id: "appointments",
-      title: "Appointments",
+      id: "registerDoctor",
+      title: "Register as Doctor",
       type: "item",
-      url: "/appointments",
-      icon: <Medication />,
-      breadcrumbs: false,
-    },
-    {
-      id: "userprofile",
-      title: "My Profile",
-      type: "item",
-      url: "/userprofile",
-      icon: <Person />,
+      url: "/registerDoctor",
+      icon: <AppRegistration />,
       breadcrumbs: false,
     },
   ],

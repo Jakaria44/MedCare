@@ -29,7 +29,7 @@ import MainCard from "./../../ui-component/cards/MainCard";
 
 // assets
 
-import { Login, Logout, PersonAddAlt } from "@mui/icons-material";
+import { LockReset, Login, Logout, PersonAddAlt } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ErrorModal from "../../component/ErrorModal";
 import SuccessfulModal from "../../component/SuccessfulModal";
@@ -56,7 +56,7 @@ const ProfileSection = () => {
   const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState("");
   const [notification, setNotification] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   const [open, setOpen] = useState(false);
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
@@ -81,14 +81,6 @@ const ProfileSection = () => {
     setOpen(false);
   };
 
-  const handleListItemClick = (event, index, route = "") => {
-    setSelectedIndex(index);
-    handleClose(event);
-
-    if (route && route !== "") {
-      navigate(route);
-    }
-  };
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -224,14 +216,22 @@ const ProfileSection = () => {
                         },
                       }}
                     >
+                      {/* My Profile */}
                       {name && (
                         <ListItemButton
-                          sx={{
-                            borderRadius: "12px",
-                          }}
-                          selected={selectedIndex === 0}
+                          // sx={{
+                          //   borderRadius: "12px",
+                          // }}
                           component={Link}
-                          to="/profile"
+                          to={
+                            localStorage.getItem("role") === "ROLE_DOCTOR"
+                              ? `/doctorProfile/${localStorage.getItem(
+                                  "doctor_id"
+                                )}`
+                              : `/userprofile/${localStorage.getItem(
+                                  "user_id"
+                                )}`
+                          }
                         >
                           <ListItemIcon>
                             <SettingsIcon fontSize="medium" />
@@ -239,17 +239,37 @@ const ProfileSection = () => {
                           <ListItemText
                             primary={
                               <Typography variant="body2" color="inherit">
-                                My Account
+                                My Profile
                               </Typography>
                             }
                           />
                         </ListItemButton>
                       )}
+                      {name && (
+                        <ListItemButton
+                          // sx={{
+                          //   borderRadius: "12px",
+                          // }}
+                          component={Link}
+                          to="/reset-password"
+                        >
+                          <ListItemIcon>
+                            <LockReset fontSize="medium" />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={
+                              <Typography variant="body2" color="inherit">
+                                Reset Password
+                              </Typography>
+                            }
+                          />
+                        </ListItemButton>
+                      )}
+
                       <ListItemButton
                         sx={{
                           borderRadius: "12px",
                         }}
-                        selected={selectedIndex === 4}
                         onClick={() => {
                           if (name) {
                             handleLogout();

@@ -7,11 +7,11 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import server from "./../../HTTP/Auth";
 
 import { useNavigate } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
-import server from "./../../HTTP/Auth";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -22,20 +22,32 @@ export default function ResetPassword() {
   );
   const [newPass, setNewPass] = React.useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setSigningIn(true);
     const data = new FormData(event.currentTarget);
     const newPass = data.get("newPass");
     console.log(newPass);
-    let path = `/api/auth/resetpassword/${newPass}`;
+    let path = `/resetpassword/${newPass}`;
+    let headers = {
+      "Content-type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    };
     if (localStorage.getItem("name") === null) {
       path = `/forgotPassword/resetpassword/${localStorage.getItem(
         "token"
       )}/${newPass}`;
+      headers = { "Content-type": "application/json" };
     }
+
     server
-      .post(path)
+      .post(
+        path,
+        {},
+        {
+          headers: headers,
+        }
+      )
       .then((res) => {
         console.log(res.data);
         localStorage.removeItem("token");
@@ -65,7 +77,7 @@ export default function ResetPassword() {
           <Avatar sx={{ m: 1, bgColor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" fontSize={29} mb={2} variant="h5">
             New Password
           </Typography>
           <Box

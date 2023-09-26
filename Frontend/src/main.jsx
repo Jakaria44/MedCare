@@ -12,6 +12,7 @@ import { ConfirmProvider } from "material-ui-confirm";
 import { MeetProvider } from "./contexts/MeetContext.jsx";
 import { MenuContextProvider } from "./contexts/MenuContextProvider.jsx";
 import { ThemeContextProvider } from "./contexts/ThemeContextProvider.jsx";
+import RouteChangeHandler from "./utils/RouteChange.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <MeetProvider>
@@ -29,7 +30,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 }}
               >
                 <CssBaseline />
-
                 <RouterProvider router={Routes} />
               </ConfirmProvider>
             </ThemeContextProvider>
