@@ -285,5 +285,5 @@ export const user = {
       approve: true,
     },
   ],
-  imageUrl: null,
+  imageUrl: "http://res.cloudinary.com/daa9vvvey/image/upload/v1694966290/esjbmgg6ccmbypi5yhn3.jpg",
 };

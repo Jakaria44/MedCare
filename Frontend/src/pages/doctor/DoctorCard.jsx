@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -6,6 +7,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React from "react";
 
@@ -27,6 +29,66 @@ const MyTypography = ({ children, ...other }) => (
 );
 
 const DoctorCard = ({ doctor }) => {
+  const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  if (small) {
+    return (
+      <Card
+        elevation={0}
+        sx={{
+          gap: 2,
+          margin: 0,
+          padding: 0,
+          display: "flex",
+          flexDirection: small ? "row" : "row",
+          borderRadius: 0,
+          border: 0,
+          backgroundColor: "background.paper",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CardMedia>
+            <Avatar
+              sx={{ height: 125, width: 125 }}
+              src={doctor.profileImageUrl}
+              alt={doctor.name}
+              loading="lazy"
+            />
+          </CardMedia>
+        </Box>
+        <CardContent sx={{ flex: 1, alignItems: "left" }}>
+          <MyTypography textAlign="left" fontSize="18px">
+            {doctor.name}
+          </MyTypography>
+          <MyTypography textAlign="left">
+            {doctor.specialization} Specialist
+          </MyTypography>
+          <MyTypography textAlign="left">
+            Fee : {doctor.appointmentFee}
+          </MyTypography>
+          {/* <CardActions> */}
+          <Button
+            sx={{ marginTop: 2 }}
+            variant="contained"
+            component={Link}
+            to={`/doctorprofile/${doctor.id}`}
+            size="small"
+            p={2}
+          >
+            View Details
+          </Button>
+          {/* </CardActions> */}
+        </CardContent>
+      </Card>
+    );
+  }
   return (
     <Card raised elevation={12}>
       {/* <img
@@ -36,6 +98,7 @@ const DoctorCard = ({ doctor }) => {
           loading="lazy"
         /> */}
       <Box
+        sx={{ padding: 0 }}
         display="flex"
         flexDirection="column"
         alignItems="center"
@@ -43,7 +106,7 @@ const DoctorCard = ({ doctor }) => {
       >
         <CardMedia
           component="img"
-          sx={{ height: 200, width: 150 }}
+          sx={{ height: 200, width: 200 }}
           image={doctor.profileImageUrl}
           alt={doctor.name}
           loading="lazy"
@@ -59,7 +122,7 @@ const DoctorCard = ({ doctor }) => {
             component={Link}
             to={`/doctorprofile/${doctor.id}`}
             size="small"
-            p={2}
+            sx={{ paddingX: 4 }}
           >
             View Details
           </Button>

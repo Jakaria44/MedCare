@@ -141,7 +141,7 @@ const AmCard = ({ load, ambulance }) => {
           avatar={<Avatar aria-label="recipe">R</Avatar>}
           action={
             isMyPost ? (
-              <IconButton aria-label="settings">
+              <IconButton aria-label="settings" onClick={handleClick}>
                 <MoreVert />
               </IconButton>
             ) : null
@@ -197,7 +197,7 @@ const AmCard = ({ load, ambulance }) => {
             Edit
           </MenuItem>
           <MenuItem onClick={deleteAmbulance} disableRipple>
-            <Delete color="error" />
+            <Delete />
             Delete
           </MenuItem>
         </StyledMenu>

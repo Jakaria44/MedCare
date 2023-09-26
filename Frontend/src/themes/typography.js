@@ -73,9 +73,9 @@ export default function themeTypography(theme) {
       lineHeight: "1.5em",
       color: theme.darkTextPrimary,
     },
-    button: {
-      textTransform: "capitalize",
-    },
+    // button: {
+    //   textTransform: "capitalize",
+    // },
     customInput: {
       marginTop: 1,
       marginBottom: 1,
