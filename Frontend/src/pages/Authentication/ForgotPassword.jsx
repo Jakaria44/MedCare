@@ -63,7 +63,7 @@ export default function ForgotPassword() {
           <Avatar sx={{ m: 1, bgColor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" fontSize={24} mb={2} variant="h5">
             Enter your Email address
           </Typography>
           <Box

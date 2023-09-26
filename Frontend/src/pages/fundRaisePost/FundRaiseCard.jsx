@@ -118,12 +118,14 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
           subheader={TimeFormat(item?.approveDate)}
         />
         <ImageListItem cols={1} rows={2} sx={{ marginTop: "1vh" }}>
-          <img
-            style={{ height: 360, width: "100%" }}
-            src={item?.postImages[0]?.imageName}
-            alt={item?.title}
-            loading="lazy"
-          />
+          {item?.postImages?.length != 0 && (
+            <img
+              style={{ height: 360, width: "100%" }}
+              src={item?.postImages[0]?.imageName}
+              alt={item?.title}
+              loading="lazy"
+            />
+          )}
         </ImageListItem>
 
         <CardContent marginBottom="0px">
