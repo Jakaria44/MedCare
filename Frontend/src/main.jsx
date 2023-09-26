@@ -2,17 +2,20 @@ import { CssBaseline } from "@mui/material";
 import { StyledEngineProvider } from "@mui/system";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import Routes from "./Routes/Routes.jsx";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+// import Routes from "./Routes/Routes.jsx";
 import "./assets/scss/style.scss";
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ConfirmProvider } from "material-ui-confirm";
+import AuthenticationRoutes from "./Routes/AuthenticationRoutes.jsx";
+import MainRoutes from "./Routes/MainRoutes.jsx";
 import { MeetProvider } from "./contexts/MeetContext.jsx";
 import { MenuContextProvider } from "./contexts/MenuContextProvider.jsx";
 import { ThemeContextProvider } from "./contexts/ThemeContextProvider.jsx";
-import RouteChangeHandler from "./utils/RouteChange.jsx";
+const App = createBrowserRouter([MainRoutes, AuthenticationRoutes]);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <MeetProvider>
@@ -30,7 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 }}
               >
                 <CssBaseline />
-                <RouterProvider router={Routes} />
+                <RouterProvider router={App} />
               </ConfirmProvider>
             </ThemeContextProvider>
           </MenuContextProvider>
