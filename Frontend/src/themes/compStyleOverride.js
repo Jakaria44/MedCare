@@ -48,17 +48,23 @@ export default function componentStyleOverrides(theme) {
                     // borderRadius: '4px',
                     // transition: 'all .2s ease-in-out',
                     // background: theme.buttonBackground,
+                    // '&:hover': {
+                    //     color: theme.textLight,
+                    //     background: theme.heading,
+                    // },
+                },
+                containedPrimary : {
                     '&:hover': {
                         color: theme.textLight,
                         background: theme.heading,
                     },
                 },
-                // contained : {
-                //     '&:hover': {
-                //         color: theme.textLight,
-                //         background: theme.heading,
-                //     },
-                // },
+                containedSuccess : {
+                    '&:hover': {
+                        color: theme.textLight,
+                        background: theme.heading,
+                    },
+                },
                 // contained : {
                 //     '&:hover': {
                 //         color: '#000',    

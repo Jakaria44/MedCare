@@ -1,11 +1,12 @@
 import { lazy } from "react";
 
 // project imports
+import ProfilePage from "../pages/profile/ProfilePage";
 import Loadable from "./../ui-component/Loadable";
 import Test from "./test";
 // main routing
 const Structure = Loadable(lazy(() => import("../layout/Structure.jsx")));
-const Home = Loadable(lazy(() => import("../pages/Home")));
+const Home = Loadable(lazy(() => import("../pages/homepage/Home")));
 const AllAmbulance = Loadable(
   lazy(() => import("../pages/ambulance/AllAmbulance"))
 );
@@ -98,6 +99,10 @@ const MainRoutes = {
       element: (
         <RaiseFund pending={localStorage.getItem("role") == "ROLE_ADMIN"} />
       ),
+    },
+    {
+      path: "/userprofile",
+      element: <ProfilePage />,
     },
   ],
 };

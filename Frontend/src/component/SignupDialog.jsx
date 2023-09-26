@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { LockPersonOutlined } from "@mui/icons-material";
 import {
   Backdrop,
@@ -6,6 +5,7 @@ import {
   Grid,
   Modal,
   Typography,
+  styled,
   useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";

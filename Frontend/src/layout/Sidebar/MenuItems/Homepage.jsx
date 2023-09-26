@@ -1,6 +1,11 @@
 // assets
 
-import { AirportShuttleOutlined, Home, Medication } from "@mui/icons-material";
+import {
+  AirportShuttleOutlined,
+  Home,
+  Medication,
+  Person,
+} from "@mui/icons-material";
 
 // constant
 
@@ -57,6 +62,14 @@ const Homepage = {
       type: "item",
       url: "/appointments",
       icon: <Medication />,
+      breadcrumbs: false,
+    },
+    {
+      id: "userprofile",
+      title: "My Profile",
+      type: "item",
+      url: "/userprofile",
+      icon: <Person />,
       breadcrumbs: false,
     },
   ],

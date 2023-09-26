@@ -22,7 +22,7 @@ import Sidebar from "./Sidebar/Sidebar";
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     ...theme.typography.mainContent,
-    borderRadius: 12,
+    // borderRadius: 12,
     marginTop: "64px",
     transition: theme.transitions.create(
       "margin",
@@ -44,11 +44,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
     [theme.breakpoints.down("md")]: {
       marginLeft: "20px",
       width: `calc(100% - ${drawerWidth}px)`,
+      // width: "100%",
       padding: "16px",
     },
     [theme.breakpoints.down("sm")]: {
       marginLeft: "10px",
-      width: `calc(100% - ${drawerWidth}px)`,
+      // width: `calc(100% - ${drawerWidth}px)`,
+      width: "100%",
       padding: "16px",
       marginRight: "10px",
     },
@@ -93,40 +95,11 @@ const Structure = () => {
         drawerToggle={handleLeftDrawerToggle}
       />
 
-      {/* <button class="chatbot-toggle">
-        <span class="material-symbols-outlined">mode_comment</span>
-        <span class="material-symbols-outlined">close</span>
-      </button>
-
-      <div class="chatbot">
-        <header>
-          <h2>chatbot</h2>
-          <span class="material-symbols-outlined">close</span>
-        </header>
-
-        <ul class="chatbox">
-          <li class="chat incoming">
-            <span class="material-symbols-outlined">smart_toy</span>
-            <p>
-              Hi there <br /> please provide the symptoms for predicting
-              diesease.
-            </p>
-          </li>
-        </ul>
-
-        <div class="chat-input">
-          <textarea placeholder="Enter a message....." required></textarea>
-          <span id="send-btn" class="material-symbols-outlined">
-            send
-          </span>
-        </div>
-      </div> */}
-
       {/*/!* main content *!/*/}
       <Main theme={theme} open={menuOpened.opened}>
         <Outlet />
       </Main>
-      <Box position="fixed" bottom="40px" right="40px">
+      <Box position="fixed" bottom="40px" right="40px" sx={{ zIndex: 1000 }}>
         <Message />
       </Box>
     </Box>

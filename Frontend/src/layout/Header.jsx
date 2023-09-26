@@ -42,22 +42,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
             />
           </Avatar>
         </ButtonBase>
-        <Box
-          component="span"
-          marginLeft="16px"
-          sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
-        >
-          {/* <ButtonBase disableRipple>
-            <Typography variant="h3" component="div" my={2}>
-              CSE Library
-            </Typography>
-          </ButtonBase> */}
-          {/* {theme.palette.mode == "light" ? (
-            <img src="/light_logo_top.png" alt="MedCare" width="100" />
-          ) : (
-            <img src="/light.png" alt="MedCare" width="100" />
-          )} */}
-
+        <Box component="span" marginLeft="16px" sx={{ flexGrow: 1 }}>
           <Typography component="div" my={2}>
             <Link
               href="/"

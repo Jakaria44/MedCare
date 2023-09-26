@@ -1,6 +1,5 @@
-import styled from "@emotion/styled";
 import { CheckCircleOutline } from "@mui/icons-material";
-import { Button, Modal, Typography, useTheme } from "@mui/material";
+import { Button, Modal, Typography, styled, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 

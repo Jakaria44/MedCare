@@ -1,8 +1,10 @@
 import {
+  Avatar,
   Button,
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   ImageListItem,
   Tooltip,
   Typography,
@@ -15,6 +17,7 @@ import ErrorModal from "../../component/ErrorModal";
 import PrettoSlider from "../../component/PrettoSlider";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
+import TimeFormat from "../../utils/TimeFormat";
 import api from "./../../HTTP/httpCommonParam";
 import AddNewFundPost from "./AddPost";
 import DonateNow from "./DonateNow";
@@ -34,7 +37,7 @@ const MyTypography = ({ children, ...other }) => (
   </Typography>
 );
 
-const FundRaiseCard = ({ load, fundPost, toApprove }) => {
+const FundRaiseCard = ({ load, item, toApprove = false }) => {
   const confirm = useConfirm();
   const [showDonate, setShowDonate] = useState(false);
 
@@ -57,12 +60,12 @@ const FundRaiseCard = ({ load, fundPost, toApprove }) => {
       });
       try {
         setLoading(true);
-        const res = await api.put(`/protect/fundPost/approve/${fundPost.id}`);
+        const res = await api.put(`/protect/fundPost/approve/${item.id}`);
         setSuccessMessage("Post Approved Successfully");
         setShowSuccessMessage(true);
         load();
       } catch (err) {
-        // setErrorMessage(err.response.fundPost.message);
+        // setErrorMessage(err.response.item.message);
         setShowErrorMessage(true);
       } finally {
         setLoading(false);
@@ -84,7 +87,7 @@ const FundRaiseCard = ({ load, fundPost, toApprove }) => {
       });
       try {
         setLoading(true);
-        const res = await api.delete(`/fundpost/delete/${fundPost.id}`);
+        const res = await api.delete(`/fundpost/delete/${item.id}`);
         setSuccessMessage("Post Deleted Successfully");
         setShowSuccessMessage(true);
         load();
@@ -102,58 +105,87 @@ const FundRaiseCard = ({ load, fundPost, toApprove }) => {
   return (
     <>
       <Card raised sx={{ width: { xs: "100%" } }} elevation={12}>
-        <ImageListItem cols={1} rows={2}>
+        <CardHeader
+          avatar={<Avatar aria-label="recipe">R</Avatar>}
+          // action={
+          //   isMyPost ? (
+          //     <IconButton aria-label="settings">
+          //       <MoreVert />
+          //     </IconButton>
+          //   ) : null
+          // }
+          title={item?.userName}
+          subheader={TimeFormat(item?.approveDate)}
+        />
+        <ImageListItem cols={1} rows={2} sx={{ marginTop: "1vh" }}>
           <img
             style={{ height: 360, width: "100%" }}
-            src={fundPost.postImages[0]?.imageName}
-            alt={fundPost.title}
+            src={item?.postImages[0]?.imageName}
+            alt={item?.title}
             loading="lazy"
           />
         </ImageListItem>
 
         <CardContent marginBottom="0px">
-          <Tooltip title={fundPost.title.replaceAll(/''/g, "'")}>
+          <Tooltip title={item.title.replaceAll(/''/g, "'")}>
             <MyTypography variant="h2">
-              {fundPost.title.replaceAll(/''/g, "'")}
+              {item.title.replaceAll(/''/g, "'")}
             </MyTypography>
           </Tooltip>
 
-          <Tooltip title={fundPost.postContent}>
+          <Tooltip title={item.postContent}>
             <MyTypography variant="body2" noWrap>
-              {fundPost.postContent.replaceAll(/''/g, "'")}
+              {item.postContent.replaceAll(/''/g, "'")}
             </MyTypography>
           </Tooltip>
 
           <MyTypography variant="body2" noWrap>
-            Raised {fundPost.donatedAmount} of {fundPost.amount} BDT
+            Raised {item.donatedAmount} of {item.amount} BDT
           </MyTypography>
           <PrettoSlider
             valueLabelDisplay="auto"
-            value={fundPost.donatedAmount}
-            max={fundPost.amount}
+            value={item.donatedAmount}
+            max={item.amount}
           />
         </CardContent>
         <CardActions>
           <Box display="flex" flexGrow={1} justifyContent="space-between">
             {toApprove ? (
               <>
-                <Button variant="outlined" onClick={approveFundPost}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={approveFundPost}
+                >
                   Approve
                 </Button>{" "}
-                <Button variant="outlined" onClick={deleteFundPost}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={deleteFundPost}
+                >
                   Decline
                 </Button>
               </>
-            ) : (
-              <Button variant="outlined" onClick={() => setShowDonate(true)}>
+            ) : item.approve ? (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => setShowDonate(true)}
+              >
                 Donate Now
+              </Button>
+            ) : (
+              <Button variant="contained" color="error" disabled>
+                Not Approved
               </Button>
             )}
 
             <Button
-              variant="outlined"
+              variant="contained"
+              color="primary"
               component={Link}
-              to={"/fundpost/" + fundPost.id}
+              to={"/fundpost/" + item.id}
             >
               Details
             </Button>
@@ -176,7 +208,7 @@ const FundRaiseCard = ({ load, fundPost, toApprove }) => {
         }}
       />
       <AddNewFundPost
-        fundPostProp={fundPost}
+        fundPostProp={item}
         editing={true}
         open={editingFundPost}
         close={() => {
@@ -190,9 +222,9 @@ const FundRaiseCard = ({ load, fundPost, toApprove }) => {
           setShowDonate(false);
           load();
         }}
-        got={fundPost.donatedAmount}
-        due={fundPost.amount}
-        postId={fundPost.id}
+        got={item.donatedAmount}
+        due={item.amount}
+        postId={item.id}
       />
 
       <SpinnerWithBackdrop backdropOpen={loading} helperText="Please Wait" />

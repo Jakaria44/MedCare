@@ -1,5 +1,12 @@
 // material-ui
-import { Box, Chip, Drawer, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Drawer,
+  Link,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // third-party
@@ -21,11 +28,21 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
 
   const drawer = (
     <>
-      {/* <Box sx={{ display: { xs: "block", md: "none" } }}>
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
         <Box sx={{ display: "flex", p: 2, mx: "auto" }}>
-          <LogoSection />
+          <Typography component="div">
+            <Link
+              href="/"
+              color="text.primary"
+              variant="h2"
+              sx={{ textDecoration: "none" }}
+              fontFamily="cursive"
+            >
+              MedCare
+            </Link>
+          </Typography>
         </Box>
-      </Box> */}
+      </Box>
       <BrowserView>
         <PerfectScrollbar
           marginTop={8}

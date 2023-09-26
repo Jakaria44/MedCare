@@ -8,10 +8,10 @@ import {
   Typography,
   alpha,
   useScrollTrigger,
-  useTheme,
+  useTheme, Stack,
 } from "@mui/material";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import DarkModeSwitch from "../../component/DarkModeSwitch";
 
 function ElevationScroll(props) {
@@ -31,6 +31,7 @@ function ElevationScroll(props) {
 }
 function Copyright(props) {
   return (
+    <Stack  direction="row" spacing={1} justifyContent="center" alignItems="center">
     <Typography
       variant="body2"
       color="text.secondary"
@@ -38,11 +39,16 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <MuiLink href="/" color="text.secondary">
-        MedCare
-      </MuiLink>
-      {new Date().getFullYear()}
     </Typography>
+      <Link to="/" variant="body2">
+        <Typography variant="body2" color="primary.main">
+          MedCare
+        </Typography>
+      </Link>
+    <Typography variant='body2'  color="text.secondary">
+      {new Date().getFullYear()}</Typography>
+
+    </Stack>
   );
 }
 const AuthStructure = () => {

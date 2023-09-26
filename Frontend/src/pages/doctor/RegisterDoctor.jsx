@@ -1,4 +1,4 @@
-import { Add, Delete } from "@mui/icons-material";
+import { Add, CameraAlt, Delete, FileUpload } from "@mui/icons-material";
 import {
   Avatar,
   Backdrop,
@@ -183,14 +183,17 @@ function DoctorForm() {
               </Typography>
               {/* <Divider width="70%" /> */}
               <Grid item sm={6} xs={12}>
-                <Button variant="contained" component="label">
+                <Button variant="outlined" component="label">
                   <Avatar
                     variant="square"
-                    alt="Preview"
+                    alt="P"
                     src={dp}
-                    sx={{ width: 150, height: 200 }}
+                    sx={{ width: 150, height: 200, textAlign: "center" }}
                   >
-                    Profile Picture
+                    <Stack spacing={4} alignItems="center">
+                      <CameraAlt />
+                      <Typography variant="button">Profile Picture</Typography>
+                    </Stack>
                   </Avatar>
 
                   <input
@@ -203,14 +206,17 @@ function DoctorForm() {
                 </Button>
               </Grid>
               <Grid item sm={6} xs={12}>
-                <Button variant="contained" component="label">
+                <Button variant="outlined" component="label">
                   <Avatar
                     variant="square"
                     alt="C"
                     src={cv}
-                    sx={{ width: 150, height: 200 }}
+                    sx={{ width: 150, height: 200, textAlign: "center" }}
                   >
-                    CV
+                    <Stack spacing={4} alignItems="center">
+                      <FileUpload />
+                      <Typography variant="button">CV</Typography>
+                    </Stack>
                   </Avatar>
 
                   <input
