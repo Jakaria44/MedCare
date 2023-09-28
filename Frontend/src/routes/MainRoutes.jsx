@@ -30,7 +30,7 @@ const DoctorProfile = Loadable(
 const AppointMents = Loadable(
   lazy(() => import("../pages/appointment/AppointmentPage"))
 );
-const Meet = Loadable(lazy(() => import("../pages/meeting/Meeting")));
+const MeetWebRTC = Loadable(lazy(() => import("../pages/meeting/MeetWebRTC")));
 const EditDoctor = Loadable(lazy(() => import("../pages/doctor/EditProfile")));
 const AllBlood = Loadable(lazy(() => import("../pages/blood/AllBlood")));
 const ErrorPage = Loadable(lazy(() => import("./../pages/ErrorPage")));
@@ -91,8 +91,8 @@ const MainRoutes = {
       element: <AppointMents />,
     },
     {
-      path: "/meet/:appointId/:meetingId",
-      element: <Meet />,
+      path: "/meet/:appointId",
+      element: <MeetWebRTC />,
     },
     {
       path: "/pendingfundpost",

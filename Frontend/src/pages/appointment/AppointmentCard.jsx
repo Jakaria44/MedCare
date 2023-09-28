@@ -181,7 +181,7 @@ const AppointmentCard = ({ doctorId, appoint, userId, upcoming = false }) => {
             variant="contained"
             onClick={() => {
               // history.push(`/createMeet/${appoint._id}`);
-              window.location.href = `/meet/${appoint.id}/${randomString(7)}`;
+              window.location.href = `/meet/${appoint.id}}`;
             }}
           >
             Consult Now

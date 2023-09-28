@@ -33,7 +33,7 @@ export default function ErrorPage() {
 
           <Box
             component="img"
-            src="public/ErrorPage.svg"
+            src="/ErrorPage.svg"
             sx={{ height: 260, mx: "auto", my: { xs: 5, sm: 10 } }}
           />
 
