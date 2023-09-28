@@ -36,9 +36,15 @@ const FeaturesChatBot = () => {
     },
   ];
   return (
-    <Grid container spacing={2} my={2}>
+    <Grid container spacing={2} my={2} sx={{ padding: 0 }}>
       {features.map((item, i) => (
-        <Grid item key={i} xs={12} md={6}>
+        <Grid
+          item
+          key={i}
+          xs={12}
+          md={6}
+          sx={{ paddingLeft: 0, paddingTop: 0 }}
+        >
           <FeatureCard
             seq={i % 2}
             media={item.media}

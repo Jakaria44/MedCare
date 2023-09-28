@@ -99,7 +99,13 @@ const ChatBot = () => {
           </Box>
         </CustomBox>
         <FeaturesChatBot />
-        <Box display="flex" alignItems="center" justifyContent="center">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          m={0}
+          p={0}
+        >
           <CustomButtonContained
             onClick={() => navigate("/doctorList")}
             text={"Try Now"}

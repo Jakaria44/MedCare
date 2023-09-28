@@ -1,5 +1,5 @@
 import { getAnalytics } from 'firebase/analytics';
-import { initializeApp } from 'firebase/app';
+import { firestore, initializeApp } from 'firebase/app';
 
 import { getStorage } from 'firebase/storage';
 
@@ -22,5 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const storage = getStorage(app);
+
+const firestore = firestore();
 
 export default app;
