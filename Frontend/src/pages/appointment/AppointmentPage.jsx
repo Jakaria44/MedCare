@@ -63,7 +63,7 @@ const AppointmentPage = () => {
       </Typography>
       <Divider sx={{ marginBottom: "2vh" }} />
       <Stack spacing={2}>
-        {ongoing?.length !== 0 &&
+        {ongoing?.length !== 0 ? (
           ongoing?.map((item, i) => (
             <AppointmentCard
               key={i}
@@ -72,7 +72,19 @@ const AppointmentPage = () => {
               userId={item?.userid}
               upcoming={false}
             />
-          ))}
+          ))
+        ) : (
+          <Typography
+            variant="body2"
+            fontSize={20}
+            align="center"
+            gutterBottom
+            pl={3}
+            mb={2}
+          >
+            No Ongoing Appointments
+          </Typography>
+        )}
       </Stack>
       <Typography
         variant="body2"
@@ -85,7 +97,20 @@ const AppointmentPage = () => {
         Upcoming Appointments
       </Typography>
       <Divider />
-      {upcoming?.length !== 0 && <UpcomingTable list={upcoming} />}
+      {upcoming?.length !== 0 ? (
+        <UpcomingTable list={upcoming} />
+      ) : (
+        <Typography
+          variant="body2"
+          fontSize={20}
+          align="center"
+          gutterBottom
+          pl={3}
+          mb={2}
+        >
+          No Upcoming Appointments
+        </Typography>
+      )}
     </>
   );
 };

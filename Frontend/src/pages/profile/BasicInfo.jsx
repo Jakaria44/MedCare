@@ -52,7 +52,7 @@ const BasicInfo = ({ user }) => {
       >
         <img
           src={
-            localStorage.getItem("user")?.imageUrl ??
+            localStorage.getItem("image") ??
             "https://www.w3schools.com/howto/img_avatar.png"
           }
           alt="Avatar"

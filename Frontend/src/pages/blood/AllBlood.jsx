@@ -36,7 +36,7 @@ export const sortOptions = [
 
 export const defaultQueryOptions = {
   pageNumber: 0,
-  pageSize: 50,
+  pageSize: 20,
   SortBy: "Newest",
   SortDir: "asc",
   availability: true,
@@ -50,7 +50,7 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
   const [total, setTotal] = useState(0); // 0 is the initial state value
   const [page, setPage] = useState(queries.page || 1);
   const [addingNewBloodPost, setAddingNewBloodPost] = useState(false);
-  const [editBloodPost, setEditBloodPost] = useState(null);
+  const [editBloodPost, setEditBloodPost] = useState(false);
   // const count = Math.ceil(data.length / queryOptions.perPage);
   // const count = Math.ceil(total / queryOptions.perPage);
   const count = useMemo(() => total, [total]);
@@ -91,6 +91,7 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
       setLoading(false);
     }
   };
+
   return (
     <>
       <Box
@@ -162,7 +163,7 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
           </Box>
 
           <Box flexGrow={2} />
-          {localStorage.getItem("user_id") !== null && (
+          {localStorage.getItem("blood_group") === "" && (
             <Box flexGrow={1}>
               <Button
                 startIcon={<Add />}
@@ -204,20 +205,8 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
         open={addingNewBloodPost}
         close={() => {
           setAddingNewBloodPost(false);
-
-          loadAllBloodPost();
         }}
-      />
-
-      <AddNewBloodPost
-        open={editBloodPost !== null}
-        close={() => {
-          setAddingNewBloodPost(false);
-
-          loadAllBloodPost();
-        }}
-        editing={true}
-        ambulance={editBloodPost}
+        load={loadAllBloodPost}
       />
     </>
   );

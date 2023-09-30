@@ -19,7 +19,7 @@ import ErrorModal from "../../component/ErrorModal";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import { storage } from "../../firebaseConfig";
 import server from "./../../HTTP/Auth";
-const defaultImage = "https://img.freepik.com/free-icon/user_318-159711.jpg";
+const defaultImage = "https://www.w3schools.com/howto/img_avatar.png";
 
 const emailRegex =
   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -105,6 +105,12 @@ export default function SignUp() {
       localStorage.setItem("role", response.data.userDto.role);
       localStorage.setItem("image", response.data.userDto.imageUrl);
       localStorage.setItem("name", response.data.userDto.name);
+      localStorage.setItem(
+        "blood_group",
+        response.data.userDto?.bloodDonatePostList.length > 0
+          ? response.data.userDto?.bloodDonatePostList[0].bloodGroup
+          : ""
+      );
       console.log(response.data);
 
       setSigningUp(false);

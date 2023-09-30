@@ -5,6 +5,7 @@ import {
   SmartToyOutlined,
 } from "@mui/icons-material";
 import {
+  Avatar,
   Box,
   IconButton,
   List,
@@ -18,6 +19,8 @@ import {
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useMessageContext } from "../contexts/MesageContext";
 
 const ChatToggleButton = styled("div")`
   position: fixed;
@@ -49,15 +52,12 @@ const ChatToggleButton = styled("div")`
 `;
 
 const Message = () => {
+  const { messages, setMessages } = useMessageContext();
   const [open, setOpen] = useState(false);
   const [userMessage, setUserMessage] = useState("");
-  const [reqBody, setReqBody] = useState({});
-  const [messages, setMessages] = useState([
-    {
-      message: "Hi there, please provide the symptoms for predicting diesease.",
-      type: "incoming",
-    },
-  ]);
+  const [reqBody, setReqBody] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const scrollContainerRef = useRef(null);
 
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -82,16 +82,16 @@ const Message = () => {
     }
 
     if (msg.toLowerCase() === "no") {
-      populatReqBody();
-      generateResponse();
+      setUserMessage("");
+      const requests = populatReqBody();
+      generateResponse(requests);
     } else {
-      setReqBody({
-        ...reqBody,
-        [`Symptom_${Object.keys(reqBody).length + 1}`]: userMessage,
-      });
+      const reqbody = reqBody.concat(userMessage.split(","));
+
+      setReqBody(reqbody);
 
       setTimeout(() => {
-        set("Do you want to add more Symptomps ?");
+        set("Do you want to add more Symptoms ?");
       }, 600);
     }
     setUserMessage("");
@@ -105,14 +105,15 @@ const Message = () => {
       },
     ]);
   };
-  const generateResponse = () => {
-    const API_URL = "https://web-production-34f4.up.railway.app/prediction";
+  const generateResponse = (requests) => {
+    console.log(requests);
+    const API_URL = "https://web-production-e9890.up.railway.app/prediction";
     fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify(requests),
     })
       .then((response) => {
         if (!response.ok) {
@@ -121,16 +122,18 @@ const Message = () => {
         return response.json();
       })
       .then((responseData) => {
+        setLoading(false);
         console.log("Response data:", responseData);
         set(responseData);
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Fetch error:", error);
         setMessages([
           ...messages,
           {
             message:
-              "Opps Something went wrong or I dont have knowledge about your syndrome. My Boss Ashik will make me able to learn a lot in sha allah",
+              "Opps Something went wrong or I don't have knowledge about your syndrome. Please give symptoms properly.",
             type: "incoming",
           },
         ]);
@@ -138,11 +141,15 @@ const Message = () => {
   };
 
   function populatReqBody() {
-    for (let i = 1; i <= 17; i++) {
-      if (!reqBody[`Symptom_${i}`]) {
-        reqBody[`Symptom_${i}`] = "";
+    let requests = {};
+    for (let i = 0; i < 17; i++) {
+      if (!reqBody[i]) {
+        requests[`Symptom_${i + 1}`] = "";
+      } else {
+        requests[`Symptom_${i + 1}`] = reqBody[i];
       }
     }
+    return requests;
   }
 
   useEffect(() => {
@@ -152,7 +159,7 @@ const Message = () => {
         scrollContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
+  const location = useLocation();
   return (
     <>
       <ChatToggleButton
@@ -247,6 +254,21 @@ const Message = () => {
                       {message.message}
                     </Typography>
                   </Stack>
+                  {message.type === "self" && (
+                    <IconButton sx={{ bgcolor: "Background.default" }}>
+                      <Avatar>
+                        <img
+                          src={
+                            localStorage.getItem("image") ??
+                            "https://www.w3schools.com/howto/img_avatar.png"
+                          }
+                          border="0"
+                          width="40px"
+                          height="40px"
+                        />
+                      </Avatar>
+                    </IconButton>
+                  )}
                 </Stack>
               </ListItem>
             ))}
@@ -266,7 +288,7 @@ const Message = () => {
           >
             <TextField
               fullWidth
-              placeholder="Enter symptomp here....."
+              placeholder="Enter symptom here....."
               required
               value={userMessage}
               onChange={(e) => setUserMessage(e.target.value)}

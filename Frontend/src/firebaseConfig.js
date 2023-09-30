@@ -1,6 +1,7 @@
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 
+import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 // Import the functions you need from the SDKs you need
@@ -9,18 +10,22 @@ import { getStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAVUQRdTJLDcvTeKXKTkyK9SX78P7pHdD8",
-  authDomain: "medcare-e9794.firebaseapp.com",
-  projectId: "medcare-e9794",
-  storageBucket: "medcare-e9794.appspot.com",
-  messagingSenderId: "10602563922",
-  appId: "1:10602563922:web:32f0bcf94ea442b869928b",
-  measurementId: "G-2C82RV78NS"
+  apiKey: "AIzaSyC2crdXm5tEjgtIhG5mbV8FMI9xK_MJevo",
+  authDomain: "medcare-video-calling.firebaseapp.com",
+  projectId: "medcare-video-calling",
+  storageBucket: "medcare-video-calling.appspot.com",
+  messagingSenderId: "455950935583",
+  appId: "1:455950935583:web:befb80768de1113392972a",
+  measurementId: "G-XVCH8ESYGK",
 };
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const storage = getStorage(app);
+
+
+export const db = getFirestore(app);
 
 export default app;

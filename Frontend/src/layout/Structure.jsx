@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useMenu } from "../contexts/MenuContextProvider.jsx";
 import { actions } from "../contexts/actions.jsx";
 import Header from "./Header";
@@ -61,10 +61,11 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 const Structure = () => {
   const theme = useTheme();
 
+  const location = useLocation();
   const matchDownMd = useMediaQuery(theme.breakpoints.down("md"));
   // Handle left drawer
   const { menuOpened, dispatch } = useMenu();
-  console.log(menuOpened);
+  console.log(location.pathname !== "/chat");
 
   const handleLeftDrawerToggle = () => {
     dispatch({ type: actions.TOGGLE_SIDE_DRAWER, id: menuOpened });
@@ -101,9 +102,19 @@ const Structure = () => {
       <Main theme={theme} open={menuOpened.opened}>
         <Outlet />
       </Main>
-      <Box position="fixed" bottom="40px" right="40px" sx={{ zIndex: 1000 }}>
-        <Message />
-      </Box>
+      {location.pathname !== "/chat" && (
+        <Box
+          position="fixed"
+          bottom="40px"
+          right="40px"
+          sx={{
+            zIndex: 1000,
+            display: location.pathname != "/chat" ? "block" : "none",
+          }}
+        >
+          <Message />
+        </Box>
+      )}
     </Box>
   );
 };

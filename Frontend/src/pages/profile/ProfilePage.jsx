@@ -1,15 +1,34 @@
-import { Box, Typography, styled } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+  styled,
+  useMediaQuery,
+} from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import server from "../../HTTP/httpCommonParam";
+import ErrorModal from "../../component/ErrorModal";
 import HorizontalScrollingContent from "../../component/HorizontalScrollingContent";
+import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
+import SuccessfulModal from "../../component/SuccessfulModal";
 import AmbulanceCard from "../ambulance/AmbulanceCard";
+import AddNewBloodPost from "../blood/AddNewBloodPost";
 import FundRaiseCard from "../fundRaisePost/FundRaiseCard";
 import BasicInfo from "./BasicInfo";
 // import { user } from "./dummyUser";
 const ProfilePage = () => {
+  const confirm = useConfirm();
+  const [editingBloodPost, setEditingBloodPost] = useState(false); // [editingBloodPost, setEditingBloodPost
+  const [successMessage, setSuccessMessage] = useState("success");
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("An Error Occured");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  console.log(id);
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [myFundPost, setMyFundPost] = useState([]);
@@ -49,6 +68,7 @@ const ProfilePage = () => {
       setPendingFundPost([]);
     }
   };
+
   const loadMyAmbulancePost = async () => {
     try {
       const res = await server.get(
@@ -76,12 +96,44 @@ const ProfilePage = () => {
     }
   };
 
+  const deleteBloodPost = async () => {
+    try {
+      await confirm({
+        title: "Delete Blood Post",
+        description: "Are you sure you want to delete this Blood Post?",
+        confirmationText: "Delete",
+        cancellationText: "Cancel",
+        confirmationButtonProps: { variant: "outlined", color: "error" },
+        cancellationButtonProps: { variant: "contained", color: "error" },
+      });
+      try {
+        // handleClose();
+        setLoading(true);
+        console.log(user.bloodDonatePostList[0].id);
+        const res = await server.delete(
+          `/protect/blooddonatepost/delete/${user.bloodDonatePostList[0].id}`
+        );
+        localStorage.setItem("blood_group", "");
+        setSuccessMessage("Successfully Deleted");
+        setShowSuccessMessage(true);
+        loadUser();
+      } catch (err) {
+        setErrorMessage("something went wrong");
+        setShowErrorMessage(true);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     loadUser();
     loadMyFundRaisePosts();
     loadMyAmbulancePost();
   }, []);
-
+  const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
   return (
     <>
       <Typography
@@ -95,6 +147,34 @@ const ProfilePage = () => {
         My Profile
       </Typography>
       <BasicInfo user={user} />
+      {user?.bloodDonatePostList.length > 0 && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          // sx={{ flexDirection: { md: "column", xs: "row" } }}
+          pb={4}
+          mt={3}
+        >
+          <Stack spacing={2} direction={small ? "column" : "row"}>
+            <Button
+              startIcon={<Edit />}
+              variant="contained"
+              onClick={() => setEditingBloodPost(true)}
+            >
+              Edit Blood Donate Info
+            </Button>
+            <Button
+              startIcon={<Delete />}
+              variant="contained"
+              color="error"
+              onClick={deleteBloodPost}
+            >
+              Delete Blood Donate Info
+            </Button>
+          </Stack>
+        </Box>
+      )}
       <Box
         m={2}
         sx={{
@@ -149,6 +229,32 @@ const ProfilePage = () => {
           card={(item, load) => <AmbulanceCard load={load} item={item} />}
         />
       )}
+      <AddNewBloodPost
+        bloodPostProp={user?.bloodDonatePostList[0]}
+        editing={true}
+        open={editingBloodPost}
+        close={() => {
+          setEditingBloodPost(false);
+        }}
+        load={loadUser}
+      />
+
+      <SuccessfulModal
+        showSuccessMessage={showSuccessMessage}
+        successMessage={successMessage}
+        HandleModalClosed={() => {
+          setShowSuccessMessage(false);
+        }}
+      />
+      <ErrorModal
+        showErrorMessage={showErrorMessage}
+        errorMessage={errorMessage}
+        HandleModalClosed={() => {
+          setShowErrorMessage(false);
+        }}
+      />
+
+      <SpinnerWithBackdrop backdropOpen={loading} helperText={"Please Wait"} />
     </>
   );
 };

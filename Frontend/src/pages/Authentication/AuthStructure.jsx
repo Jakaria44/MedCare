@@ -2,16 +2,15 @@ import {
   AppBar,
   Box,
   Container,
-  Link as MuiLink,
-  Slide,
+  Stack,
   Toolbar,
   Typography,
   alpha,
   useScrollTrigger,
-  useTheme, Stack,
+  useTheme,
 } from "@mui/material";
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import DarkModeSwitch from "../../component/DarkModeSwitch";
 
 function ElevationScroll(props) {
@@ -31,23 +30,28 @@ function ElevationScroll(props) {
 }
 function Copyright(props) {
   return (
-    <Stack  direction="row" spacing={1} justifyContent="center" alignItems="center">
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
+    <Stack
+      direction="row"
+      spacing={1}
+      justifyContent="center"
+      alignItems="center"
     >
-      {"Copyright © "}
-    </Typography>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        {...props}
+      >
+        {"Copyright © "}
+      </Typography>
       <Link to="/" variant="body2">
         <Typography variant="body2" color="primary.main">
           MedCare
         </Typography>
       </Link>
-    <Typography variant='body2'  color="text.secondary">
-      {new Date().getFullYear()}</Typography>
-
+      <Typography variant="body2" color="text.secondary">
+        {new Date().getFullYear()}
+      </Typography>
     </Stack>
   );
 }
@@ -69,19 +73,6 @@ const AuthStructure = () => {
                 marginY="0px"
                 sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
               >
-                {/* {theme.palette.mode == "light" ? (
-                  <img
-                    src="./../../public/LibraryLogo2.png"
-                    alt="Book Breeze"
-                    width="100"
-                  />
-                ) : (
-                  <img
-                    src="./../../public/LibraryLogo.png"
-                    alt="Book Breeze"
-                    width="100"
-                  />
-                )} */}
                 <Typography
                   variant="h2"
                   fontFamily="cursive"

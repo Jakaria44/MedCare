@@ -29,20 +29,26 @@ export default function SignIn() {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-  React.useEffect(() => {
-    console.log("hi");
-  }, []);
+
   const signin = async (user) => {
     try {
       console.log(user);
       const response = await server.post("/login", user);
       console.log(response.data);
+      // user
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("role", response.data.userDto?.role);
       localStorage.setItem("image", response.data.userDto?.imageUrl);
       localStorage.setItem("name", response.data.userDto?.name);
       localStorage.setItem("user_id", response.data.userDto?.id);
+      localStorage.setItem(
+        "blood_group",
+        response.data.userDto?.bloodDonatePostList.length > 0
+          ? response.data.userDto?.bloodDonatePostList[0].bloodGroup
+          : ""
+      );
 
+      //      doctor
       if (!response.data?.userDto || response.data?.doctorDtos) {
         localStorage.setItem("role", "ROLE_DOCTOR");
         localStorage.setItem(
@@ -54,7 +60,7 @@ export default function SignIn() {
       }
 
       setSigningIn(false);
-      window.location.replace("/");
+      // window.location.replace("/");
     } catch (err) {
       setErrorMessage(err?.response?.data?.message || "Something went wrong");
       setShowErrorMessage(true);
