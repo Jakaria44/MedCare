@@ -6,9 +6,9 @@ import {
   Bloodtype,
   Home,
   ListAlt,
+  Message,
   VolunteerActivism,
 } from "@mui/icons-material";
-import { Avatar } from "@mui/material";
 
 // constant
 
@@ -49,6 +49,14 @@ const Homepage = {
       type: "item",
       url: "/ambulance",
       icon: <AirportShuttleOutlined />,
+      breadcrumbs: false,
+    },
+    {
+      id: "chat",
+      title: "AI Chatbot",
+      type: "item",
+      url: "/chat",
+      icon: <Message />,
       breadcrumbs: false,
     },
     {

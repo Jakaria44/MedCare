@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button, IconButton, Paper, Typography } from "@mui/material";
 import firebase from "firebase/compat/app";
+import "firebase/compat/database";
 import "firebase/compat/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Mic, MicOff, Videocam, VideocamOff } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
 import React from "react";
+import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -24,17 +26,36 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   // firebase = initializeApp(firebaseConfig);
 }
-
+export const firebaseDB = firebase.database();
 const firestore = firebase.firestore();
 
 // Initialize WebRTC
 const servers = {
   iceServers: [
     {
-      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+      urls: "stun:stun.relay.metered.ca:80",
+    },
+    {
+      urls: "turn:a.relay.metered.ca:80",
+      username: "be844a4db0fa13786480853c",
+      credential: "VxFZ717IfwiEtwvU",
+    },
+    {
+      urls: "turn:a.relay.metered.ca:80?transport=tcp",
+      username: "be844a4db0fa13786480853c",
+      credential: "VxFZ717IfwiEtwvU",
+    },
+    {
+      urls: "turn:a.relay.metered.ca:443",
+      username: "be844a4db0fa13786480853c",
+      credential: "VxFZ717IfwiEtwvU",
+    },
+    {
+      urls: "turn:a.relay.metered.ca:443?transport=tcp",
+      username: "be844a4db0fa13786480853c",
+      credential: "VxFZ717IfwiEtwvU",
     },
   ],
-  iceCandidatePoolSize: 10,
 };
 
 const pc = new RTCPeerConnection(servers);
@@ -42,15 +63,18 @@ const pc = new RTCPeerConnection(servers);
 function Videos() {
   const navigate = useNavigate();
 
-  const [micOn, setMicOn] = useState(false);
-  const [videoOn, setVideoOn] = useState(false);
+  const [micOn, setMicOn] = useState(true);
+  const [videoOn, setVideoOn] = useState(true);
   const [localStream, setLocalStream] = useState(null);
   const localRef = useRef();
+
   const remoteRef = useRef();
 
+  const [loading, setLoading] = useState(false);
   const { appointId } = useParams();
   const roomId = appointId;
   useEffect(() => {
+    console.log(appointId);
     setupSources();
 
     return () => {
@@ -62,11 +86,17 @@ function Videos() {
       }
     };
   }, []);
+  const senders = pc.getSenders();
 
+  // Find the audio sender
+  const audioSender = senders.find(
+    (sender) => sender.track && sender.track.kind === "audio"
+  );
+  console.log(audioSender);
   const setupSources = async () => {
     const localStream = await navigator.mediaDevices.getUserMedia({
-      video: false,
-      audio: false,
+      video: true,
+      audio: true,
     });
     setLocalStream(localStream);
     const remoteStream = new MediaStream();
@@ -84,7 +114,7 @@ function Videos() {
     localRef.current.srcObject = localStream;
     remoteRef.current.srcObject = remoteStream;
 
-    setWebcamActive(true);
+    // setWebcamActive(true);
     let docRef = firestore.collection("calls").doc(`${appointId}`);
     console.log(docRef.get());
 
@@ -188,6 +218,7 @@ function Videos() {
   };
 
   const hangUp = async () => {
+    setLoading(true);
     pc.close();
 
     if (roomId) {
@@ -211,6 +242,7 @@ function Videos() {
 
       await roomRef.delete();
     }
+    setLoading(false);
 
     navigate(-1);
   };
@@ -247,24 +279,29 @@ function Videos() {
   const toggleMic = () => {
     const senders = pc.getSenders();
 
-    // Find the audio sender
+    // Find the video sender
     const audioSender = senders.find(
       (sender) => sender.track && sender.track.kind === "audio"
     );
 
     if (audioSender) {
-      // Toggle the audio track's enabled state
+      // Toggle the video track's enabled state
       audioSender.track.enabled = !audioSender.track.enabled;
       setMicOn(audioSender.track.enabled);
     }
     if (localStream) {
       localStream.getAudioTracks().forEach((track) => {
-        track.enabled = !micOn;
+        if (micOn) {
+          // Disable the video track
+          // pc.remo;
+          track.enabled = false;
+        } else {
+          // Enable the video track
+          track.enabled = true;
+        }
       });
-      setMicOn((prevState) => !prevState);
     }
   };
-
   return (
     <>
       <Typography
@@ -323,7 +360,7 @@ function Videos() {
                   ref={remoteRef}
                   autoPlay
                   playsInline
-                  muted
+                  // muted
                 />
               </div>
             </Paper>
@@ -340,6 +377,7 @@ function Videos() {
           </Button>
         </div>
       </Container>
+      <SpinnerWithBackdrop backdropOpen={loading} />
     </>
   );
 }

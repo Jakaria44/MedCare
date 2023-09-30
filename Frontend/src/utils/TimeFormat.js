@@ -37,3 +37,21 @@ export function TimeFormat3(dateIn) {
   
   return `${hour % 12 || 12}:${min} ${amPm}`;
 }
+
+/**
+ * 
+ * @param {"2023-09-29T14:00:00"} dateIn 
+ * @returns 2:00 PM
+ */
+export function TimeFormat4(dateIn) {
+  const date = new Date(dateIn);
+
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true, // Use 12-hour clock format
+  };
+  
+  return date.toLocaleTimeString('en-US', options);
+  
+}

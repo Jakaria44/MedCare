@@ -10,10 +10,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ConfirmProvider } from "material-ui-confirm";
 import AuthenticationRoutes from "./Routes/AuthenticationRoutes.jsx";
-import MainRoutes from "./Routes/MainRoutes.jsx";
 import { MeetProvider } from "./contexts/MeetContext.jsx";
 import { MenuContextProvider } from "./contexts/MenuContextProvider.jsx";
+import { MessageProvider } from "./contexts/MesageContext";
 import { ThemeContextProvider } from "./contexts/ThemeContextProvider.jsx";
+import MainRoutes from "./routes/MainRoutes.jsx";
 const App = createBrowserRouter([MainRoutes, AuthenticationRoutes]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -23,18 +24,20 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <StyledEngineProvider injectFirst>
           <MenuContextProvider>
             <ThemeContextProvider>
-              <ConfirmProvider
-                defaultOptions={{
-                  confirmationButtonProps: {
-                    color: "success",
-                    autoFocus: true,
-                  },
-                  cancellationButtonProps: { color: "error" },
-                }}
-              >
-                <CssBaseline />
-                <RouterProvider router={App} />
-              </ConfirmProvider>
+              <MessageProvider>
+                <ConfirmProvider
+                  defaultOptions={{
+                    confirmationButtonProps: {
+                      color: "success",
+                      autoFocus: true,
+                    },
+                    cancellationButtonProps: { color: "error" },
+                  }}
+                >
+                  <CssBaseline />
+                  <RouterProvider router={App} />
+                </ConfirmProvider>
+              </MessageProvider>
             </ThemeContextProvider>
           </MenuContextProvider>
         </StyledEngineProvider>

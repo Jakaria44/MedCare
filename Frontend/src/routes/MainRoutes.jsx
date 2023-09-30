@@ -3,7 +3,10 @@ import { lazy } from "react";
 // project imports
 import ProfilePage from "../pages/profile/ProfilePage";
 import Loadable from "./../ui-component/Loadable";
-import Test from "./test";
+import Test from "./Test";
+
+const ChatPage = Loadable(lazy(() => import("../pages/MessagePage")));
+
 // main routing
 const Structure = Loadable(lazy(() => import("../layout/Structure.jsx")));
 const Home = Loadable(lazy(() => import("../pages/homepage/Home")));
@@ -85,7 +88,10 @@ const MainRoutes = {
       path: "/pendingdoctor",
       element: <PendingApplications />,
     },
-
+    {
+      path: "/chat",
+      element: <ChatPage />,
+    },
     {
       path: "/appointments",
       element: <AppointMents />,

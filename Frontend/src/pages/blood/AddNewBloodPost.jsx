@@ -16,7 +16,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import api from "./../../HTTP/httpCommonParam";
 const defaultBloodPost = {
@@ -25,12 +25,17 @@ const defaultBloodPost = {
   contact: "",
 };
 const AddNewBloodPost = ({
+  load,
   bloodPostProp = defaultBloodPost,
   editing = false,
   open,
   close,
 }) => {
-  const [bloodPost, setBloodPost] = useState(bloodPostProp);
+  const [bloodPost, setBloodPost] = useState({
+    availibility: bloodPostProp.availibility,
+    bloodGroup: bloodPostProp.bloodGroup,
+    contact: bloodPostProp.contact,
+  });
   const [uploading, setUploading] = useState(false);
   const handleChange = (field, value) => {
     // console.log(field, value);
@@ -39,10 +44,18 @@ const AddNewBloodPost = ({
       [field]: value,
     }));
   };
+  useEffect(() => {
+    setBloodPost(bloodPostProp);
+  }, []);
+  useEffect(() => {
+    setBloodPost(bloodPostProp);
+  }, [bloodPostProp]);
+  console.log(bloodPost, bloodPostProp);
 
   const submitHandler = async () => {
     try {
       let res;
+      setUploading(true);
       if (!editing)
         res = await api.post("/protect/blooddonatepost/create", bloodPost);
       else
@@ -51,11 +64,12 @@ const AddNewBloodPost = ({
           bloodPost
         );
       console.log(res.data);
+      localStorage.setItem("blood_group", res.data.bloodGroup);
     } catch (err) {
       console.log(err);
     } finally {
-      setBloodPost(defaultBloodPost);
       setUploading(false);
+      load();
       close();
     }
   };
@@ -77,7 +91,7 @@ const AddNewBloodPost = ({
     >
       <Box p={2}>
         <Typography variant="h2" textAlign="center" gutterBottom>
-          Add new BloodPost
+          {editing ? "Edit Info" : "Add new BloodPost"}
         </Typography>
         <Divider />
         <Grid
@@ -139,13 +153,13 @@ const AddNewBloodPost = ({
         <Button
           color="error"
           onClick={() => {
-            setBloodPost(defaultBloodPost);
+            // setBloodPost(defaultBloodPost);
             close();
           }}
         >
           Cancel
         </Button>
-        <Button color="success" type="submit">
+        <Button color="success" variant="contained" type="submit">
           {editing ? "Update" : "Add"}
         </Button>
       </DialogActions>

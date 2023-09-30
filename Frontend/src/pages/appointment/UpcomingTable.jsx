@@ -11,11 +11,12 @@ import TableHead from "@mui/material/TableHead";
 
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Fragment, useState } from "react";
-import { TimeFormat2, TimeFormat3 } from "../../utils/TimeFormat";
+import { TimeFormat2, TimeFormat3, TimeFormat4 } from "../../utils/TimeFormat";
 import { StyledTableCell, StyledTableRow } from "../doctor/DoctorProfile";
 import AppointmentCard from "./appointmentCard";
 
 const UpcomingTable = ({ list }) => {
+  console.log(list);
   const [open, setOpen] = useState(-1);
   const isDoctor = list?.length
     ? list[0].doctorid == localStorage.getItem("doctor_id")
@@ -58,10 +59,14 @@ const UpcomingTable = ({ list }) => {
                   })}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {TimeFormat3(row?.startTime)}
+                  {row?.startTime?.includes("T")
+                    ? TimeFormat4(row?.startTime)
+                    : TimeFormat3(row?.startTime)}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {TimeFormat3(row?.endTime)}
+                  {row?.endTime?.includes("T")
+                    ? TimeFormat4(row?.endTime)
+                    : TimeFormat3(row?.endTime)}
                 </StyledTableCell>
 
                 <StyledTableCell>

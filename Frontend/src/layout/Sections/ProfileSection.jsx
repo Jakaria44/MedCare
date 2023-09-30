@@ -222,16 +222,34 @@ const ProfileSection = () => {
                           // sx={{
                           //   borderRadius: "12px",
                           // }}
-                          component={Link}
-                          to={
-                            localStorage.getItem("role") === "ROLE_DOCTOR"
-                              ? `/doctorProfile/${localStorage.getItem(
+                          onClick={() => {
+                            setOpen(false);
+                            if (
+                              localStorage.getItem("role") === "ROLE_DOCTOR"
+                            ) {
+                              navigate(
+                                `/doctorProfile/${localStorage.getItem(
                                   "doctor_id"
                                 )}`
-                              : `/userprofile/${localStorage.getItem(
+                              );
+                            } else {
+                              navigate(
+                                `/userprofile/${localStorage.getItem(
                                   "user_id"
                                 )}`
-                          }
+                              );
+                            }
+                          }}
+                          // component={Link}
+                          // to={
+                          //   localStorage.getItem("role") === "ROLE_DOCTOR"
+                          //     ? `/doctorProfile/${localStorage.getItem(
+                          //         "doctor_id"
+                          //       )}`
+                          //     : `/userprofile/${localStorage.getItem(
+                          //         "user_id"
+                          //       )}`
+                          // }
                         >
                           <ListItemIcon>
                             <SettingsIcon fontSize="medium" />

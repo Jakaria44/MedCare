@@ -118,6 +118,7 @@ const BloodPostCard = ({ load, bloodPost }) => {
         const res = await server.delete(
           `/protect/blooddonatepost/delete/${bloodPost.id}`
         );
+        localStorage.setItem("blood_group", "");
         setSuccessMessage(res.data.message);
         setShowSuccessMessage(true);
         load();
@@ -131,6 +132,7 @@ const BloodPostCard = ({ load, bloodPost }) => {
     }
   };
   const editBloodPost = () => {
+    handleClose();
     setEditingBloodPost(true);
   };
   return (
@@ -232,8 +234,8 @@ const BloodPostCard = ({ load, bloodPost }) => {
         open={editingBloodPost}
         close={() => {
           setEditingBloodPost(false);
-          load();
         }}
+        load={load}
       />
 
       <SpinnerWithBackdrop backdropOpen={loading} helperText="Please Wait" />

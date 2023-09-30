@@ -13,7 +13,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MyTypography from "../../ui-component/MyTypography";
-import randomString from "../../utils/RandomString";
 import TimeFormat from "../../utils/TimeFormat";
 
 // import { useHistory } from "react-router-dom";
@@ -181,7 +180,7 @@ const AppointmentCard = ({ doctorId, appoint, userId, upcoming = false }) => {
             variant="contained"
             onClick={() => {
               // history.push(`/createMeet/${appoint._id}`);
-              window.location.href = `/meet/${appoint.id}}`;
+              window.location.href = `/meet/${appoint.id}`;
             }}
           >
             Consult Now

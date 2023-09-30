@@ -10,6 +10,7 @@ import { getStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC2crdXm5tEjgtIhG5mbV8FMI9xK_MJevo",
   authDomain: "medcare-video-calling.firebaseapp.com",
@@ -17,7 +18,7 @@ const firebaseConfig = {
   storageBucket: "medcare-video-calling.appspot.com",
   messagingSenderId: "455950935583",
   appId: "1:455950935583:web:befb80768de1113392972a",
-  measurementId: "G-XVCH8ESYGK"
+  measurementId: "G-XVCH8ESYGK",
 };
 
 const app = initializeApp(firebaseConfig);

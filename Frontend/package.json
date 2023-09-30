@@ -25,6 +25,7 @@
     "dayjs": "^1.11.9",
     "firebase": "^10.2.0",
     "framer-motion": "^10.15.1",
+    "leaflet": "^1.9.4",
     "material-ui-confirm": "^3.0.9",
     "material-ui-popup-state": "^5.0.9",
     "nom": "^0.0.3",
@@ -32,6 +33,7 @@
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^6.15.0",
     "uuid": "^9.0.0"
