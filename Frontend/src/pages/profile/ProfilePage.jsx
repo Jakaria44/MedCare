@@ -253,7 +253,7 @@ const ProfilePage = () => {
           card={(item, load) => <FundRaiseCard load={load} item={item} />}
         />
       )}
-      {id == userId && myFundPost?.length != 0 && (
+      {id == userId && pendingFundPost?.length != 0 && (
         <HorizontalScrollingContent
           title="Fundraise Posts Pending"
           allItemLink="/"
