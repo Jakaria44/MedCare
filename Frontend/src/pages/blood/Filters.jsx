@@ -109,24 +109,26 @@ const Filters = ({ queries, load }) => {
   );
 
   const submit = () => {
-    if (selectedUpazila) {
+    if (selectedGroup) {
       load(
         queryOptions,
-        `/ambulancePost/filterByupazilawithPage/${selectedUpazila.name}`
+        `/bloodDonatePost/filterByBloodGroup/${selectedGroup}`
+      );
+    } else if (selectedUpazila) {
+      load(
+        queryOptions,
+        `/bloodDonatePost/filterByupazila/${selectedUpazila.name}`
       );
     } else if (selectedDistrict) {
       load(
         queryOptions,
-        `/ambulancePost/filterByDistrictwithPage/${selectedDistrict.name}`
+        `/bloodDonatePost/filterByDistrict/${selectedDistrict.name}`
       );
     } else if (selectedDivision) {
       load(
         queryOptions,
-        `/ambulancePost/filterByDivisionwithPage/${selectedDivision.name}`
+        `/bloodDonatePost/filterByDivision/${selectedDivision.name}`
       );
-    } else if (selectedGroup) {
-      load(queryOptions);
-      `/bloodDonatePost/filterByBloodGroup/${selectedGroup}`;
     } else {
       load(queryOptions);
     }

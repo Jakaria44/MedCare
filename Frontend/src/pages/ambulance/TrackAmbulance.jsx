@@ -24,7 +24,7 @@ const TrackAmbulance = () => {
   const [editAmbulance, setEditAmbulance] = useState(null);
   const [toAdd, setToAdd] = useState(false);
   const [ambulances, setAmbulances] = useState([]);
-  const [center, setCenter] = useState([24, 90]);
+  const [center, setCenter] = useState([24.0650882, 89.5461685]);
   const [view, setView] = useState(-1);
   const [details, setDetails] = useState({});
 
@@ -121,7 +121,7 @@ const TrackAmbulance = () => {
       {center ? (
         <MapContainer
           center={center}
-          zoom={8}
+          zoom={10}
           // scrollWheelZoom={false}
           style={{ height: "72vh", width: "100%" }}
         >

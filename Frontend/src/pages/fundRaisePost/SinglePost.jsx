@@ -218,7 +218,7 @@ const SinglePost = () => {
         <Skeleton variant="text" />
       ) : (
         <Typography variant="h2" textAlign="center">
-          {data.title}
+          {data.title.replaceAll(/''/g, "'")}
         </Typography>
       )}
 
@@ -266,7 +266,7 @@ const SinglePost = () => {
       <Divider width="100%" />
       {data?.title && (
         <Typography variant="body1" fontSize={19} textAlign="justify">
-          {data?.postContent}
+          {data?.postContent.replaceAll(/''/g, "'")}
         </Typography>
       )}
       {data && (

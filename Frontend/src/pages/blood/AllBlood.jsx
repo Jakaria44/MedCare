@@ -69,6 +69,7 @@ const AllBlood = ({ queries = defaultQueryOptions, title = "Find Blood" }) => {
     apiPath = "/blooddonatepost/getallpostbySortandPage"
   ) => {
     setLoading(true);
+
     queries = {
       ...queries,
       SortBy: sortOptions.find((option) => option.name === queries.SortBy)

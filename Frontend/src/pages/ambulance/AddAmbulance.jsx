@@ -43,7 +43,9 @@ const AddAmbulance = ({ ambulanceProp, editing = false, open, close }) => {
       setPreviewUrl(defaultAmbulancePicture);
     } else {
       setPreviewUrl(ambulanceProp?.image);
-      setAmbulance(ambulanceProp);
+      setAmbulance({
+        ...ambulanceProp,
+      });
     }
   }, [ambulanceProp]);
 
@@ -63,6 +65,7 @@ const AddAmbulance = ({ ambulanceProp, editing = false, open, close }) => {
   };
 
   const handleChange = (field, value) => {
+    console.log(field, value);
     setAmbulance((prevProfile) => ({
       ...prevProfile,
       [field]: value,

@@ -89,47 +89,40 @@ const Structure = () => {
       // timestamp: firebaseDB.ServerValue.TIMESTAMP, // Optionally, you can record a timestamp
     });
   }
+  const handleAmbulanceUpdate = (snapshot) => {
+    const ambulanceData = snapshot.val();
+    if (!ambulanceData) return;
+    console.log(ambulanceData);
+
+    if ("geolocation" in navigator) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Update Firebase with the new location data
+          console.log(ambulanceData?.available);
+          updateLocation(latitude, longitude, ambulanceData?.available);
+          console.log(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error);
+        }
+      );
+
+      // Clean up the geolocation watch when the component unmounts
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+      };
+    } else {
+      console.log("Geolocation is not available in this browser.");
+    }
+  };
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
 
-    if (userId === "null") {
-      return;
-    }
-
     const ambulanceRef = firebaseDB.ref(`ambulances/${userId}`);
-
-    const handleAmbulanceUpdate = (snapshot) => {
-      const ambulanceData = snapshot.val();
-      console.log(ambulanceData);
-
-      if ("geolocation" in navigator) {
-        const watchId = navigator.geolocation.watchPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            // Update Firebase with the new location data
-            updateLocation(
-              latitude,
-              longitude,
-              ambulanceData?.available || false
-            );
-            console.log(latitude, longitude);
-          },
-          (error) => {
-            console.error("Error getting geolocation:", error);
-          }
-        );
-
-        // Clean up the geolocation watch when the component unmounts
-        return () => {
-          navigator.geolocation.clearWatch(watchId);
-        };
-      } else {
-        console.log("Geolocation is not available in this browser.");
-      }
-    };
-
-    ambulanceRef.on("value", handleAmbulanceUpdate);
-
+    if (userId != "null") {
+      ambulanceRef.on("value", handleAmbulanceUpdate);
+    }
     // Clean up the Firebase listener when the component unmounts
     return () => {
       ambulanceRef.off("value", handleAmbulanceUpdate);
