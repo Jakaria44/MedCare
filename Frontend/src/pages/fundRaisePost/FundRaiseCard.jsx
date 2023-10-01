@@ -48,7 +48,6 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
   const [errorMessage, setErrorMessage] = useState("An Error Occured");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const approveFundPost = async () => {
     try {
       await confirm({
@@ -113,7 +112,7 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
               component={Link}
               to={"/userprofile/" + item?.userid}
             >
-              M
+              {item?.userName?.charAt(0).toUpperCase() || "U"}
             </Avatar>
           }
           // action={
@@ -199,6 +198,7 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
               <Button
                 variant="contained"
                 color="success"
+                disabled={!localStorage.getItem("user_id")}
                 onClick={() => setShowDonate(true)}
               >
                 Donate Now
