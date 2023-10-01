@@ -107,7 +107,7 @@ const ChatBot = () => {
           p={0}
         >
           <CustomButtonContained
-            onClick={() => navigate("/doctorList")}
+            onClick={() => navigate("/chat")}
             text={"Try Now"}
           />
         </Box>

@@ -12,7 +12,9 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
+import { firebaseDB } from "../meeting/MeetWebRTC";
 import server from "./../../HTTP/httpCommonParam";
+import AddAmbulance from "./AddAmbulance";
 import AddNewAmbulance from "./AddNewAmbulance";
 import AmbulanceList from "./AmbulanceList";
 import Filters from "./Filters";
@@ -60,6 +62,7 @@ const AllAmbulance = ({
   // const count = Math.ceil(total / queryOptions.perPage);
   const count = useMemo(() => total, [total]);
   const [isMy, setIsMy] = useState(false);
+  const [toAdd, setToAdd] = useState(false);
 
   const handleMyPostsChange = (e) => {
     setIsMy(e.target.checked);
@@ -83,7 +86,17 @@ const AllAmbulance = ({
     loadAllAmbulance({ ...queryOptions, page: p });
   };
   useEffect(() => {
-    // loadAllBooks(queries);
+    if (localStorage.getItem("user_id")) {
+      const detailsRef = firebaseDB.ref(
+        "details/" + localStorage.getItem("user_id")
+      );
+      let ambulance;
+      detailsRef.on("value", (snapshot) => {
+        ambulance = snapshot.val();
+        console.log(ambulance);
+        setToAdd(ambulance === null);
+      });
+    }
     loadAllAmbulance(queries);
   }, []);
 
@@ -196,7 +209,7 @@ const AllAmbulance = ({
           </Box>
 
           <Box flexGrow={2} />
-          {localStorage.getItem("user_id") !== null && (
+          {toAdd && (
             <Box flexGrow={1}>
               <Button
                 startIcon={<Add />}
@@ -204,7 +217,7 @@ const AllAmbulance = ({
                 color="success"
                 onClick={() => setAddingNewAmbulance(true)}
               >
-                Add new Ambulance
+                Add Your Ambulance
               </Button>
             </Box>
           )}
@@ -234,7 +247,15 @@ const AllAmbulance = ({
         />
       </Box>
 
-      <AddNewAmbulance
+      {/* <AddNewAmbulance
+        open={addingNewAmbulance}
+        close={() => {
+          setAddingNewAmbulance(false);
+
+          loadAllAmbulance();
+        }}
+      /> */}
+      <AddAmbulance
         open={addingNewAmbulance}
         close={() => {
           setAddingNewAmbulance(false);
@@ -242,7 +263,6 @@ const AllAmbulance = ({
           loadAllAmbulance();
         }}
       />
-
       <AddNewAmbulance
         open={editAmbulance !== null}
         close={() => {

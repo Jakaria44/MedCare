@@ -23,7 +23,7 @@ const Hero = () => {
   }));
 
   const Title = styled(Typography)(({ theme }) => ({
-    fontSize: "64px",
+    fontSize: "60px",
     // color: "#000336",
     fontWeight: "bold",
     margin: theme.spacing(3, 0, 3, 0),

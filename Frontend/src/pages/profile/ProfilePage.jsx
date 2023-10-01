@@ -15,9 +15,11 @@ import ErrorModal from "../../component/ErrorModal";
 import HorizontalScrollingContent from "../../component/HorizontalScrollingContent";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 import SuccessfulModal from "../../component/SuccessfulModal";
-import AmbulanceCard from "../ambulance/AmbulanceCard";
+import AddAmbulance from "../ambulance/AddAmbulance";
+import AmbulanceDetails from "../ambulance/AmbulanceDetails";
 import AddNewBloodPost from "../blood/AddNewBloodPost";
 import FundRaiseCard from "../fundRaisePost/FundRaiseCard";
+import { firebaseDB } from "../meeting/MeetWebRTC";
 import BasicInfo from "./BasicInfo";
 // import { user } from "./dummyUser";
 const ProfilePage = () => {
@@ -29,13 +31,13 @@ const ProfilePage = () => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  const userId = localStorage.getItem("user_id");
+  const userId = localStorage.getItem("user_id") ?? null;
   const navigate = useNavigate();
   const [myFundPost, setMyFundPost] = useState([]);
   const [user, setUser] = useState(null);
   const [pendingFundPost, setPendingFundPost] = useState([]); // [pendingFundPost, setPendingFundPost
-  const [myAmbulancePost, setMyAmbulancePost] = useState([]);
-
+  const [myAmbulancePost, setMyAmbulancePost] = useState({});
+  const [edit, setEdit] = useState(false);
   const loadMyFundRaisePosts = async () => {
     try {
       const res = await server.get(
@@ -69,21 +71,12 @@ const ProfilePage = () => {
     }
   };
 
-  const loadMyAmbulancePost = async () => {
-    try {
-      const res = await server.get(
-        `/ambulance/getallpostbyuserbySortAndPage/${id}`,
-        {
-          params: {
-            pageSize: 100,
-          },
-        }
-      );
-      setMyAmbulancePost(res.data.content);
-    } catch (err) {
-      console.log(err);
-      setMyAmbulancePost([]);
-    }
+  const handleAmbulanceUpdate = (snapshot) => {
+    const ambulanceData = snapshot.val();
+    console.log(ambulanceData);
+    if (!ambulanceData) setMyAmbulancePost(null);
+    else
+      setMyAmbulancePost((prev) => ({ ...prev, ...ambulanceData, id: userId }));
   };
 
   const loadUser = async () => {
@@ -95,7 +88,44 @@ const ProfilePage = () => {
       console.log(err);
     }
   };
+  useEffect(() => {
+    console.log(myAmbulancePost);
+  }, [myAmbulancePost]);
 
+  // delete ambulance
+  const handleDelete = async () => {
+    try {
+      await confirm({
+        title: "Delete Blood Post",
+        description: "Are you sure you want to delete this Blood Post?",
+        confirmationText: "Delete",
+        cancellationText: "Cancel",
+        confirmationButtonProps: { variant: "outlined", color: "error" },
+        cancellationButtonProps: { variant: "contained", color: "error" },
+      });
+      const ambulanceRef = firebaseDB.ref(`ambulances/${userId}`);
+      const detailsRef = firebaseDB.ref(`details/${userId}`);
+      // Use the remove method to delete the reference
+      setLoading(true);
+      try {
+        await ambulanceRef.remove();
+        await detailsRef.remove();
+
+        setSuccessMessage("Successfully Deleted");
+        setShowSuccessMessage(true);
+        ambulanceRef.on("value", handleAmbulanceUpdate);
+        detailsRef.on("value", handleAmbulanceUpdate);
+      } catch (err) {
+        console.log(err);
+        setErrorMessage("something went wrong");
+        setShowErrorMessage(true);
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const deleteBloodPost = async () => {
     try {
       await confirm({
@@ -131,7 +161,17 @@ const ProfilePage = () => {
   useEffect(() => {
     loadUser();
     loadMyFundRaisePosts();
-    loadMyAmbulancePost();
+
+    if (!userId) return;
+    const ambulanceRef = firebaseDB.ref(`ambulances/${userId}`);
+    ambulanceRef.on("value", handleAmbulanceUpdate);
+    const detailsRef = firebaseDB.ref(`details/${userId}`);
+    detailsRef.on("value", handleAmbulanceUpdate);
+
+    return () => {
+      ambulanceRef.off("value", handleAmbulanceUpdate);
+      detailsRef.off("value", handleAmbulanceUpdate);
+    };
   }, []);
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
   return (
@@ -142,7 +182,8 @@ const ProfilePage = () => {
         fontFamily="cursive"
         align="center"
         gutterBottom
-        pb={6}
+        mt={1}
+        pb={3}
       >
         My Profile
       </Typography>
@@ -183,6 +224,7 @@ const ProfilePage = () => {
             transform: "scale(1.01)",
             transition: "all 0.3s ease-in-out",
           },
+          padding: "0 !important",
         }}
         onClick={() => {
           navigate("/appointments");
@@ -220,15 +262,23 @@ const ProfilePage = () => {
           card={(item, load) => <FundRaiseCard load={load} item={item} />}
         />
       )}
-      {myAmbulancePost?.length != 0 && (
-        <HorizontalScrollingContent
-          title="Ambulance Posts"
-          allItemLink="/"
-          items={myAmbulancePost}
-          load={loadMyAmbulancePost}
-          card={(item, load) => <AmbulanceCard load={load} item={item} />}
-        />
+      {myAmbulancePost !== null && (
+        <Box m={2} sx={{ padding: "0 !important" }}>
+          <AmbulanceDetails
+            data={myAmbulancePost}
+            profile={true}
+            setEdit={setEdit}
+            handleDelete={handleDelete}
+          />
+        </Box>
       )}
+
+      <AddAmbulance
+        editing={true}
+        ambulanceProp={myAmbulancePost}
+        open={edit}
+        close={() => setEdit(false)}
+      />
       <AddNewBloodPost
         bloodPostProp={user?.bloodDonatePostList[0]}
         editing={true}

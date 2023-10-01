@@ -13,9 +13,9 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from "@mui/material";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import React, { useEffect, useState } from "react";
 
 import api from "./../../HTTP/httpCommonParam";
@@ -36,23 +36,33 @@ const AddNewBloodPost = ({
     bloodGroup: bloodPostProp.bloodGroup,
     contact: bloodPostProp.contact,
   });
+  const [validNum, setValidNum] = useState(true);
   const [uploading, setUploading] = useState(false);
   const handleChange = (field, value) => {
-    // console.log(field, value);
     setBloodPost((prevProfile) => ({
       ...prevProfile,
       [field]: value,
     }));
   };
+  const handleNumberChange = (value) => {
+    const isValid = matchIsValidTel(value);
+    setValidNum(isValid);
+    setBloodPost((prevProfile) => ({
+      ...prevProfile,
+      contact: value,
+    }));
+  };
+
   useEffect(() => {
     setBloodPost(bloodPostProp);
   }, []);
   useEffect(() => {
     setBloodPost(bloodPostProp);
   }, [bloodPostProp]);
-  console.log(bloodPost, bloodPostProp);
+  // console.log(bloodPost, bloodPostProp);
 
   const submitHandler = async () => {
+    if (!validNum) return;
     try {
       let res;
       setUploading(true);
@@ -101,17 +111,30 @@ const AddNewBloodPost = ({
           alignItems="center"
           justifyContent="space-evenly"
         >
-          <Grid item xs={5}>
-            <TextField
+          <Grid item xs={12}>
+            {/* <TextField
               required
               label="Contact No"
               fullWidth
               value={bloodPost.contact}
               onChange={(e) => handleChange("contact", e.target.value)}
+            /> */}
+
+            <MuiTelInput
+              color={validNum ? "info" : "error"}
+              disableDropdown
+              defaultCountry="BD"
+              onChange={handleNumberChange}
+              value={bloodPost.contact}
+              fullWidth
+              label="Contact No"
+              required
+              error={!validNum}
+              helperText={!validNum ? "Invalid Number" : ""}
             />
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={8}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Blood Group</InputLabel>
               <Select
@@ -132,7 +155,7 @@ const AddNewBloodPost = ({
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <FormControlLabel
               control={
                 <Checkbox

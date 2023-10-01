@@ -35,7 +35,6 @@ const BloodList = ({ load, data, loading }) => {
             xs={12}
             sm={6}
             md={4}
-            lg={3}
             key={index}
             margin="auto"
             paddingX={2}

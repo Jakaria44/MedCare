@@ -41,7 +41,7 @@ const BasicInfo = ({ user }) => {
 
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} p={0}>
       <Grid
         item
         xs={12}
@@ -49,6 +49,7 @@ const BasicInfo = ({ user }) => {
         m="auto"
         display="flex"
         justifyContent="center"
+        sx={{ padding: "0 !important" }}
       >
         <img
           src={
@@ -72,7 +73,7 @@ const BasicInfo = ({ user }) => {
         display="flex"
         justifyContent="center"
       >
-        <Stack p={small ? 5 : 0} width="100%" spacing={2} divider={<Divider />}>
+        <Stack p={small ? 1 : 0} width="100%" spacing={2} divider={<Divider />}>
           {userRows.map((row) => (
             <SingleRow
               icon={row.icon}
@@ -84,19 +85,14 @@ const BasicInfo = ({ user }) => {
       </Grid>
 
       <Grid
-        m={small ? 2 : 0}
+        my={small ? 2 : 0}
         item
         xs={12}
         md={user?.bloodDonatePostList.length > 0 ? 4 : 6}
         display="flex"
         justifyContent="center"
       >
-        <Stack
-          px={small ? 3 : 0}
-          width="100%"
-          spacing={2}
-          divider={<Divider />}
-        >
+        <Stack p={small ? 1 : 0} width="100%" spacing={2} divider={<Divider />}>
           {user?.bloodDonatePostList.length > 0 && (
             <SingleRow
               icon={<Bloodtype />}

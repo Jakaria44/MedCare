@@ -94,6 +94,12 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
 
+  const roles = {
+    role_doctor: "Doctor",
+    role_normal: "User",
+    role_admin: "admin",
+  };
+
   return (
     <>
       <Chip
@@ -190,8 +196,8 @@ const ProfileSection = () => {
                           {name || "GUEST"}
                         </Typography>
                       </Stack>
-                      <Typography my={2} variant="body1">
-                        {localStorage.getItem("role")?.toUpperCase() ||
+                      <Typography my={2} fontSize={16} variant="body1">
+                        {roles[localStorage.getItem("role")?.toLowerCase()] ||
                           "Please Sign In"}
                       </Typography>
                     </Stack>
@@ -240,16 +246,6 @@ const ProfileSection = () => {
                               );
                             }
                           }}
-                          // component={Link}
-                          // to={
-                          //   localStorage.getItem("role") === "ROLE_DOCTOR"
-                          //     ? `/doctorProfile/${localStorage.getItem(
-                          //         "doctor_id"
-                          //       )}`
-                          //     : `/userprofile/${localStorage.getItem(
-                          //         "user_id"
-                          //       )}`
-                          // }
                         >
                           <ListItemIcon>
                             <SettingsIcon fontSize="medium" />

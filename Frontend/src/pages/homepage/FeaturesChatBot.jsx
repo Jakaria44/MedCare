@@ -38,13 +38,7 @@ const FeaturesChatBot = () => {
   return (
     <Grid container spacing={2} my={2} sx={{ padding: 0 }}>
       {features.map((item, i) => (
-        <Grid
-          item
-          key={i}
-          xs={12}
-          md={6}
-          sx={{ paddingLeft: 0, paddingTop: 0 }}
-        >
+        <Grid item key={i} xs={12} md={6} sx={{ padding: "0 !important" }}>
           <FeatureCard
             seq={i % 2}
             media={item.media}
@@ -62,75 +56,77 @@ export default FeaturesChatBot;
 const FeatureCard = ({ seq, media, title, text }) => {
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
   return (
-    <Card
-      elevation={0}
-      sx={{
-        margin: 0,
-        padding: 0,
-        display: "flex",
-        flexDirection: small ? "row" : "row",
-        borderRadius: 0,
-        border: 0,
-        backgroundColor: "background.paper",
-      }}
-    >
-      {/* // <Card sx={{ display: "flex", flexDirection: small ? "row" : "row" }}> */}
-      {seq === 0 && (
-        <Box
-          sx={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={media}
-            alt="Quick Symptom"
-            sx={{ height: "100%", width: "100%" }}
-          />
-        </Box>
-      )}
-      <CardContent sx={{ flex: 1 }}>
-        <Typography
-          mb={1}
-          sx={{
-            fontWeight: "700",
-            fontSize: "18px",
-            lineHeight: "27px",
-          }}
-        >
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-            color: "#5A6473",
-          }}
-        >
-          {text}
-        </Typography>
-      </CardContent>
-      {seq !== 0 && (
-        <Box
-          sx={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={media}
-            alt="Quick Symptom"
-            sx={{ height: "100%", width: "100%" }}
-          />
-        </Box>
-      )}
-    </Card>
+    <>
+      <Card
+        elevation={0}
+        sx={{
+          margin: 0,
+          padding: 0,
+          display: "flex",
+          flexDirection: small ? "row" : "row",
+          borderRadius: 0,
+          border: 0,
+          backgroundColor: "background.paper",
+        }}
+      >
+        {/* // <Card sx={{ display: "flex", flexDirection: small ? "row" : "row" }}> */}
+        {seq === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={media}
+              alt="Quick Symptom"
+              sx={{ height: "100%", width: "100%" }}
+            />
+          </Box>
+        )}
+        <CardContent sx={{ flex: 1 }}>
+          <Typography
+            mb={1}
+            sx={{
+              fontWeight: "700",
+              fontSize: "18px",
+              lineHeight: "27px",
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#5A6473",
+            }}
+          >
+            {text}
+          </Typography>
+        </CardContent>
+        {seq !== 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={media}
+              alt="Quick Symptom"
+              sx={{ height: "100%", width: "100%" }}
+            />
+          </Box>
+        )}
+      </Card>
+    </>
   );
 };

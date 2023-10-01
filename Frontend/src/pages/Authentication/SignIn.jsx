@@ -60,7 +60,7 @@ export default function SignIn() {
       }
 
       setSigningIn(false);
-      // window.location.replace("/");
+      window.location.replace("/");
     } catch (err) {
       setErrorMessage(err?.response?.data?.message || "Something went wrong");
       setShowErrorMessage(true);
