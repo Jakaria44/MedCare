@@ -45,8 +45,12 @@ const TrackAmbulance = () => {
 
     const handleDetailsSnapshot = (snapshot) => {
       const data = snapshot.val();
-      console.log(data);
-      setDetails(data.map((item, index) => ({ ...item, id: index })));
+
+      setDetails(
+        Object.keys(data).map((item, index) => {
+          return { ...data[item], id: item };
+        })
+      );
     };
 
     const handleAmbulanceSnapshot = (snapshot) => {
