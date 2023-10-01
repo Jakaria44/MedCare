@@ -314,7 +314,7 @@ const SinglePost = () => {
             <Chip
               variant="outlined"
               component="a"
-              href={item}
+              href={item.documentName}
               target="_blank"
               label="View Document"
               icon={<OpenInNew />}

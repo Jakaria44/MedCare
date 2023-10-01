@@ -68,7 +68,7 @@ const ProfileSection = () => {
     localStorage.clear();
     localStorage.setItem("colorMode", mode);
 
-    navigate("/signin");
+    window.location.reload();
   };
 
   const handleClose = (event) => {
