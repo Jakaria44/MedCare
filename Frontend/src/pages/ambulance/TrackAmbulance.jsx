@@ -24,22 +24,28 @@ const TrackAmbulance = () => {
   const [editAmbulance, setEditAmbulance] = useState(null);
   const [toAdd, setToAdd] = useState(false);
   const [ambulances, setAmbulances] = useState([]);
-  const [center, setCenter] = useState();
+  const [center, setCenter] = useState([24, 90]);
   const [view, setView] = useState(-1);
   const [details, setDetails] = useState({});
+
   useEffect(() => {
-    const ambulanceRef = firebaseDB.ref("ambulances");
+    // console.log(
+    //   typeof details[localStorage.getItem("user_id")] === "undefined"
+    // );
+    if (typeof details[localStorage.getItem("user_id")] === "undefined") {
+      setToAdd(true);
+    } else {
+      setToAdd(false);
+    }
+  }, [details]);
+
+  useEffect(() => {
+    const ambulanceRef = firebaseDB.ref("ambulances/");
     const detailsRef = firebaseDB.ref("details/");
 
     const handleDetailsSnapshot = (snapshot) => {
       const data = snapshot.val();
       setDetails(data);
-      console.log(typeof data[localStorage.getItem("user_id")] === "undefined");
-
-      if (typeof data[localStorage.getItem("user_id")] === "undefined") {
-        setToAdd(true);
-      }
-      console.log(data);
     };
 
     const handleAmbulanceSnapshot = (snapshot) => {
@@ -56,37 +62,12 @@ const TrackAmbulance = () => {
       }
     };
 
-    const handleGeolocationSuccess = (position) => {
-      const { latitude, longitude } = position.coords;
-      // get user's location
-      setCenter([latitude, longitude]);
-      console.log(latitude, longitude);
-    };
-
-    const handleGeolocationError = (error) => {
-      console.error("Error getting geolocation:", error);
-    };
-
     detailsRef.on("value", handleDetailsSnapshot);
     ambulanceRef.on("value", handleAmbulanceSnapshot);
 
-    if ("geolocation" in navigator) {
-      const watchId = navigator.geolocation.watchPosition(
-        handleGeolocationSuccess,
-        handleGeolocationError
-      );
-
-      // Don't forget to clear the watch when the component unmounts
-      return () => {
-        navigator.geolocation.clearWatch(watchId);
-        detailsRef.off("value", handleDetailsSnapshot); // Clean up the "details" listener
-      };
-    } else {
-      console.log("Geolocation is not available in this browser.");
-    }
-
     return () => {
       // Clean up the "ambulances" listener when the component unmounts
+      detailsRef.off("value", handleDetailsSnapshot);
       ambulanceRef.off("value", handleAmbulanceSnapshot);
     };
   }, []);
@@ -140,7 +121,7 @@ const TrackAmbulance = () => {
       {center ? (
         <MapContainer
           center={center}
-          zoom={12}
+          zoom={8}
           // scrollWheelZoom={false}
           style={{ height: "72vh", width: "100%" }}
         >
@@ -216,7 +197,14 @@ const MyMarkers = ({ data, setView }) => {
     >
       <Popup>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Button onClick={() => setView(id)}>Details</Button>
+          <Button
+            onClick={() => {
+              console.log(id);
+              setView(id);
+            }}
+          >
+            Details
+          </Button>
         </Box>
       </Popup>
     </Marker>

@@ -92,7 +92,7 @@ const Structure = () => {
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
 
-    if (!userId) {
+    if (userId === "null") {
       return;
     }
 
