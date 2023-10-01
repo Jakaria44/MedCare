@@ -4,7 +4,7 @@ import React from "react";
 // import houseCard from "../media/houseCard.png";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../component/CustomButton";
-import AmbulanceImage from "/ambulance.png";
+import AmbulanceImage from "/Ambulance.png";
 
 const Ambulance = () => {
   const navigate = useNavigate();

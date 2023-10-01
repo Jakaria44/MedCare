@@ -197,7 +197,7 @@ const Message = () => {
             p={2}
           >
             <Typography variant="body2" color={"primary.light"} fontSize={23}>
-              HealthGPT
+              HealthBot
             </Typography>
             <Stack direction="row" spacing={2}>
               <IconButton

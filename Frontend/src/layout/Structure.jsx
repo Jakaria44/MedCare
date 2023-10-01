@@ -56,8 +56,10 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
       // marginRight: "10px",
       // marginBottom: "10px",
       margin: "10px",
+      marginTop: "64px",
       width: "90%",
-      padding: "0px",
+      padding: "16px",
+      paddingTop: "2vh",
     },
   })
 );

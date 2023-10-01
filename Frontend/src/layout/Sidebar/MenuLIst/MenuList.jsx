@@ -14,7 +14,13 @@ const MenuList = () => {
         return <NavGroup key={i} item={item} />;
       default:
         return (
-          <Typography key={i} variant="h6" color="error" align="center">
+          <Typography
+            key={i}
+            fontSize={20}
+            variant="h6"
+            color="error"
+            align="center"
+          >
             Menu Items Error
           </Typography>
         );

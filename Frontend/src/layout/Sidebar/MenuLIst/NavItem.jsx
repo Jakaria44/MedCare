@@ -74,6 +74,7 @@ const NavItem = ({ item, level }) => {
       <ListItemText
         primary={
           <Typography
+            fontSize={16}
             variant={menu.id === item.id ? "h5" : "body1"}
             color="inherit"
           >
