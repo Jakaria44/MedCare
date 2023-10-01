@@ -66,23 +66,26 @@ const Message = () => {
   const handleSend = () => {
     if (!userMessage) return;
     console.log(userMessage);
-    setMessages([...messages, { message: userMessage, type: "self" }]);
-
+    setMessages((messages) => [
+      ...messages,
+      {
+        message: userMessage,
+        type: "self",
+      },
+    ]);
     const msg = userMessage.trim().toLowerCase();
 
-    if (["ok", "thank you"].includes(msg.toLowerCase())) {
-      setMessages([
-        ...messages,
-        {
-          message: " You are welcome and Take care yourself",
-          type: "incoming",
-        },
-      ]);
+    if (["ok", "thank you", "thanks"].includes(msg)) {
+      setUserMessage("");
+      setTimeout(() => {
+        set("You are welcome and Take care yourself");
+      }, 600);
       // sendChatbox.scrollTo(0, sendChatbox.scrollHeight);
+      console.log(messages);
       return;
     }
 
-    if (msg.toLowerCase() === "no") {
+    if (msg == "no") {
       setUserMessage("");
       const requests = populatReqBody();
       generateResponse(requests);

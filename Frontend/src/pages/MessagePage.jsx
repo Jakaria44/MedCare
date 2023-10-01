@@ -55,27 +55,29 @@ const MessagePage = () => {
   const scrollContainerRef = useRef(null);
 
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
   const handleSend = () => {
     if (!userMessage) return;
     console.log(userMessage);
-    setMessages([...messages, { message: userMessage, type: "self" }]);
-
+    setMessages((messages) => [
+      ...messages,
+      {
+        message: userMessage,
+        type: "self",
+      },
+    ]);
     const msg = userMessage.trim().toLowerCase();
 
-    if (["ok", "thank you"].includes(msg.toLowerCase())) {
-      setMessages([
-        ...messages,
-        {
-          message: " You are welcome and Take care yourself",
-          type: "incoming",
-        },
-      ]);
+    if (["ok", "thank you", "thanks"].includes(msg)) {
+      setUserMessage("");
+      setTimeout(() => {
+        set("You are welcome and Take care yourself");
+      }, 600);
       // sendChatbox.scrollTo(0, sendChatbox.scrollHeight);
+      console.log(messages);
       return;
     }
 
-    if (msg.toLowerCase() === "no") {
+    if (msg == "no") {
       setUserMessage("");
       const requests = populatReqBody();
       generateResponse(requests);
@@ -158,9 +160,12 @@ const MessagePage = () => {
     <Paper
       elevation={24}
       sx={{
-        borderRadius: "20px",
+        // borderRadius: "20px",
         position: "fixed",
-
+        top: "11%",
+        left: "5%",
+        right: "5%",
+        bottom: "5%",
         width: small ? "96%" : "65%",
         height: "85%",
         display: "flex",
@@ -170,10 +175,10 @@ const MessagePage = () => {
       }}
     >
       <Stack
-        bgcolor="Highlight"
+        bgcolor="primary.main"
         direction="row"
         justifyContent="space-between"
-        borderRadius={"20px 20px 0px 0px"}
+        // borderRadius={"20px 20px 0px 0px"}
         p={2}
       >
         <Typography variant="body2" color={"primary.light"} fontSize={23}>
