@@ -1,6 +1,7 @@
 import {
   CloseOutlined,
   ModeCommentOutlined,
+  OpenInNew,
   SendOutlined,
   SmartToyOutlined,
 } from "@mui/icons-material";
@@ -19,7 +20,7 @@ import {
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMessageContext } from "../contexts/MesageContext";
 
 const ChatToggleButton = styled("div")`
@@ -57,7 +58,7 @@ const Message = () => {
   const [userMessage, setUserMessage] = useState("");
   const [reqBody, setReqBody] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const scrollContainerRef = useRef(null);
 
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -160,6 +161,7 @@ const Message = () => {
     }
   }, [messages]);
   const location = useLocation();
+
   return (
     <>
       <ChatToggleButton
@@ -197,10 +199,18 @@ const Message = () => {
             <Typography variant="body2" color={"primary.light"} fontSize={23}>
               HealthGPT
             </Typography>
-
-            <IconButton onClick={() => setOpen(!open)}>
-              <CloseOutlined />
-            </IconButton>
+            <Stack direction="row" spacing={2}>
+              <IconButton
+                onClick={() => {
+                  navigate("/chat");
+                }}
+              >
+                <OpenInNew sx={{ transform: "scaleX(-1)" }} />
+              </IconButton>
+              <IconButton onClick={() => setOpen(!open)}>
+                <CloseOutlined />
+              </IconButton>
+            </Stack>
           </Stack>
           <List
             ref={scrollContainerRef}

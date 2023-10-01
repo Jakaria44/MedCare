@@ -3,7 +3,6 @@ import { lazy } from "react";
 // project imports
 import ProfilePage from "../pages/profile/ProfilePage";
 import Loadable from "./../ui-component/Loadable";
-import Test from "./Test";
 
 const ChatPage = Loadable(lazy(() => import("../pages/MessagePage")));
 
@@ -12,6 +11,9 @@ const Structure = Loadable(lazy(() => import("../layout/Structure.jsx")));
 const Home = Loadable(lazy(() => import("../pages/homepage/Home")));
 const AllAmbulance = Loadable(
   lazy(() => import("../pages/ambulance/AllAmbulance"))
+);
+const TrackAmbulance = Loadable(
+  lazy(() => import("../pages/ambulance/TrackAmbulance"))
 );
 const RaiseFund = Loadable(
   lazy(() => import("../pages/fundRaisePost/AllPost"))
@@ -48,13 +50,13 @@ const MainRoutes = {
       path: "/",
       element: <Home />,
     },
-    {
-      path: "/test",
-      element: <Test />,
-    },
+    // {
+    //   path: "/test",
+    //   element: <TrackAmbulance />,
+    // },
     {
       path: "/ambulance",
-      element: <AllAmbulance />,
+      element: <TrackAmbulance />,
     },
     {
       path: "/fundpost",

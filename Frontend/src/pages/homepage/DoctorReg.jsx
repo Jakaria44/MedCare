@@ -4,14 +4,13 @@ import React from "react";
 // import houseCard from "../media/houseCard.png";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../component/CustomButton";
-import AmbulanceImage from "/ambulance.png";
+import appointmentImage from "/doctor.jpeg";
 
-const Ambulance = () => {
+const DoctorReg = () => {
   const navigate = useNavigate();
-
   const CustomBox = styled(Box)(({ theme }) => ({
     display: "flex",
-    gap: theme.spacing(14),
+    gap: theme.spacing(10),
     alignItems: "center",
     justifyContent: "space-between",
     [theme.breakpoints.down("md")]: {
@@ -22,8 +21,10 @@ const Ambulance = () => {
   }));
 
   const ImgContainer = styled(Box)(({ theme }) => ({
+    width: "30%",
     [theme.breakpoints.down("md")]: {
       display: "flex",
+      width: "100%",
       flexDirection: "column",
       alignItems: "center",
     },
@@ -38,12 +39,23 @@ const Ambulance = () => {
       marginRight: "auto",
     },
   }));
+
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   return (
-    <Box sx={{ my: 2, py: 2 }}>
+    <Box sx={{ my: 1, pb: 2 }}>
       <Container>
         <CustomBox>
+          {!small && (
+            <ImgContainer>
+              <img
+                src={appointmentImage}
+                alt="house"
+                style={{ maxWidth: "100%" }}
+              />
+            </ImgContainer>
+          )}
+
           <Box>
             <Divider />
             <Typography
@@ -53,22 +65,19 @@ const Ambulance = () => {
                 my: 3,
               }}
             >
-              Locate Nearest Ambulance
+              Are You a Doctor?
             </Typography>
             {small && (
               <ImgContainer>
                 <img
-                  onClick={() => {
-                    navigate("/ambulance");
-                  }}
-                  src={AmbulanceImage}
-                  alt="Ambulance"
+                  src={appointmentImage}
+                  alt="house"
                   style={{ maxWidth: "100%" }}
                 />
               </ImgContainer>
             )}
             <Typography
-              my={small ? 1 : 4}
+              my={4}
               sx={{
                 fontSize: "18px",
                 color: "#5A6473",
@@ -76,34 +85,18 @@ const Ambulance = () => {
               }}
               textAlign="justify"
             >
-              Instant Access to Emergency Services - Get Help Fast When You Need
-              It Most
+              You can register as a doctor and provide virtual consultation to
+              patients.
             </Typography>
 
-            <CustomButton
-              onClick={() => {
-                navigate("/ambulance");
-              }}
-            >
-              Find Now
+            <CustomButton onClick={() => navigate("/registerDoctor")}>
+              Register now
             </CustomButton>
           </Box>
-          {!small && (
-            <ImgContainer>
-              <img
-                onClick={() => {
-                  navigate("/ambulance");
-                }}
-                src={AmbulanceImage}
-                alt="Ambulance"
-                style={{ maxWidth: "100%" }}
-              />
-            </ImgContainer>
-          )}
         </CustomBox>
       </Container>
     </Box>
   );
 };
 
-export default Ambulance;
+export default DoctorReg;

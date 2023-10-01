@@ -1,3 +1,4 @@
+import { Close } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
@@ -5,8 +6,13 @@ import {
   Card,
   CardHeader,
   Divider,
+  FormControl,
   FormControlLabel,
   Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Switch,
   TextField,
@@ -73,6 +79,7 @@ const Filters = ({ queries, load }) => {
   const [selectedDivision, setSelectedDivision] = useState();
   const [selectedDistrict, setSelectedDistrict] = useState();
   const [selectedUpazila, setSelectedUpazila] = useState();
+  const [selectedGroup, setSelectedGroup] = useState();
   const [queryOptions, setQueryOptions] = useState(queries || {});
   const divOption = divisions[2].data.map((e) => ({
     id: e.id,
@@ -117,6 +124,9 @@ const Filters = ({ queries, load }) => {
         queryOptions,
         `/ambulancePost/filterByDivisionwithPage/${selectedDivision.name}`
       );
+    } else if (selectedGroup) {
+      load(queryOptions);
+      `/bloodDonatePost/filterByBloodGroup/${selectedGroup}`;
     } else {
       load(queryOptions);
     }
@@ -133,6 +143,7 @@ const Filters = ({ queries, load }) => {
                 sx={{ m: 1 }}
                 checked={queryOptions.availability}
                 onChange={(e) => {
+                  setSelectedGroup("");
                   setQueryOptions({
                     ...queryOptions,
                     availability: e.target.checked,
@@ -150,6 +161,32 @@ const Filters = ({ queries, load }) => {
               </Typography>
             }
           />
+
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Blood Group</InputLabel>
+            <Select
+              label="Blood Group"
+              labelId="demo-simple-select-label"
+              required
+              value={selectedGroup || ""}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+              endAdornment={
+                <IconButton onClick={() => setSelectedGroup("")}>
+                  <Close />
+                </IconButton>
+              }
+            >
+              <MenuItem value="A+">A+</MenuItem>
+              <MenuItem value="A-">A-</MenuItem>
+              <MenuItem value="B+">B+</MenuItem>
+              <MenuItem value="B-">B-</MenuItem>
+              <MenuItem value="AB+">AB+</MenuItem>
+              <MenuItem value="AB-">AB-</MenuItem>
+              <MenuItem value="O+">O+</MenuItem>
+              <MenuItem value="O-">O-</MenuItem>
+            </Select>
+          </FormControl>
+
           <Autocomplete
             fullWidth
             options={divOption}

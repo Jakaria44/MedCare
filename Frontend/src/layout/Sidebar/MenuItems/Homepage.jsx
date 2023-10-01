@@ -1,15 +1,14 @@
 // assets
 
 import {
-  AirportShuttleOutlined,
   AppRegistration,
   Bloodtype,
   Home,
-  ListAlt,
-  Message,
   VolunteerActivism,
 } from "@mui/icons-material";
-
+import { FaAmbulance } from "react-icons/fa";
+import { FaUserDoctor } from "react-icons/fa6";
+import { SiChatbot } from "react-icons/si";
 // constant
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
@@ -48,7 +47,7 @@ const Homepage = {
       title: "Ambulance",
       type: "item",
       url: "/ambulance",
-      icon: <AirportShuttleOutlined />,
+      icon: <FaAmbulance size="20px" />,
       breadcrumbs: false,
     },
     {
@@ -56,7 +55,7 @@ const Homepage = {
       title: "AI Chatbot",
       type: "item",
       url: "/chat",
-      icon: <Message />,
+      icon: <SiChatbot size="20px" />,
       breadcrumbs: false,
     },
     {
@@ -64,7 +63,7 @@ const Homepage = {
       title: "Doctors",
       type: "item",
       url: "/doctorList",
-      icon: <ListAlt />,
+      icon: <FaUserDoctor size="20px" />,
       breadcrumbs: false,
     },
 

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 // import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 // import firebase from "./../firebaseConfig";
-import { Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { firebaseDB } from "../pages/meeting/MeetWebRTC";
 
 const Map = () => {
@@ -14,6 +14,8 @@ const Map = () => {
 
   function updateLocation(latitude, longitude) {
     const ambulanceRef = firebaseDB.ref(`ambulances/ambulance3`);
+
+    const detailsRef = firebaseDB.ref("details/details");
     console.log(new Date().toLocaleString(), latitude, longitude);
     // alert();
     setLocation([
@@ -29,6 +31,13 @@ const Map = () => {
   }
   useEffect(() => {
     const ambulanceRef = firebaseDB.ref("ambulances");
+
+    const detailsRef = firebaseDB.ref("details/1");
+
+    detailsRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+    });
 
     ambulanceRef.on("value", (snapshot) => {
       // Handle location updates here
@@ -73,7 +82,7 @@ const Map = () => {
       <MapContainer
         center={center}
         zoom={13}
-        scrollWheelZoom={false}
+        // scrollWheelZoom={false}
         style={{ height: "72vh", width: "100%" }}
       >
         <TileLayer
@@ -82,7 +91,14 @@ const Map = () => {
         />
         {ambulances?.map((item, index) => (
           <Marker key={index} position={[item.latitude, item.longitude]}>
-            <Popup>{`Ambulance ${index + 1}`}</Popup>
+            <Popup>
+              <Box>
+                <Typography>{`Ambulance ${index + 1}`}</Typography>
+                <Typography>Latitude: {item.latitude}</Typography>
+                <Typography>Longitude: {item.longitude}</Typography>
+                <Button>Details</Button>
+              </Box>
+            </Popup>
           </Marker>
         ))}
       </MapContainer>

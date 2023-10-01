@@ -35,7 +35,6 @@ const PostList = ({ load, data, loading, toApprove }) => {
             xs={12}
             sm={6}
             md={4}
-            lg={3}
             key={index}
             margin="auto"
             paddingX={2}
