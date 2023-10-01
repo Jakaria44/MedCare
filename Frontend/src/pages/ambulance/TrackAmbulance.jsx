@@ -34,6 +34,11 @@ const TrackAmbulance = () => {
     const handleDetailsSnapshot = (snapshot) => {
       const data = snapshot.val();
       setDetails(data);
+      console.log(typeof data[localStorage.getItem("user_id")] === "undefined");
+
+      if (typeof data[localStorage.getItem("user_id")] === "undefined") {
+        setToAdd(true);
+      }
       console.log(data);
     };
 
@@ -107,29 +112,30 @@ const TrackAmbulance = () => {
           </Typography>
         </Box>
         {/* Place your components to be displayed at the right end here */}
-        <Box
-          id="sort-by"
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            flexGrow: 1,
-            justifyContent: "flex-end",
-          }}
-        >
-          {toAdd && (
-            <Box flexGrow={1}>
-              <Button
-                startIcon={<Add />}
-                variant="contained"
-                color="success"
-                onClick={() => setAddingNewAmbulance(true)}
-              >
-                Add Your Ambulance
-              </Button>
-            </Box>
-          )}
-        </Box>
+
+        {toAdd && localStorage.getItem("user_id") ? (
+          <Box
+            id="sort-by"
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              flexGrow: 1,
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              startIcon={<Add />}
+              variant="contained"
+              color="success"
+              onClick={() => setAddingNewAmbulance(true)}
+            >
+              Add Your Ambulance
+            </Button>
+          </Box>
+        ) : (
+          <Box flexGrow={1} />
+        )}
       </Box>
       {center ? (
         <MapContainer

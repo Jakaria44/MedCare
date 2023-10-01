@@ -210,7 +210,7 @@ const BloodPostCard = ({ load, bloodPost }) => {
           <MyTypography> Division : {bloodPost.division}</MyTypography>
           <MyTypography> District : {bloodPost.district}</MyTypography>
           <MyTypography> Upazilla : {bloodPost.upazila}</MyTypography>
-          <MyTypography>Driver Contact: {bloodPost.contact}</MyTypography>
+          <MyTypography>Contact: {bloodPost.contact}</MyTypography>
         </CardContent>
       </Card>
 

@@ -44,7 +44,7 @@ const AmbulanceDetails = ({
         gap={2}
         flexDirection={profile && !small ? "row" : "column"}
       >
-        <img src={image} alt="image" width="100%" />
+        <img src={image} alt="image" width={400} maxWidth="80%" />
         <Stack
           width={"100%"}
           spacing={2}
