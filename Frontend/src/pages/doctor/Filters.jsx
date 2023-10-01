@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import server from "./../../HTTP/httpCommonParam";
-const Filters = ({ load }) => {
+const Filters = ({ queries, load }) => {
   const [selectedSpec, setSelectedSpec] = useState();
   const [specs, setSpecs] = useState();
   useEffect(() => {
@@ -29,7 +29,10 @@ const Filters = ({ load }) => {
   };
   const submit = () => {
     if (selectedSpec) {
-      load("/doctor/getAllDoctorbySpecializationWithPge/" + selectedSpec);
+      load(
+        queries,
+        "/doctor/getAllDoctorbySpecializationWithPge/" + selectedSpec
+      );
     } else {
       load();
     }

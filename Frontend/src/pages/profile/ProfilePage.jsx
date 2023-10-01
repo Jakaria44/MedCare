@@ -64,7 +64,7 @@ const ProfilePage = () => {
           },
         }
       );
-      setPendingFundPost(res.data.content);
+      setPendingFundPost(response.data.content);
     } catch (err) {
       console.log(err);
       setPendingFundPost([]);
@@ -75,8 +75,7 @@ const ProfilePage = () => {
     const ambulanceData = snapshot.val();
     console.log(ambulanceData);
     if (!ambulanceData) setMyAmbulancePost(null);
-    else
-      setMyAmbulancePost((prev) => ({ ...prev, ...ambulanceData, id: userId }));
+    else setMyAmbulancePost((prev) => ({ ...prev, ...ambulanceData, id: id }));
   };
 
   const loadUser = async () => {
@@ -161,11 +160,11 @@ const ProfilePage = () => {
   useEffect(() => {
     loadUser();
     loadMyFundRaisePosts();
+    loadPendingFundRaisePosts();
 
-    if (!userId) return;
-    const ambulanceRef = firebaseDB.ref(`ambulances/${userId}`);
+    const ambulanceRef = firebaseDB.ref(`ambulances/${id}`);
     ambulanceRef.on("value", handleAmbulanceUpdate);
-    const detailsRef = firebaseDB.ref(`details/${userId}`);
+    const detailsRef = firebaseDB.ref(`details/${id}`);
     detailsRef.on("value", handleAmbulanceUpdate);
 
     return () => {
@@ -174,6 +173,7 @@ const ProfilePage = () => {
     };
   }, []);
   const small = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  console.log(myAmbulancePost);
   return (
     <>
       <Typography
@@ -185,10 +185,10 @@ const ProfilePage = () => {
         mt={1}
         pb={3}
       >
-        My Profile
+        Profile
       </Typography>
       <BasicInfo user={user} />
-      {user?.bloodDonatePostList.length > 0 && (
+      {user?.bloodDonatePostList.length > 0 && id == userId && (
         <Box
           display="flex"
           justifyContent="center"

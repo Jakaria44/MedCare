@@ -66,14 +66,15 @@ const AllDoctors = () => {
   }, []);
 
   const loadAllDoctors = async (
+    queries = queryOptions,
     apiPath = "/doctor/getAllapproveDoctorWithPge/true"
   ) => {
     setLoading(true);
-    const queries = {
-      ...queryOptions,
-      SortBy: sortOptions.find((option) => option.name === queryOptions.SortBy)
+    queries = {
+      ...queries,
+      SortBy: sortOptions.find((option) => option.name === queries.SortBy)
         .query,
-      SortDir: sortOptions.find((option) => option.name === queryOptions.SortBy)
+      SortDir: sortOptions.find((option) => option.name === queries.SortBy)
         .order,
     };
     console.log(queries);

@@ -34,7 +34,6 @@ const defaultAmbulance = {
 const AddAmbulance = ({ ambulanceProp, editing = false, open, close }) => {
   const [ambulance, setAmbulance] = useState(null);
   const [validNum, setValidNum] = useState(true);
-
   const [selectedImage, setSelectedImage] = useState();
   const [previewUrl, setPreviewUrl] = useState(defaultAmbulancePicture);
   useEffect(() => {
@@ -73,6 +72,8 @@ const AddAmbulance = ({ ambulanceProp, editing = false, open, close }) => {
   };
 
   const submitHandler = async () => {
+    const id = editing ? ambulanceProp.id : localStorage.getItem("user_id");
+
     setUploading(true);
     let url = defaultAmbulancePicture;
     if (selectedImage) {
@@ -84,7 +85,8 @@ const AddAmbulance = ({ ambulanceProp, editing = false, open, close }) => {
     }
     console.log(ambulance, url);
     try {
-      db.ref(`details/${localStorage.getItem("user_id")}`).set({
+      db.ref(`details/${id}`).set({
+        available: ambulance.available,
         ac: ambulance.ac,
         contact: ambulance.contact,
         driver: ambulance.driver,
@@ -97,8 +99,7 @@ const AddAmbulance = ({ ambulanceProp, editing = false, open, close }) => {
           function (position) {
             const { latitude, longitude } = position.coords;
 
-            db.ref(`ambulances/${localStorage.getItem("user_id")}`).set({
-              available: ambulance.available,
+            db.ref(`ambulances/${id}`).set({
               latitude: latitude,
               longitude: longitude,
             });

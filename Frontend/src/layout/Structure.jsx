@@ -74,8 +74,7 @@ const Structure = () => {
     dispatch({ type: actions.TOGGLE_SIDE_DRAWER, id: menuOpened });
   };
 
-  function updateLocation(latitude, longitude, available) {
-    console.log(available);
+  function updateLocation(latitude, longitude) {
     const ambulanceRef = firebaseDB.ref(
       `ambulances/${localStorage.getItem("user_id")}`
     );
@@ -85,12 +84,12 @@ const Structure = () => {
     ambulanceRef.set({
       latitude,
       longitude,
-      available,
       // timestamp: firebaseDB.ServerValue.TIMESTAMP, // Optionally, you can record a timestamp
     });
   }
   const handleAmbulanceUpdate = (snapshot) => {
     const ambulanceData = snapshot.val();
+
     if (!ambulanceData) return;
     console.log(ambulanceData);
 
@@ -100,7 +99,7 @@ const Structure = () => {
           const { latitude, longitude } = position.coords;
           // Update Firebase with the new location data
           console.log(ambulanceData?.available);
-          updateLocation(latitude, longitude, ambulanceData?.available);
+          updateLocation(latitude, longitude);
           console.log(latitude, longitude);
         },
         (error) => {
@@ -120,7 +119,7 @@ const Structure = () => {
     const userId = localStorage.getItem("user_id");
 
     const ambulanceRef = firebaseDB.ref(`ambulances/${userId}`);
-    if (userId != "null") {
+    if (userId != null) {
       ambulanceRef.on("value", handleAmbulanceUpdate);
     }
     // Clean up the Firebase listener when the component unmounts

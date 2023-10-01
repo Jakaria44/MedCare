@@ -1,5 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Slide, TextField } from "@mui/material";
+import { IconButton, InputAdornment, Slide, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,12 +9,15 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import server from "./../../HTTP/Auth";
 
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ErrorModal from "../../component/ErrorModal";
 import SpinnerWithBackdrop from "../../component/SpinnerWithBackdrop";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = React.useState(false);
+
   const [signingIn, setSigningIn] = React.useState(false);
   const [showErrorMessage, setShowErrorMessage] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState(
@@ -62,6 +65,10 @@ export default function ResetPassword() {
       });
   };
 
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <Slide in={true} direction="left">
       <Container component="main" maxWidth="xs">
@@ -89,16 +96,39 @@ export default function ResetPassword() {
             <Typography variant="body2" align="left" gutterBottom mb={2}>
               Enter your new password
             </Typography>
-            <TextField
+            {/* <TextField
               required
               fullWidth
               id="newPass"
-              label="OTP"
+              label="New Password"
               name="newPass"
               type="password"
               autoFocus
               value={newPass}
               onChange={(e) => setNewPass(e.target.value)}
+            /> */}
+            <TextField
+              required
+              fullWidth
+              name="newPass"
+              value={newPass}
+              label="New Password"
+              onChange={(e) => setNewPass(e.target.value)}
+              type={showPassword ? "text" : "password"}
+              id="password"
+              autoComplete="new-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"

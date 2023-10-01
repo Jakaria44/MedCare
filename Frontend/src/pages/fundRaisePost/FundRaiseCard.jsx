@@ -134,7 +134,7 @@ const FundRaiseCard = ({ load, item, toApprove = false }) => {
               {item?.userName}
             </Typography>
           }
-          subheader={TimeFormat(item?.approveDate)}
+          subheader={TimeFormat(item?.createdDate)}
         />
         <ImageListItem
           cols={1}

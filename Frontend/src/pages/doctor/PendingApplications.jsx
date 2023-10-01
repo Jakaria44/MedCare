@@ -182,7 +182,7 @@ const PendingApplications = () => {
             headerAlign: "center",
             align: "center",
             headerName: "Email",
-            width: 190,
+            width: 230,
           },
 
           {
@@ -190,7 +190,7 @@ const PendingApplications = () => {
             headerAlign: "center",
             align: "center",
             headerName: "Specialization",
-            width: 180,
+            width: 140,
           },
           {
             field: "appliedTime",

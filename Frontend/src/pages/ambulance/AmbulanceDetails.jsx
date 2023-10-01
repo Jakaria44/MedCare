@@ -18,10 +18,11 @@ const AmbulanceDetails = ({
   profile = false,
   handleDelete = () => {},
 }) => {
-  const { driver, contact, ac, image } = data;
+  const { driver, contact, ac, image, id, available } = data;
   const [copied, setCopied] = useState(false);
   const small = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-
+  const userId = localStorage.getItem("user_id");
+  console.log(id, userId);
   return (
     <Box
       sx={{
@@ -89,6 +90,19 @@ const AmbulanceDetails = ({
           </Stack>
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
             <Typography fontSize={16} variant="body2" gutterBottom>
+              Currently Available
+            </Typography>
+            <Typography
+              fontSize={16}
+              variant="body2"
+              gutterBottom
+              color={available ? "success" : "error"}
+            >
+              {available ? "Yes" : "No"}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={2} justifyContent={"space-between"}>
+            <Typography fontSize={16} variant="body2" gutterBottom>
               Air Condition
             </Typography>
             <Typography
@@ -114,7 +128,7 @@ const AmbulanceDetails = ({
               >
                 Back
               </Button>
-            ) : (
+            ) : id == userId ? (
               <Stack direction="row" spacing={2}>
                 <Button
                   variant="contained"
@@ -133,6 +147,8 @@ const AmbulanceDetails = ({
                   Delete
                 </Button>
               </Stack>
+            ) : (
+              <></>
             )}
           </Box>
         </Stack>

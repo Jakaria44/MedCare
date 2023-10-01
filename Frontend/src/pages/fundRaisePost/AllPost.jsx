@@ -17,8 +17,8 @@ import AddNewFundPost from "./AddPost";
 import FundPostList from "./PostList";
 
 export const sortOptions = [
-  { query: "approveDate", name: "Newest", order: "desc" },
-  { query: "approveDate", name: "Oldest", order: "asc" },
+  { query: "createdDate", name: "Newest", order: "desc" },
+  { query: "createdDate", name: "Oldest", order: "asc" },
 
   { query: "title", name: "Title (A-Z)", order: "asc" },
   { query: "title", name: "Title (Z-A)", order: "desc" },

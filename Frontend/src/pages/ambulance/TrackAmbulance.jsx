@@ -45,7 +45,8 @@ const TrackAmbulance = () => {
 
     const handleDetailsSnapshot = (snapshot) => {
       const data = snapshot.val();
-      setDetails(data);
+      console.log(data);
+      setDetails(data.map((item, index) => ({ ...item, id: index })));
     };
 
     const handleAmbulanceSnapshot = (snapshot) => {
@@ -56,7 +57,6 @@ const TrackAmbulance = () => {
           Object.keys(data).map((ambulanceId) => ({
             id: ambulanceId,
             ...data[ambulanceId],
-            available: data[ambulanceId]?.available || false,
           }))
         );
       }
@@ -130,11 +130,7 @@ const TrackAmbulance = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <MyMarkers
-            setView={setView}
-            data={ambulances?.filter((item) => item.available)}
-            center={center}
-          />
+          <MyMarkers setView={setView} data={ambulances} center={center} />
 
           <LocationButton center={center} />
           <BacktoHome center={center} />

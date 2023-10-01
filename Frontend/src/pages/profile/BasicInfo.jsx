@@ -53,8 +53,7 @@ const BasicInfo = ({ user }) => {
       >
         <img
           src={
-            localStorage.getItem("image") ??
-            "https://www.w3schools.com/howto/img_avatar.png"
+            user?.imageUrl ?? "https://www.w3schools.com/howto/img_avatar.png"
           }
           alt="Avatar"
           style={{
