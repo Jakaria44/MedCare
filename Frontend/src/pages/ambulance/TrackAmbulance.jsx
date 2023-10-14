@@ -26,7 +26,7 @@ const TrackAmbulance = () => {
   const [ambulances, setAmbulances] = useState([]);
   const [center, setCenter] = useState([24.0650882, 89.5461685]);
   const [view, setView] = useState(-1);
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState([]);
 
   useEffect(() => {
     // console.log(
@@ -45,7 +45,7 @@ const TrackAmbulance = () => {
 
     const handleDetailsSnapshot = (snapshot) => {
       const data = snapshot.val();
-
+      console.log(data);
       setDetails(
         Object.keys(data).map((item, index) => {
           return { ...data[item], id: item };
@@ -55,7 +55,7 @@ const TrackAmbulance = () => {
 
     const handleAmbulanceSnapshot = (snapshot) => {
       const data = snapshot.val();
-      // console.log(data);
+      console.log(data);
       if (data) {
         setAmbulances(
           Object.keys(data).map((ambulanceId) => ({
@@ -75,7 +75,6 @@ const TrackAmbulance = () => {
       ambulanceRef.off("value", handleAmbulanceSnapshot);
     };
   }, []);
-
   return (
     <>
       <Box
@@ -125,7 +124,7 @@ const TrackAmbulance = () => {
       {center ? (
         <MapContainer
           center={center}
-          zoom={10}
+          zoom={7}
           // scrollWheelZoom={false}
           style={{ height: "72vh", width: "100%" }}
         >
@@ -137,7 +136,7 @@ const TrackAmbulance = () => {
           <MyMarkers setView={setView} data={ambulances} center={center} />
 
           <LocationButton center={center} />
-          <BacktoHome center={center} />
+          {/* <BacktoHome center={center} /> */}
         </MapContainer>
       ) : (
         <Skeleton variant="square" height="72vh" width="100%" />
@@ -159,8 +158,11 @@ const TrackAmbulance = () => {
           justifyContent: "center",
         }}
       >
-        {details[view] ? (
-          <AmbulanceDetails data={details[view]} setView={setView} />
+        {details?.filter((i) => i.id == view)[0] ? (
+          <AmbulanceDetails
+            data={details?.filter((i) => i.id == view)[0]}
+            setView={setView}
+          />
         ) : (
           <Box>
             <CircularProgress />
@@ -182,7 +184,7 @@ export default TrackAmbulance;
 
 const MyMarkers = ({ data, setView }) => {
   const map = useMap();
-  console.log(data);
+  // console.log(data);
   const array = data.map(({ latitude, longitude, id }, index) => (
     <Marker
       key={index}

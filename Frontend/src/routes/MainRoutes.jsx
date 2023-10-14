@@ -9,9 +9,7 @@ const ChatPage = Loadable(lazy(() => import("../pages/MessagePage")));
 // main routing
 const Structure = Loadable(lazy(() => import("../layout/Structure.jsx")));
 const Home = Loadable(lazy(() => import("../pages/homepage/Home")));
-const AllAmbulance = Loadable(
-  lazy(() => import("../pages/ambulance/AllAmbulance"))
-);
+
 const TrackAmbulance = Loadable(
   lazy(() => import("../pages/ambulance/TrackAmbulance"))
 );
