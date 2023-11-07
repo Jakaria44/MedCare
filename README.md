@@ -15,9 +15,9 @@ Revolutionizing Healthcare Support
 ![WebRTC](https://img.shields.io/badge/webrtc-F811aa?style=for-the-badge&logo=webrtc&logoColor=black)
 ![WebRTC](https://img.shields.io/badge/firebase-aaf03?style=for-the-badge&logo=firebase&logoColor=white)
 
-<!-- ## Video
+ ## Video
 
-[![Youtube Video](database/images/Video%20Thumbnail.jpg)](https://youtu.be/CF-wFOkN4pM?si=2IIxt51tByt4aLNL) -->
+[![Youtube Video](database/images/Video%20Thumbnail.jpg)](https://youtu.be/CF-wFOkN4pM?si=2IIxt51tByt4aLNL)
 
 ## View Demo
 
