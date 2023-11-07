@@ -17,7 +17,6 @@ Revolutionizing Healthcare Support
 
  ## Video
 
-[![Youtube Video](database/images/Video%20Thumbnail.jpg)](https://youtu.be/CF-wFOkN4pM?si=2IIxt51tByt4aLNL)
 
 ## View Demo
 
